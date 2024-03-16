@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
+import 'package:tizibane/models/LoginUser.dart';
 import 'package:tizibane/screens/Home.dart';
 import 'package:tizibane/screens/Registration.dart';
 
@@ -12,10 +14,23 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final phoneController = TextEditingController();
-  final passwordController = TextEditingController();
+  late TextEditingController nrcController;
+  late TextEditingController passwordController;
+  late LoginUser loginUser;
+
+  @override
+  void initState() {
+    super.initState();
+    nrcController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
+    loginUser = LoginUser(
+      nrc: nrcController.text,
+      password: passwordController.text,
+    );
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -51,10 +66,10 @@ class _LoginState extends State<Login> {
                 child: Column(
                   children: [
                     TextField(
-                      controller: phoneController,
+                      controller: nrcController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        hintText: 'Phone Number',
+                        hintText: 'Nrc',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0)),
                       ),
@@ -81,10 +96,7 @@ class _LoginState extends State<Login> {
                     SubmitButton(
                       text: 'Sign In',
                       onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BottomMenuBarItems()));
+                        handleLogin(loginUser);
                       },
                     ),
                   ],
@@ -120,5 +132,20 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  // Inside the function or method where you want to perform login and navigation
+  void handleLogin(LoginUser loginUser) async {
+    bool loginSuccessful = await AuthService().loginInUser(loginUser);
+    if (loginSuccessful) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BottomMenuBarItems(nrc: nrcController.text.trim(),),
+        ),
+      );
+    } else {
+      // Handle login failure, e.g., show an error message
+    }
   }
 }

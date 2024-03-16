@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tizibane/components/drawer/sidemenu.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:tizibane/Services/UserService.dart';
+import 'package:tizibane/screens/Contact/NewContact.dart';
 
 class NFC extends StatefulWidget {
   @override
@@ -10,6 +12,18 @@ class NFC extends StatefulWidget {
 
 class NFCState extends State<NFC> {
   ValueNotifier<dynamic> result = ValueNotifier(null);
+
+    String? userNrc;
+
+  loadUser(userNrc) async
+  {
+    final user = await UserService().getUser(userNrc);
+    setState(() {
+      Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => NewContact(fullNames: user.fullNames,phoneNumbers: user.phoneNumbers,email: user.email,)));
+    });
+      
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +77,15 @@ class NFCState extends State<NFC> {
   }
 
   void _tagRead() {
-    NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-      var payload = tag.data["ndef"]["cachedMessage"]["records"][0]["payload"];
-      var stringPayload = String.fromCharCodes(payload);
-      result.value = stringPayload;
-      print(result.value);
-      NfcManager.instance.stopSession();
-    });
+    // NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+    //   var payload = tag.data["ndef"]["cachedMessage"]["records"][0]["payload"];
+    //   var stringPayload = String.fromCharCodes(payload);
+    //   result.value = stringPayload;
+    //   print("Hello");
+    //   print(result.value);
+    //   NfcManager.instance.stopSession();
+    // });
+    print("hello");
   }
 
 }

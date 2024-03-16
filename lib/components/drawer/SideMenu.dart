@@ -32,8 +32,7 @@ class _SideMenuState extends State<SideMenu> {
             leading: Icon(Icons.home_filled),
             title: Text("Home"),
             onTap: () => {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Home()))
+
             },
           ),
           ListTile(
