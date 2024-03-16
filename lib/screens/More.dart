@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:tizibane/components/drawer/sidemenu.dart';
 import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';

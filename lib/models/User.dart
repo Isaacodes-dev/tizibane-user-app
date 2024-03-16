@@ -8,6 +8,8 @@ class User{
   final String profilePic;
   final String password;
 
+  static const String defaultProfilePic = 'assets/images/user.jpg';
+
   const User({
     required this.nrc,
     required this.fullNames,
@@ -24,9 +26,19 @@ class User{
       fullNames: json['fullNames'] as String,
       phoneNumbers: json['phoneNumbers'] as String,
       email: json['email'] as String,
-      profilePic: json['profilePic'] as String,
+      profilePic: json['profilePic'] ?? "",
       password: json['password'] as String
     );
   }
-
+    Map<String, dynamic> toJson() {
+    return {
+      'nrc': nrc,
+      'fullNames': fullNames,
+      'phoneNumbers': phoneNumbers,
+      'email': email,
+      'profilePic': profilePic.isNotEmpty ? profilePic : defaultProfilePic,
+      'password': password,
+    };
+  }
 }
+

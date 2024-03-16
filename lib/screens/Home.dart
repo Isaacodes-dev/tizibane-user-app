@@ -1,16 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
-import 'package:tizibane/components/drawer/sidemenu.dart';
 import 'package:tizibane/screens/Contact/ViewContact.dart';
+import 'package:tizibane/models/User.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String nrc;
+  const Home({super.key, required this.nrc});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  late User user = User(nrc: '',fullNames: '',phoneNumbers: '',email: '',profilePic: '',password: ''); // Provide a default value
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Call the function to make the network request
+    loadUser(widget.nrc);
+  }
+
+  loadUser(String nrc) async {
+    try {
+      isLoading = true;
+      // Fetch user data
+      User userData = await UserService().getUser(nrc);
+      setState(() {
+        user = userData;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Handle error
+      print('Error fetching user data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,36 +61,35 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                          width: 140,
-                          child: ClipOval(
-                            child: Material(
-                              child: Ink.image(
-                                image: AssetImage('assets/images/user.jpg'),
-                                fit: BoxFit.fill,
-                                width: 128,
-                                height: 128,
-                              ),
-                            ),
-                          )),
+                        width: 140,
+                        child: ClipOval(
+                          child: Material(
+                            child: isLoading
+                                ? CircularProgressIndicator() // Show loading indicator
+                                : Image.network(
+                                    'http://192.168.0.109:8000/api/${user.profilePic}'),
+                          ),
+                        ),
+                      ),
                       Container(
                         child: Column(
                           children: [
                             Text(
-                              'James Brown',
+                              user.fullNames,
                               style: TextStyle(color: Colors.white),
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             Text(
-                              'Cool Tech Solutions',
+                              user.phoneNumbers,
                               style: TextStyle(color: Colors.white),
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             Text(
-                              'Director of Operations',
+                              user.email,
                               style: TextStyle(color: Colors.white),
                             ),
                           ],
@@ -75,8 +105,7 @@ class _HomeState extends State<Home> {
                   children: [
                     Text(
                       'Recent Contacts',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

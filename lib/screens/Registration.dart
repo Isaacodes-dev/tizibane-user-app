@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
+import 'package:tizibane/Services/AuthService.dart';
+import 'package:tizibane/models/User.dart';
 import 'package:tizibane/screens/Login.dart';
 
 class Registration extends StatefulWidget {
@@ -10,11 +12,36 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
-  final phoneController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  late TextEditingController nrcController;
+  late TextEditingController fullNamesController;
+  late TextEditingController phoneController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController confirmPasswordController;
+  late User user;
+
+  @override
+  void initState() {
+    super.initState();
+    nrcController = TextEditingController();
+    fullNamesController = TextEditingController();
+    phoneController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    confirmPasswordController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
+     //const String defaultProfilePic = 'assets/images/user.jpg';
+    user = User(
+      nrc: nrcController.text,
+      fullNames: fullNamesController.text,
+      phoneNumbers: phoneController.text,
+      email: emailController.text,
+      profilePic: '', // You may want to handle this differently
+      password: passwordController.text,
+    );
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -49,10 +76,40 @@ class _RegistrationState extends State<Registration> {
                 child: Column(
                   children: [
                     TextField(
+                      controller: nrcController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'Nrc',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: fullNamesController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'FullNames',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
                       controller: phoneController,
                       obscureText: false,
                       decoration: InputDecoration(
                         hintText: 'Phone Number',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: emailController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0)),
                       ),
@@ -81,11 +138,16 @@ class _RegistrationState extends State<Registration> {
                   ],
                 ),
               ),
-              const Center(
+              Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SubmitButton(text: 'Sign Up'),
+                    SubmitButton(
+                      text: 'Sign Up',
+                      onTap: () {
+                        AuthService().createUser(user);
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -108,11 +170,16 @@ class _RegistrationState extends State<Registration> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.orange),
                       ),
+                      
                     )
                   ],
+                  
                 ),
-              )
+                
+              ),
+               const SizedBox(height: 25),
             ],
+            
           ),
         ),
       ),

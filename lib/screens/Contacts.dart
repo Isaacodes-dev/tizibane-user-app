@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/Alerts/AlertDialog.dart';
 import 'package:tizibane/components/NFC.dart';
 import 'package:tizibane/components/drawer/sidemenu.dart';
@@ -59,7 +60,21 @@ class _ContactsState extends State<Contacts> {
             var payload = tag.data["ndef"]["cachedMessage"]["records"][0]["payload"];
             var stringPayload = String.fromCharCodes(payload);
             result.value = stringPayload;
-            NfcManager.instance.stopSession();
+            String resultString = result.value.toString();
+
+            String resultSubString = resultString.substring(3);
+            
+            if(resultSubString.isNotEmpty)
+            {
+                NfcManager.instance.stopSession();
+                
+                loadUser(resultSubString);
+
+            }
+            else
+            {
+              print("error");
+            }
                   
         });
       }catch(ex)
@@ -67,6 +82,16 @@ class _ContactsState extends State<Contacts> {
         print("Error");
       }
    
+  }
+
+    loadUser(userNrc) async
+  {
+    final user = await UserService().getUser(userNrc);
+    setState(() {
+      Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => NewContact(fullNames: user.fullNames,phoneNumbers: user.phoneNumbers,email: user.email,)));
+    });
+      
   }
 
   @override
