@@ -2,20 +2,18 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 class User{
   final String nrc;
-  final String fullNames;
-  final String phoneNumbers;
+  final String full_names;
+  final String phone_number;
   final String email;
-  final String profilePic;
   final String password;
 
   static const String defaultProfilePic = 'assets/images/user.jpg';
 
   const User({
     required this.nrc,
-    required this.fullNames,
-    required this.phoneNumbers,
+    required this.full_names,
+    required this.phone_number,
     required this.email,
-    required this.profilePic,
     required this.password
   });
 
@@ -23,20 +21,18 @@ class User{
   {
     return User(
       nrc: json['nrc'],
-      fullNames: json['fullNames'] as String,
-      phoneNumbers: json['phoneNumbers'] as String,
+      full_names: json['full_names'] as String,
+      phone_number: json['phone_number'] as String,
       email: json['email'] as String,
-      profilePic: json['profilePic'] ?? "",
       password: json['password'] as String
     );
   }
     Map<String, dynamic> toJson() {
     return {
       'nrc': nrc,
-      'fullNames': fullNames,
-      'phoneNumbers': phoneNumbers,
+      'full_names': full_names,
+      'phone_number': phone_number,
       'email': email,
-      'profilePic': profilePic.isNotEmpty ? profilePic : defaultProfilePic,
       'password': password,
     };
   }

@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late User user = User(nrc: '',fullNames: '',phoneNumbers: '',email: '',profilePic: '',password: ''); // Provide a default value
+  late User user = User(nrc: '',full_names: '',phone_number: '',email: '',password: ''); // Provide a default value
 
   bool isLoading = true;
 
@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
                             child: isLoading
                                 ? CircularProgressIndicator() // Show loading indicator
                                 : Image.network(
-                                    'http://192.168.0.109:8000/api/${user.profilePic}'),
+                                    'http://192.168.0.109:8000/api/'),
                           ),
                         ),
                       ),
@@ -75,14 +75,14 @@ class _HomeState extends State<Home> {
                         child: Column(
                           children: [
                             Text(
-                              user.fullNames,
+                              user.full_names,
                               style: TextStyle(color: Colors.white),
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             Text(
-                              user.phoneNumbers,
+                              user.phone_number,
                               style: TextStyle(color: Colors.white),
                             ),
                             SizedBox(

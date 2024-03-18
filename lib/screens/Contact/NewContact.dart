@@ -3,9 +3,9 @@ import 'package:tizibane/Components/SubmitButton.dart';
 
 class NewContact extends StatefulWidget {
 
-  const NewContact({super.key, required this.fullNames, required this.email,required this.phoneNumbers});
-  final String fullNames;
-  final String phoneNumbers;
+  const NewContact({super.key, required this.full_names, required this.email,required this.phone_number});
+  final String full_names;
+  final String phone_number;
   final String email;
 
   @override
@@ -13,7 +13,7 @@ class NewContact extends StatefulWidget {
 }
 
 class _NewContactState extends State<NewContact> {
-  String get fullNames => fullNames;
+  String get full_names => full_names;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class _NewContactState extends State<NewContact> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(left: 12.0),
-                                      child: Text(widget.fullNames),
+                                      child: Text(widget.full_names),
                                     ),
                                   ],
                                 ),
@@ -112,7 +112,7 @@ class _NewContactState extends State<NewContact> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Phone:"),
-                                    Text(widget.phoneNumbers),
+                                    Text(widget.phone_number),
                                   ],
                                 ),
                                 SizedBox(
