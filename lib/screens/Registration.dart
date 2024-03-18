@@ -36,10 +36,9 @@ class _RegistrationState extends State<Registration> {
      //const String defaultProfilePic = 'assets/images/user.jpg';
     user = User(
       nrc: nrcController.text,
-      fullNames: fullNamesController.text,
-      phoneNumbers: phoneController.text,
+      full_names: fullNamesController.text,
+      phone_number: phoneController.text,
       email: emailController.text,
-      profilePic: '', // You may want to handle this differently
       password: passwordController.text,
     );
     double width = MediaQuery.of(context).size.width;

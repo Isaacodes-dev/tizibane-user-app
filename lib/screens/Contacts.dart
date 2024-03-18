@@ -89,7 +89,7 @@ class _ContactsState extends State<Contacts> {
     final user = await UserService().getUser(userNrc);
     setState(() {
       Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => NewContact(fullNames: user.fullNames,phoneNumbers: user.phoneNumbers,email: user.email,)));
+            MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
     });
       
   }
