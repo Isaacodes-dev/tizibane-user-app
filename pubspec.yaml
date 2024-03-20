@@ -42,6 +42,8 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   http: ^1.1.0
   image_picker: ^1.0.7
+  get: ^4.6.6
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:

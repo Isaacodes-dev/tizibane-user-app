@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/screens/Contact/ViewContact.dart';
 import 'package:tizibane/models/User.dart';
 
 class Home extends StatefulWidget {
-  final String nrc;
-  const Home({super.key, required this.nrc});
+
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  final nrcStorage = GetStorage();
+  
+  
+  
   late User user = User(nrc: '',full_names: '',phone_number: '',email: '',password: ''); // Provide a default value
 
   bool isLoading = true;
 
   @override
   void initState() {
+    String nrc = nrcStorage.read('nrcNumber');
     super.initState();
     // Call the function to make the network request
-    loadUser(widget.nrc);
+    loadUser(nrc);
   }
 
   loadUser(String nrc) async {
