@@ -6,9 +6,9 @@ import 'package:tizibane/screens/Profile.dart';
 
 class BottomMenuBarItems extends StatefulWidget {
   final int selectedIndex = 0;
-  final String nrc;
+  
 
-  const BottomMenuBarItems({Key? key, required this.nrc}) : super(key: key);
+  const BottomMenuBarItems({Key? key}) : super(key: key);
 
   @override
   State<BottomMenuBarItems> createState() => _BottomMenuBarItemsState();
@@ -34,7 +34,7 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
   final PageStorageBucket bucket = PageStorageBucket();
   @override
   Widget build(BuildContext context) {
-    Widget currentScreen = currentIndex == 0 ? Home(nrc: widget.nrc,) : currentIndex == 1 ? Contacts() : currentIndex == 2 ? Profile() : More();
+    Widget currentScreen = currentIndex == 0 ? Home() : currentIndex == 1 ? Contacts() : currentIndex == 2 ? Profile() : More();
     return Scaffold(
       body: PageStorage(
         child: currentScreen,
@@ -54,7 +54,7 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
                 minWidth: 50,
                 onPressed: (){
                   setState(() {
-                    currentScreen = Home(nrc: widget.nrc,);
+                    currentScreen = Home();
                     currentIndex = 0;
                   });
                 },

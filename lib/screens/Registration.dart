@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/models/User.dart';
@@ -12,35 +13,24 @@ class Registration extends StatefulWidget {
 }
 
 class _RegistrationState extends State<Registration> {
-  late TextEditingController nrcController;
-  late TextEditingController fullNamesController;
-  late TextEditingController phoneController;
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
-  late TextEditingController confirmPasswordController;
-  late User user;
+  final TextEditingController nrcController = TextEditingController();
+  final TextEditingController fullNamesController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  final AuthService _authService = Get.put(AuthService());
 
   @override
   void initState() {
     super.initState();
-    nrcController = TextEditingController();
-    fullNamesController = TextEditingController();
-    phoneController = TextEditingController();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
-     //const String defaultProfilePic = 'assets/images/user.jpg';
-    user = User(
-      nrc: nrcController.text,
-      full_names: fullNamesController.text,
-      phone_number: phoneController.text,
-      email: emailController.text,
-      password: passwordController.text,
-    );
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -141,12 +131,33 @@ class _RegistrationState extends State<Registration> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SubmitButton(
-                      text: 'Sign Up',
-                      onTap: () {
-                        AuthService().createUser(user);
-                      },
-                    ),
+                    Obx(() {
+                      return _authService.isLoading.value
+                          ? const CircularProgressIndicator()
+                          : SubmitButton(
+                              text: 'Sign Up',
+                              onTap: () async {
+                                if (passwordController.text ==
+                                    confirmPasswordController.text) {
+                                  await _authService.createUser(
+                                      nrc: nrcController.text.trim(),
+                                      full_names:
+                                          fullNamesController.text.trim(),
+                                      phone_number: phoneController.text.trim(),
+                                      email: emailController.text.trim(),
+                                      password: passwordController.text.trim());
+                                } else {
+                                  Get.snackbar(
+                                    'Info',
+                                    'Passwords not Matching',
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: const Color.fromARGB(255, 143, 173, 226),
+                                    colorText: Colors.white,
+                                  );
+                                }
+                              },
+                            );
+                    }),
                   ],
                 ),
               ),
@@ -169,16 +180,12 @@ class _RegistrationState extends State<Registration> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.orange),
                       ),
-                      
                     )
                   ],
-                  
                 ),
-                
               ),
-               const SizedBox(height: 25),
+              const SizedBox(height: 25),
             ],
-            
           ),
         ),
       ),
