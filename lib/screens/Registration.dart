@@ -30,7 +30,6 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -137,23 +136,33 @@ class _RegistrationState extends State<Registration> {
                           : SubmitButton(
                               text: 'Sign Up',
                               onTap: () async {
-                                if (passwordController.text ==
-                                    confirmPasswordController.text) {
-                                  await _authService.createUser(
-                                      nrc: nrcController.text.trim(),
-                                      full_names:
-                                          fullNamesController.text.trim(),
-                                      phone_number: phoneController.text.trim(),
-                                      email: emailController.text.trim(),
-                                      password: passwordController.text.trim());
+                                if (isValid(
+                                    fullNamesController.text.trim(),
+                                    phoneController.text.trim(),
+                                    emailController.text.trim())) {
+                                  if (passwordController.text ==
+                                      confirmPasswordController.text) {
+                                    await _authService.createUser(
+                                        nrc: nrcController.text.trim(),
+                                        full_names:
+                                            fullNamesController.text.trim(),
+                                        phone_number:
+                                            phoneController.text.trim(),
+                                        email: emailController.text.trim(),
+                                        password:
+                                            passwordController.text.trim());
+                                  } else {
+                                    Get.snackbar(
+                                      'Info',
+                                      'Passwords not Matching',
+                                      snackPosition: SnackPosition.TOP,
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 143, 173, 226),
+                                      colorText: Colors.white,
+                                    );
+                                  }
                                 } else {
-                                  Get.snackbar(
-                                    'Info',
-                                    'Passwords not Matching',
-                                    snackPosition: SnackPosition.TOP,
-                                    backgroundColor: const Color.fromARGB(255, 143, 173, 226),
-                                    colorText: Colors.white,
-                                  );
+                                    return;
                                 }
                               },
                             );
@@ -190,5 +199,39 @@ class _RegistrationState extends State<Registration> {
         ),
       ),
     );
+  }
+
+  bool isValid(String fullNames, String phoneNumber, String emailText) {
+    RegExp emailRegex = RegExp(
+      r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+.[a-zA-Z]+',
+      caseSensitive: false,
+    );
+
+    RegExp fullNamesRegex = RegExp(
+      r'^[a-zA-Z.]+',
+      caseSensitive: false,
+    );
+
+    RegExp phoneNumberRegex = RegExp(
+      r'^[0-9.]+',
+      caseSensitive: false,
+    );
+
+    if (!fullNamesRegex.hasMatch(fullNames)) {
+      Get.snackbar('Error', 'Invalid Name Format');
+      return false;
+    }else if(!emailRegex.hasMatch(emailText)){
+      Get.snackbar('Error', 'Invalid email Format');
+      return false;
+    }
+    else if(!phoneNumberRegex.hasMatch(phoneNumber))
+    {
+      Get.snackbar('Error', 'Invalid phone Format');
+      return false;
+    }
+     else {
+
+      return true;
+    }
   }
 }
