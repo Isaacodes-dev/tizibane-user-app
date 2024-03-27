@@ -80,8 +80,7 @@ class _HomeState extends State<Home> {
                         child: Column(
                           children: [
                             Text(
-                              _userService.userObj.value.full_names,
-                              style: TextStyle(color: Colors.white),
+                              _userService.userObj.value.full_names,style: TextStyle(color: Colors.white),
                             ),
                             SizedBox(
                               height: 10,
