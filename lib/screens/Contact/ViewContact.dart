@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tizibane/constants/constants.dart';
 
 class ViewContact extends StatefulWidget {
   const ViewContact({super.key});
@@ -32,16 +33,18 @@ class _ViewContactState extends State<ViewContact> {
               children: [
                 Column(
                   children: [
-                    ClipOval(
-                      child: Material(
-                        child: Ink.image(
-                          image: AssetImage('assets/images/user.jpg'),
-                          fit: BoxFit.fill,
-                          width: 128,
-                          height: 128,
+                      Container(
+                        width: 140,
+                        child: ClipOval(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              // child: _profileService.imagePath.value != '' ? Image.network(imageBaseUrl+_profileService.imagePath.value,fit: BoxFit.cover,width: 150,height: 150,):
+                              // Image.asset(defaultProfilePic, fit: BoxFit.cover,width: 150,height: 150,),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
                     const SizedBox(
                       height: 24,
                     ),

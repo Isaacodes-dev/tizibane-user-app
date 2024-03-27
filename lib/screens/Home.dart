@@ -80,7 +80,8 @@ class _HomeState extends State<Home> {
                         child: Column(
                           children: [
                             Text(
-                              _userService.userObj.value.full_names,style: TextStyle(color: Colors.white),
+                              _userService.userObj.value.full_names,
+                              style: TextStyle(color: Colors.white),
                             ),
                             SizedBox(
                               height: 10,
@@ -132,26 +133,6 @@ class _HomeState extends State<Home> {
                           ),
                         );
                       },
-                    ),
-                    ListTile(
-                      title: Text('James Mulenga'),
-                      subtitle: Text('0973700797'),
-                      leading: CircleAvatar(child: Text('JM')),
-                    ),
-                    ListTile(
-                      title: Text('Mutale Phiri'),
-                      subtitle: Text('0973700596'),
-                      leading: CircleAvatar(child: Text('MP')),
-                    ),
-                    ListTile(
-                      title: Text('Banda Phiri'),
-                      subtitle: Text('0973701798'),
-                      leading: CircleAvatar(child: Text('BP')),
-                    ),
-                    ListTile(
-                      title: Text('Kennedy Mulenga'),
-                      subtitle: Text('0973704797'),
-                      leading: CircleAvatar(child: Text('KM')),
                     ),
                   ],
                 ),

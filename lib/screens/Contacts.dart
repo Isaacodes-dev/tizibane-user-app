@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:tizibane/Services/ContactService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/Alerts/AlertDialog.dart';
 import 'package:tizibane/components/NFC.dart';
@@ -24,8 +27,10 @@ class Contacts extends StatefulWidget {
 class _ContactsState extends State<Contacts> {
   
   ValueNotifier<dynamic> result = ValueNotifier(null);
+
+  final ContactService _contactService = Get.put(ContactService(),permanent: true);
   
-  List<Contact> contacts = [];
+  //List<Contact> contacts = [];
   
   final qrKey = GlobalKey(debugLabel: 'QR');
   
@@ -38,7 +43,7 @@ class _ContactsState extends State<Contacts> {
     super.reassemble();
     if(Platform.isAndroid)
     {
-      controller!.pauseCamera();
+      controller?.pauseCamera();
     }else if(Platform.isIOS){
       controller!.resumeCamera();
     }
@@ -68,7 +73,8 @@ class _ContactsState extends State<Contacts> {
             {
                 NfcManager.instance.stopSession();
                 
-                // loadUser(resultSubString);
+                loadUser(resultSubString);
+                
 
             }
             else
@@ -84,15 +90,10 @@ class _ContactsState extends State<Contacts> {
    
   }
 
-  //   loadUser(userNrc) async
-  // {
-  //   final user = await UserService().getUser(userNrc);
-  //   setState(() {
-  //     Navigator.of(context).push(
-  //           MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
-  //   });
-      
-  // }
+  loadUser(resultSubString) async
+  {
+      await _contactService.getContact(resultSubString);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,21 +159,7 @@ class _ContactsState extends State<Contacts> {
                     subtitle: Text('0973700797'),
                     leading: CircleAvatar(child: Text('JM')),
                   ),
-                  ListTile(
-                    title: Text('Mutale Phiri'),
-                    subtitle: Text('0973700596'),
-                    leading: CircleAvatar(child: Text('MP')),
-                  ),
-                  ListTile(
-                    title: Text('Banda Phiri'),
-                    subtitle: Text('0973701798'),
-                    leading: CircleAvatar(child: Text('BP')),
-                  ),
-                  ListTile(
-                    title: Text('Kennedy Mulenga'),
-                    subtitle: Text('0973704797'),
-                    leading: CircleAvatar(child: Text('KM')),
-                  ),
+
                 ],
               ),
             ),

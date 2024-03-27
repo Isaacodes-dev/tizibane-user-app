@@ -17,7 +17,6 @@ class Profile extends StatefulWidget {
 final UserService _userService = Get.put(UserService());
 
 class _ProfileState extends State<Profile> {
-
   final UserService _userService = Get.put(UserService());
 
   final ProfileService _profileService = Get.put(ProfileService());
@@ -30,12 +29,10 @@ class _ProfileState extends State<Profile> {
 
   late Future<String?> userProfilePicFuture;
 
-   
-
   @override
   void initState() {
     super.initState();
-     _profileService.getImagePath();
+    _profileService.getImagePath();
   }
 
   // Future<void> _changeProfilePicture() async {
@@ -46,7 +43,6 @@ class _ProfileState extends State<Profile> {
   //     });
   //   }
   // }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +73,16 @@ class _ProfileState extends State<Profile> {
                                   child: ProfileService.pickedFile != null
                                       ? Image.file(
                                           File(ProfileService.pickedFile!.path),
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.contain)
-                                      : Image.network(imageBaseUrl+_profileService.imagePath.value,fit: BoxFit.cover,width: 150,height: 150,))),
+                                          width: 150,
+                                          height: 150,
+                                          fit: BoxFit.cover)
+                                      : Image.network(
+                                          imageBaseUrl +
+                                              _profileService.imagePath.value,
+                                          fit: BoxFit.cover,
+                                          width: 150,
+                                          height: 150,
+                                        ))),
                         ),
                       );
                     }),
@@ -183,10 +185,13 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Center(
                       child: GestureDetector(
                         child: Text('Upload'),
-                        onTap:()=> Get.find<ProfileService>().upload(),
+                        onTap: () => Get.find<ProfileService>().upload(),
                       ),
                     )
                   ],

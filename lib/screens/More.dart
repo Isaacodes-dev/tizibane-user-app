@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/screens/Login.dart';
@@ -15,7 +16,12 @@ class More extends StatefulWidget {
 
 final AuthService _authService = Get.put(AuthService());
 
+final nrcStorage = GetStorage();
+
+String nrcNumber = nrcStorage.read('nrcNumber');
+
 class _MoreState extends State<More> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +40,7 @@ class _MoreState extends State<More> {
                   child: Container(
                     width: 140,
                     child: QrImageView(
-                      data: '123456451',
+                      data: nrcNumber,
                       size: 200,
                       foregroundColor: Colors.orange,
                     ),
