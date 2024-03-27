@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
+import 'package:tizibane/Services/ContactService.dart';
+import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/screens/More.dart';
 
 class NewContact extends StatefulWidget {
-
-  const NewContact({super.key, required this.full_names, required this.email,required this.phone_number});
-  final String full_names;
-  final String phone_number;
+  final String contactNrc;
+  final String fullNames;
   final String email;
+  final String phoneNumber;
+  final String profilePicture;
+
+  const NewContact(
+      {super.key,
+      required this.contactNrc,
+      required this.fullNames,
+      required this.email,
+      required this.phoneNumber,
+      required this.profilePicture});
 
   @override
   State<NewContact> createState() => _NewContactState();
 }
 
 class _NewContactState extends State<NewContact> {
-  String get full_names => full_names;
+  String contactSaverNrc = nrcStorage.read('nrcNumber');
 
+  final ContactService _contactService = Get.put(ContactService());
   @override
   Widget build(BuildContext context) {
-    
+    String defaultProfilePic = 'assets/images/user.jpg';
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -40,13 +53,26 @@ class _NewContactState extends State<NewContact> {
               children: [
                 Column(
                   children: [
-                    ClipOval(
-                      child: Material(
-                        child: Ink.image(
-                          image: AssetImage('assets/images/user.jpg'),
-                          fit: BoxFit.fill,
-                          width: 128,
-                          height: 128,
+                    Container(
+                      width: 140,
+                      child: ClipOval(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            child: widget.profilePicture != ''
+                                ? Image.network(
+                                    imageBaseUrl + widget.profilePicture,
+                                    fit: BoxFit.cover,
+                                    width: 150,
+                                    height: 150,
+                                  )
+                                : Image.asset(
+                                    defaultProfilePic,
+                                    fit: BoxFit.cover,
+                                    width: 150,
+                                    height: 150,
+                                  ),
+                          ),
                         ),
                       ),
                     ),
@@ -85,7 +111,7 @@ class _NewContactState extends State<NewContact> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(left: 12.0),
-                                      child: Text(widget.full_names),
+                                      child: Text(widget.fullNames),
                                     ),
                                   ],
                                 ),
@@ -112,7 +138,7 @@ class _NewContactState extends State<NewContact> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Phone:"),
-                                    Text(widget.phone_number),
+                                    Text(widget.phoneNumber),
                                   ],
                                 ),
                                 SizedBox(
@@ -152,7 +178,23 @@ class _NewContactState extends State<NewContact> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SubmitButton(text: 'Save'),
+                        Obx((){
+                            return _contactService.isLoading.value
+                          ? const CircularProgressIndicator()
+                          :SubmitButton(
+                              text: 'Save',
+                              onTap: () async  {
+                                Map<String, dynamic> contactBody = {
+                                  'contact_saver': contactSaverNrc,
+                                  'nrc': widget.contactNrc
+                                };
+                                  await _contactService.saveContact(contactBody);
+                                  _contactService.contactDetails.refresh();
+                                  
+                              },
+                            );
+                          }
+                        ),
                       ],
                     )
                   ],

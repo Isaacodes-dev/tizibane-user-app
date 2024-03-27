@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:tizibane/constants/constants.dart';
 
 class ProfileService extends GetxController {
@@ -45,6 +46,10 @@ class ProfileService extends GetxController {
       Map map = jsonDecode(await response.stream.bytesToString());
       String message = map['message'];
       success = true;
+      Get.snackbar('Success','Image uploaded Successfully',          
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,);
       getImagePath();
     }else{
       print('Error uploading image');

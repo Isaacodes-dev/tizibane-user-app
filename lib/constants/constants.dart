@@ -13,3 +13,7 @@ const String tizibaneUser = 'tizibaneuser';
 const String uploadProfilePic = 'uploadimage';
 
 const String getImage = 'getimage';
+
+const String getContactDetails = 'getcontact';
+
+const String saveContacDetails = 'savecontact';

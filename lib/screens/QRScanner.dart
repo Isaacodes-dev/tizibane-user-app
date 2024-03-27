@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:tizibane/Services/ContactService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
 
 class QRScanner extends StatefulWidget {
   const QRScanner({super.key});
 
+  
+
   @override
   State<QRScanner> createState() => _QRScannerState();
 }
 
 class _QRScannerState extends State<QRScanner> {
+
+  final ContactService _contactService = Get.put(ContactService());
   
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   
@@ -24,14 +30,19 @@ class _QRScannerState extends State<QRScanner> {
 
   String? userNrc;
 
-  loadUser(userNrc) async
-  {
-    final user = await UserService().getUser();
-    // setState(() {
-    //   Navigator.of(context).push(
-    //         MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
-    // });
+  // loadUser(userNrc) async
+  // {
+  //   final user = await UserService().getUser();
+  //   // setState(() {
+  //   //   Navigator.of(context).push(
+  //   //         MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
+  //   // });
       
+  // }
+
+    loadUser(userNrc) async
+  {
+      await _contactService.getContact(userNrc);
   }
 
    @override
@@ -61,7 +72,7 @@ class _QRScannerState extends State<QRScanner> {
             child: Center(
               child: (result != null)
                   ? Text(
-                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                      '')
                   : Text('Scan a code'),
             ),
           )
