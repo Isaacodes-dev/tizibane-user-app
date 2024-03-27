@@ -17,16 +17,15 @@ class User{
     required this.password
   });
 
-  factory User.fromJson(Map<String, dynamic>json)
-  {
-    return User(
-      nrc: json['nrc'],
-      full_names: json['full_names'] as String,
-      phone_number: json['phone_number'] as String,
-      email: json['email'] as String,
-      password: json['password'] as String
-    );
-  }
+factory User.fromJson(Map<String, dynamic> json) {
+  return User(
+    nrc: json['nrc'] ?? '',
+    full_names: json['full_names'] ?? '',
+    phone_number: json['phone_number'] ?? '',
+    email: json['email'] ?? '',
+    password: json['password'] ?? '',
+  );
+}
     Map<String, dynamic> toJson() {
     return {
       'nrc': nrc,

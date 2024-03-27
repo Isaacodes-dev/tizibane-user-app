@@ -68,7 +68,7 @@ class _ContactsState extends State<Contacts> {
             {
                 NfcManager.instance.stopSession();
                 
-                loadUser(resultSubString);
+                // loadUser(resultSubString);
 
             }
             else
@@ -84,15 +84,15 @@ class _ContactsState extends State<Contacts> {
    
   }
 
-    loadUser(userNrc) async
-  {
-    final user = await UserService().getUser(userNrc);
-    setState(() {
-      Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
-    });
+  //   loadUser(userNrc) async
+  // {
+  //   final user = await UserService().getUser(userNrc);
+  //   setState(() {
+  //     Navigator.of(context).push(
+  //           MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
+  //   });
       
-  }
+  // }
 
   @override
   Widget build(BuildContext context) {

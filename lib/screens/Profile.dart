@@ -1,4 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tizibane/Services/ProfileService.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:tizibane/Services/UserService.dart';
+import 'package:tizibane/constants/constants.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -7,9 +14,44 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
+final UserService _userService = Get.put(UserService());
+
 class _ProfileState extends State<Profile> {
+
+  final UserService _userService = Get.put(UserService());
+
+  final ProfileService _profileService = Get.put(ProfileService());
+
+  File? imageFile;
+
+  XFile? pickedFile;
+
+  final picker = ImagePicker();
+
+  late Future<String?> userProfilePicFuture;
+
+   
+
+  @override
+  void initState() {
+    super.initState();
+     _profileService.getImagePath();
+  }
+
+  // Future<void> _changeProfilePicture() async {
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       imageFile = File(pickedFile.path);
+  //     });
+  //   }
+  // }
+  
+
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => ProfileService());
+    String defaultProfilePic = 'assets/images/user.jpg';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 0, 52, 105),
@@ -22,16 +64,26 @@ class _ProfileState extends State<Profile> {
               children: [
                 Column(
                   children: [
-                    ClipOval(
-                      child: Material(
-                        child: Ink.image(
-                          image: AssetImage('assets/images/user.jpg'),
-                          fit: BoxFit.fill,
-                          width: 128,
-                          height: 128,
+                    GetBuilder<ProfileService>(builder: (ProfileService) {
+                      return Container(
+                        width: 140,
+                        child: ClipOval(
+                          child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                  onTap: () {
+                                    ProfileService.changeProfilePicture();
+                                  },
+                                  child: ProfileService.pickedFile != null
+                                      ? Image.file(
+                                          File(ProfileService.pickedFile!.path),
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.contain)
+                                      : Image.network(imageBaseUrl+_profileService.imagePath.value,fit: BoxFit.cover,width: 150,height: 150,))),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                     const SizedBox(
                       height: 24,
                     ),
@@ -48,9 +100,10 @@ class _ProfileState extends State<Profile> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      child: Image.asset('assets/images/samplelogo.png',
-                                      height: 100,
-                                      width: 100,
+                                      child: Image.asset(
+                                        'assets/images/samplelogo.png',
+                                        height: 100,
+                                        width: 100,
                                       ),
                                     )
                                   ],
@@ -66,7 +119,8 @@ class _ProfileState extends State<Profile> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(left: 12.0),
-                                      child: Text("Isaac Mulenga"),
+                                      child: Text(_userService
+                                          .userObj.value.full_names),
                                     ),
                                   ],
                                 ),
@@ -81,7 +135,8 @@ class _ProfileState extends State<Profile> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(left: 12.0),
-                                      child: Text("mulengaisaac10@gmail.com"),
+                                      child: Text(
+                                          _userService.userObj.value.email),
                                     ),
                                   ],
                                 ),
@@ -93,7 +148,8 @@ class _ProfileState extends State<Profile> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Phone:"),
-                                    Text("+260973700796"),
+                                    Text(_userService
+                                        .userObj.value.phone_number),
                                   ],
                                 ),
                                 SizedBox(
@@ -104,7 +160,7 @@ class _ProfileState extends State<Profile> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Company:"),
-                                    Text("Elisons"),
+                                    Text(""),
                                   ],
                                 ),
                                 SizedBox(
@@ -115,7 +171,7 @@ class _ProfileState extends State<Profile> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Position:"),
-                                    Text("Software Developer"),
+                                    Text(""),
                                   ],
                                 ),
                                 SizedBox(
@@ -127,6 +183,12 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
+                    Center(
+                      child: GestureDetector(
+                        child: Text('Upload'),
+                        onTap:()=> Get.find<ProfileService>().upload(),
+                      ),
+                    )
                   ],
                 ),
               ],

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';
+import 'package:get/get.dart';
 
 class More extends StatefulWidget {
   const More({super.key});
@@ -10,6 +12,8 @@ class More extends StatefulWidget {
   @override
   State<More> createState() => _MoreState();
 }
+
+final AuthService _authService = Get.put(AuthService());
 
 class _MoreState extends State<More> {
   @override
@@ -60,18 +64,21 @@ class _MoreState extends State<More> {
           leading: Icon(Icons.settings),
           title: Text('Settings'),
           onTap: () => {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Settings()))
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Settings()))
           },
         ),
-        ListTile(
-          leading: Icon(Icons.logout),
-          title: Text('Logout'),
-          onTap: () => {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => Login()))
-          },
-        ),
+        Obx(() {
+          return _authService.isLoading.value
+              ? Center(child: Text('Please Wait...',style: TextStyle(fontSize: 14),))
+              : ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text('Logout'),
+                  onTap: () async {
+                    await _authService.logOut();
+                  },
+                );
+        })
       ],
     );
     return listView;

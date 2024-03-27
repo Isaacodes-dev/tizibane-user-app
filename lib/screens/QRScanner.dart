@@ -26,11 +26,11 @@ class _QRScannerState extends State<QRScanner> {
 
   loadUser(userNrc) async
   {
-    final user = await UserService().getUser(userNrc);
-    setState(() {
-      Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
-    });
+    final user = await UserService().getUser();
+    // setState(() {
+    //   Navigator.of(context).push(
+    //         MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
+    // });
       
   }
 
