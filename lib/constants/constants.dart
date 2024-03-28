@@ -16,4 +16,8 @@ const String getImage = 'getimage';
 
 const String getContactDetails = 'getcontact';
 
+const String getContactsDetails = 'getcontacts';
+
+const String getRecentAddedContacts = 'getrecentcontacts';
+
 const String saveContacDetails = 'savecontact';

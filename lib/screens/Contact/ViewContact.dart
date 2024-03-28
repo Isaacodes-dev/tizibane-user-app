@@ -2,7 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:tizibane/constants/constants.dart';
 
 class ViewContact extends StatefulWidget {
-  const ViewContact({super.key});
+  final String contactNrc;
+  final String fullNames;
+  final String email;
+  final String phoneNumber;
+  final String profilePicture;
+ 
+ ViewContact(
+      {super.key,
+      required this.contactNrc,
+      required this.fullNames,
+      required this.email,
+      required this.phoneNumber,
+      required this.profilePicture});
 
   @override
   State<ViewContact> createState() => _ViewContactState();
@@ -11,6 +23,7 @@ class ViewContact extends StatefulWidget {
 class _ViewContactState extends State<ViewContact> {
   @override
   Widget build(BuildContext context) {
+    String defaultProfilePic = 'assets/images/user.jpg';
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -25,7 +38,7 @@ class _ViewContactState extends State<ViewContact> {
         backgroundColor: Color.fromARGB(255, 0, 52, 105),
         title: Text('Contact Details'),
       ),
-        body: Padding(
+      body: Padding(
         padding: const EdgeInsets.only(top: 25.0),
         child: SingleChildScrollView(
           child: Center(
@@ -33,18 +46,29 @@ class _ViewContactState extends State<ViewContact> {
               children: [
                 Column(
                   children: [
-                      Container(
-                        width: 140,
-                        child: ClipOval(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              // child: _profileService.imagePath.value != '' ? Image.network(imageBaseUrl+_profileService.imagePath.value,fit: BoxFit.cover,width: 150,height: 150,):
-                              // Image.asset(defaultProfilePic, fit: BoxFit.cover,width: 150,height: 150,),
-                            ),
+                    Container(
+                      width: 140,
+                      child: ClipOval(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            child: widget.profilePicture != ''
+                                ? Image.network(
+                                    imageBaseUrl + widget.profilePicture,
+                                    fit: BoxFit.cover,
+                                    width: 150,
+                                    height: 150,
+                                  )
+                                : Image.asset(
+                                    defaultProfilePic,
+                                    fit: BoxFit.cover,
+                                    width: 150,
+                                    height: 150,
+                                  ),
                           ),
                         ),
                       ),
+                    ),
                     const SizedBox(
                       height: 24,
                     ),
@@ -61,9 +85,10 @@ class _ViewContactState extends State<ViewContact> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      child: Image.asset('assets/images/samplelogo.png',
-                                      height: 100,
-                                      width: 100,
+                                      child: Image.asset(
+                                        'assets/images/samplelogo.png',
+                                        height: 100,
+                                        width: 100,
                                       ),
                                     )
                                   ],
@@ -79,7 +104,7 @@ class _ViewContactState extends State<ViewContact> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(left: 12.0),
-                                      child: Text("Isaac Mulenga"),
+                                      child: Text(widget.fullNames),
                                     ),
                                   ],
                                 ),
@@ -94,7 +119,7 @@ class _ViewContactState extends State<ViewContact> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(left: 12.0),
-                                      child: Text("mulengaisaac10@gmail.com"),
+                                      child: Text(widget.email),
                                     ),
                                   ],
                                 ),
@@ -106,7 +131,7 @@ class _ViewContactState extends State<ViewContact> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Phone:"),
-                                    Text("+260973700796"),
+                                    Text(widget.phoneNumber),
                                   ],
                                 ),
                                 SizedBox(
@@ -117,7 +142,7 @@ class _ViewContactState extends State<ViewContact> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Company:"),
-                                    Text("Elisons"),
+                                    Text(""),
                                   ],
                                 ),
                                 SizedBox(
@@ -128,7 +153,7 @@ class _ViewContactState extends State<ViewContact> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Position:"),
-                                    Text("Software Developer"),
+                                    Text(""),
                                   ],
                                 ),
                                 SizedBox(
