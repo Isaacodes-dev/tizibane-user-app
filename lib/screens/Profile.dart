@@ -65,24 +65,26 @@ class _ProfileState extends State<Profile> {
                         width: 140,
                         child: ClipOval(
                           child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                  onTap: () {
-                                    ProfileService.changeProfilePicture();
-                                  },
-                                  child: ProfileService.pickedFile != null
-                                      ? Image.file(
-                                          File(ProfileService.pickedFile!.path),
-                                          width: 150,
-                                          height: 150,
-                                          fit: BoxFit.cover)
-                                      : Image.network(
-                                          imageBaseUrl +
-                                              _profileService.imagePath.value,
-                                          fit: BoxFit.cover,
-                                          width: 150,
-                                          height: 150,
-                                        ))),
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                ProfileService.changeProfilePicture();
+                              },
+                              child: ProfileService.pickedFile != null
+                                  ? Image.file(
+                                      File(ProfileService.pickedFile!.path),
+                                      width: 150,
+                                      height: 150,
+                                      fit: BoxFit.cover)
+                                  : Image.network(
+                                      imageBaseUrl +
+                                          _profileService.imagePath.value,
+                                      fit: BoxFit.cover,
+                                      width: 150,
+                                      height: 150,
+                                    ),
+                            ),
+                          ),
                         ),
                       );
                     }),

@@ -10,6 +10,7 @@ import 'package:tizibane/components/NFC.dart';
 import 'package:tizibane/components/drawer/sidemenu.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
 import 'package:tizibane/screens/Contact/ViewContact.dart';
@@ -25,78 +26,68 @@ class Contacts extends StatefulWidget {
 }
 
 class _ContactsState extends State<Contacts> {
-  
   ValueNotifier<dynamic> result = ValueNotifier(null);
 
-  final ContactService _contactService = Get.put(ContactService(),permanent: true);
-  
+  final ContactService _contactService =
+      Get.put(ContactService(), permanent: true);
+//final ContactService contactService = Get.find();
   //List<Contact> contacts = [];
-  
+
   final qrKey = GlobalKey(debugLabel: 'QR');
-  
+
   Barcode? resultQr;
 
   QRViewController? controller;
 
   @override
-  void reassemble(){
+  void reassemble() {
     super.reassemble();
-    if(Platform.isAndroid)
-    {
+    if (Platform.isAndroid) {
       controller?.pauseCamera();
-    }else if(Platform.isIOS){
+    } else if (Platform.isIOS) {
       controller!.resumeCamera();
     }
   }
 
-  void scanQR(){
+  void scanQR() {
+    setState(() {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => QRScanner()));
+    });
+  }
 
-      setState(() {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => QRScanner()));
+  void _tagRead() {
+    try {
+      NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+        var payload =
+            tag.data["ndef"]["cachedMessage"]["records"][0]["payload"];
+        var stringPayload = String.fromCharCodes(payload);
+        result.value = stringPayload;
+        String resultString = result.value.toString();
+
+        String resultSubString = resultString.substring(3);
+
+        if (resultSubString.isNotEmpty) {
+          NfcManager.instance.stopSession();
+
+          loadUser(resultSubString);
+        } else {
+          print("error");
+        }
       });
-      
+    } catch (ex) {
+      print("Error");
+    }
   }
 
-    void _tagRead() {
-      try{
-            
-            NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-            var payload = tag.data["ndef"]["cachedMessage"]["records"][0]["payload"];
-            var stringPayload = String.fromCharCodes(payload);
-            result.value = stringPayload;
-            String resultString = result.value.toString();
-
-            String resultSubString = resultString.substring(3);
-            
-            if(resultSubString.isNotEmpty)
-            {
-                NfcManager.instance.stopSession();
-                
-                loadUser(resultSubString);
-                
-
-            }
-            else
-            {
-              print("error");
-            }
-                  
-        });
-      }catch(ex)
-      {
-        print("Error");
-      }
-   
-  }
-
-  loadUser(resultSubString) async
-  {
-      await _contactService.getContact(resultSubString);
+  loadUser(resultSubString) async {
+    await _contactService.getContact(resultSubString);
   }
 
   @override
   Widget build(BuildContext context) {
+    final getContacts = Get.put<ContactService>(ContactService());
+   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 0, 52, 105),
@@ -136,33 +127,35 @@ class _ContactsState extends State<Contacts> {
                 prefixIcon: Icon(Icons.search),
               ),
             ),
-            Expanded(
-              child: ListView(
-                children: [
-                  ListTile(
-                    title: Text('Isaac Mulenga'),
-                    subtitle: Text('0973700796'),
-                    leading: CircleAvatar(
-                      child: Text('IM'),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ViewContact(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: Text('James Mulenga'),
-                    subtitle: Text('0973700797'),
-                    leading: CircleAvatar(child: Text('JM')),
-                  ),
-
-                ],
-              ),
-            ),
+            Obx(() {
+              return getContacts.isLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: _contactService.contactsList.length,
+                        itemBuilder: (context, index) {
+                          ContactModel contact = _contactService.contactsList[index];
+                        return  ListTile(
+                            title: Text(contact.fullNames),
+                            subtitle: Text(contact.phoneNumber),
+                            leading: CircleAvatar(
+                              foregroundImage: NetworkImage(imageBaseUrl + contact.profilePicture,),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ViewContact(contactNrc: contact.nrc,fullNames: contact.fullNames,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture,),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    );
+            }),
           ],
         ),
       ),

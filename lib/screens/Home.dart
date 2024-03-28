@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:tizibane/Services/ContactService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/models/Contact.dart';
 import 'package:tizibane/screens/Contact/ViewContact.dart';
 import 'package:tizibane/models/User.dart';
 
@@ -21,6 +23,8 @@ class _HomeState extends State<Home> {
   final UserService _userService = Get.put(UserService());
 
   final ProfileService _profileService = Get.put(ProfileService());
+
+  final ContactService _contactService = Get.put(ContactService());
   //late Future<String?> userProfilePicFuture; // Declare Future<String?>
 
   bool isLoading = true;
@@ -47,7 +51,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     String defaultProfilePic = 'assets/images/user.jpg';
-
+    final getRecentContacts = Get.put<ContactService>(ContactService());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 0, 52, 105),
@@ -116,27 +120,31 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              Expanded(
-                child: ListView(
-                  children: [
-                    ListTile(
-                      title: Text('Isaac Mulenga'),
-                      subtitle: Text('0973700796'),
-                      leading: CircleAvatar(
-                        child: Text('IM'),
+            Obx(() {
+              return getRecentContacts.isLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: _contactService.contactsList.length,
+                        itemBuilder: (context, index) {
+                          ContactModel contact = _contactService.contactsList[index];
+                        return  ListTile(
+                            title: Text(contact.fullNames),
+                            subtitle: Text(contact.phoneNumber),
+                            leading: CircleAvatar(
+                              foregroundImage: NetworkImage(imageBaseUrl + contact.profilePicture,),
+                            ),
+                            onTap: () {
+                              Get.to(ViewContact(contactNrc: contact.nrc,fullNames: contact.fullNames,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture));
+
+                            },
+                          );
+                        },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ViewContact(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                    );
+            }),
             ],
           ),
         ],
