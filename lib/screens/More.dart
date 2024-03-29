@@ -6,6 +6,7 @@ import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';
 import 'package:get/get.dart';
+import 'package:tizibane/screens/UpdateUserCredentials.dart';
 
 class More extends StatefulWidget {
   const More({super.key});
@@ -21,7 +22,6 @@ final nrcStorage = GetStorage();
 String nrcNumber = nrcStorage.read('nrcNumber');
 
 class _MoreState extends State<More> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,9 +74,21 @@ class _MoreState extends State<More> {
                 context, MaterialPageRoute(builder: (context) => Settings()))
           },
         ),
+        ListTile(
+          leading: Icon(Icons.person),
+          title: Text('Update User Credentials'),
+          onTap: () => {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => UpdateUserCredentials()))
+          },
+        ),
         Obx(() {
           return _authService.isLoading.value
-              ? Center(child: Text('Please Wait...',style: TextStyle(fontSize: 14),))
+              ? Center(
+                  child: Text(
+                  'Please Wait...',
+                  style: TextStyle(fontSize: 14),
+                ))
               : ListTile(
                   leading: Icon(Icons.logout),
                   title: Text('Logout'),

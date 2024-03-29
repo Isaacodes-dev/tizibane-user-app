@@ -12,6 +12,8 @@ const String tizibaneUser = 'tizibaneuser';
 
 const String uploadProfilePic = 'uploadimage';
 
+const String uploadDefaultProfilePic = 'uploaddefaultimage';
+
 const String getImage = 'getimage';
 
 const String getContactDetails = 'getcontact';

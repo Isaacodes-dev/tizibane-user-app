@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/models/LoginUser.dart';
@@ -14,6 +15,8 @@ import 'package:tizibane/screens/Login.dart';
 
 class AuthService extends GetxController {
   final UserService _userService = Get.put(UserService());
+
+  final ProfileService _profileService = Get.put(ProfileService());
   final isLoading = false.obs;
 
   final token = ''.obs;
@@ -53,6 +56,8 @@ class AuthService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+        _profileService.setDefaultPicture(nrc);
+        //Get.offAll(() => Login());
       } else {
         isLoading.value = false;
         print(json.decode(response.body)['message']);

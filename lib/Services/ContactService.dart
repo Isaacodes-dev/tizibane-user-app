@@ -57,10 +57,10 @@ class ContactService extends GetxController {
       if (responseData['contact'] != null) {
         ContactModel contact;
         if (responseData['contact'] is List) {
-          // If responseData['contact'] is a list, assume the first element contains the contact
+    
           contact = ContactModel.fromJson(responseData['contact'][0]);
         } else if (responseData['contact'] is Map) {
-          // If responseData['contact'] is a map, assume it contains the contact directly
+         
           contact = ContactModel.fromJson(responseData['contact']);
         } else {
           throw Exception('Unexpected response format');
@@ -185,12 +185,12 @@ Future<void> getRecentContacts() async {
 
   Future<void> saveContactToPhonebook() async {
     update();
-    // Request permission to access contacts
+    
     PermissionStatus permissionStatus = await Permission.contacts.request();
     if (permissionStatus.isGranted) {
-      // Permission granted, proceed to save contact
+     
       try {
-        // Create a new contact
+       
         Contact contact = Contact(
           givenName: contactDetails.value.fullNames,
           phones: [
@@ -198,19 +198,18 @@ Future<void> getRecentContacts() async {
           ],
           emails: [Item(label: 'work', value: contactDetails.value.email)],
         );
-        // Save the contact
+        
         await ContactsService.addContact(contact);
         print('Contact saved successfully');
-        // Navigate to the desired screen
+       
         Get.offAll(() => BottomMenuBarItems());
       } catch (e) {
         print('Failed to save contact: $e');
-        // Handle the error as needed (e.g., show an error message to the user)
+        
       }
     } else {
-      // Permission to access contacts is denied
       print('Permission to access contacts is denied');
-      // Handle the denied permission (e.g., show a dialog or request permission again)
+      
     }
   }
 }
