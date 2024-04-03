@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/ContactService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/Alerts/AlertDialog.dart';
@@ -90,7 +91,7 @@ class _ContactsState extends State<Contacts> {
    
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 0, 52, 105),
+        backgroundColor: Colors.black,
       ),
       body: Container(
         padding: EdgeInsets.all(20),
@@ -105,9 +106,9 @@ class _ContactsState extends State<Contacts> {
                 decoration: const ShapeDecoration(
                     shape: CircleBorder(
                         side: BorderSide(
-                      color: Color.fromARGB(255, 0, 52, 105),
+                      color: Colors.black,
                     )),
-                    color: Color.fromARGB(255, 0, 52, 105)),
+                    color: Colors.black),
                 child: IconButton(
                   icon: const Icon(Icons.add),
                   color: Colors.white,
@@ -122,37 +123,54 @@ class _ContactsState extends State<Contacts> {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Search',
+                contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 prefixIcon: Icon(Icons.search),
               ),
             ),
+            const SizedBox(height: 15),
             Obx(() {
               return getContacts.isLoading.value
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                    ],
+                  )
                   : Expanded(
-                      child: ListView.builder(
+                    
+                      child: _contactService.contactsList.length > 0 ? ListView.builder(
                         itemCount: _contactService.contactsList.length,
                         itemBuilder: (context, index) {
                           ContactModel contact = _contactService.contactsList[index];
-                        return  ListTile(
-                            title: Text(contact.fullNames),
-                            subtitle: Text(contact.phoneNumber),
-                            leading: CircleAvatar(
-                              foregroundImage: NetworkImage(imageBaseUrl + contact.profilePicture,),
+                        return  Card(
+                          shadowColor: Colors.black,
+                          elevation: 3,
+                          child: ListTile(
+                              title: Text(contact.firstName + ' ' + contact.lastName,style: GoogleFonts.lexendDeca()),
+                              subtitle: Text(contact.positionName,style: GoogleFonts.lexendDeca()),
+                              leading: CircleAvatar(
+                                radius: 35,
+                                foregroundImage: NetworkImage(imageBaseUrl + contact.profilePicture,),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewContact(contactNrc: contact.nrc,firstName: contact.firstName,lastName: contact.lastName,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture,positionName: contact.positionName,),
+                                  ),
+                                  
+                                );
+                              },
                             ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ViewContact(contactNrc: contact.nrc,fullNames: contact.fullNames,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture,),
-                                ),
-                              );
-                            },
-                          );
+                        );
                         },
+                      ): Padding(
+                        padding: EdgeInsets.all(30),
+                        child: Text('No Contacts to display',style: GoogleFonts.lexendDeca()),
                       ),
                     );
             }),

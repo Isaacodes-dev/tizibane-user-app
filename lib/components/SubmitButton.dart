@@ -12,11 +12,11 @@ class SubmitButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(25),
-        width: 300,
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+        width: 380,
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 2, 47, 83),
-          borderRadius: BorderRadius.circular(9),
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
           child: Text(

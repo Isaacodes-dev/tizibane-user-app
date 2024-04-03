@@ -27,7 +27,8 @@ class AuthService extends GetxController {
 
   Future<void> createUser({
     required String nrc,
-    required String full_names,
+    required String first_name,
+    required String last_name,
     required String phone_number,
     required String email,
     required String password,
@@ -38,7 +39,8 @@ class AuthService extends GetxController {
 
       final data = {
         'nrc': nrc,
-        'full_names': full_names,
+        'first_name': first_name,
+        'last_name': last_name,
         'phone_number': phone_number,
         'email': email,
         'password': password,
@@ -56,8 +58,11 @@ class AuthService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        _profileService.setDefaultPicture(nrc);
-        //Get.offAll(() => Login());
+        await _profileService.setDefaultPicture(nrc);
+        
+        Get.offAll(() => Login());
+        
+        
       } else {
         isLoading.value = false;
         print(json.decode(response.body)['message']);
@@ -110,10 +115,9 @@ class AuthService extends GetxController {
             backgroundColor: Colors.red,
             colorText: Colors.white,
           );
-          // Clear any existing authentication token
+         
           box.remove('token');
-          // Optionally, navigate the user to the login screen
-          // Get.offAll(()=> LoginScreen());
+
         } else {
           // Handle other error codes
           Get.snackbar(
@@ -147,7 +151,7 @@ class AuthService extends GetxController {
         isLoading.value = false;
         box.remove('token');
         nrcStorage.remove('nrcNumber');
-        _userService.userObj.value = User(nrc: '', full_names: '', phone_number: '', email: '', password: '');
+        _userService.userObj.value = User(nrc: '', first_name: '', last_name: '', phone_number: '', email: '', password: '', profilePicture: '');
         Get.snackbar(
           'Success',
           'You have logged out Successfully',
@@ -155,15 +159,17 @@ class AuthService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+        Get.deleteAll();
         Get.offAll(() => Login());
       } else {
         Get.snackbar(
           'Error',
-          'logout not Successfull',
+          'logout not Successful',
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
+        print(response.body);
         isLoading.value = false;
       }
     } catch (e) {

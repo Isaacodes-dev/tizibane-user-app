@@ -12,40 +12,26 @@ import 'package:tizibane/screens/Contact/NewContact.dart';
 class QRScanner extends StatefulWidget {
   const QRScanner({super.key});
 
-  
-
   @override
   State<QRScanner> createState() => _QRScannerState();
 }
 
 class _QRScannerState extends State<QRScanner> {
-
   final ContactService _contactService = Get.put(ContactService());
-  
+
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  
+
   Barcode? result;
-  
+
   QRViewController? controller;
 
   String? userNrc;
 
-  // loadUser(userNrc) async
-  // {
-  //   final user = await UserService().getUser();
-  //   // setState(() {
-  //   //   Navigator.of(context).push(
-  //   //         MaterialPageRoute(builder: (context) => NewContact(full_names: user.full_names,phone_number: user.phone_number,email: user.email,)));
-  //   // });
-      
-  // }
-
-    loadUser(userNrc) async
-  {
-      await _contactService.getContact(userNrc);
+  loadUser(userNrc) async {
+    await _contactService.getContact(userNrc);
   }
 
-   @override
+  @override
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
@@ -57,7 +43,7 @@ class _QRScannerState extends State<QRScanner> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       body: Column(
         children: <Widget>[
           Expanded(
@@ -70,31 +56,30 @@ class _QRScannerState extends State<QRScanner> {
           Expanded(
             flex: 1,
             child: Center(
-              child: (result != null)
-                  ? Text(
-                      '')
-                  : Text('Scan a code'),
+              child: (result != null) ? Text('') : Text('Scan a code'),
             ),
           )
         ],
       ),
     );
   }
-void _onQRViewCreated(QRViewController controller) {
-  this.controller = controller;
-  bool isUserLoaded = false; // Add a flag to track if user data is already loaded
 
-  controller.scannedDataStream.listen((scanData) {
-    if (!isUserLoaded) { // Only load user data if it hasn't been loaded already
-      setState(() {
-        result = scanData;
-        userNrc = result!.code.toString();
-        loadUser(userNrc);
-        isUserLoaded = true; // Set flag to true after loading user data
-      });
-    }
-  });
-}
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    bool isUserLoaded =
+        false; 
+
+    controller.scannedDataStream.listen((scanData) {
+      if (!isUserLoaded) {
+        setState(() {
+          result = scanData;
+          userNrc = result!.code.toString();
+          loadUser(userNrc);
+          isUserLoaded = true; 
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -102,4 +87,3 @@ void _onQRViewCreated(QRViewController controller) {
     super.dispose();
   }
 }
-

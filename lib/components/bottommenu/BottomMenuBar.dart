@@ -41,7 +41,7 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
         bucket: bucket,
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 0, 52, 105),
+        color: Colors.black,
         shape: CircularNotchedRectangle(),
         notchMargin: 10,
         child: Container(
@@ -63,9 +63,9 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
                   children: [
                     Icon(
                       Icons.home_filled,
-                      color: currentIndex == 0 ? Colors.orange : Color.fromARGB(255, 218, 218, 218),
+                      color: currentIndex == 0 ? Colors.orange : Colors.white,
                     ),
-                    Text("Home", style: TextStyle(color: currentIndex == 0 ? Colors.orange : Color.fromARGB(255, 218, 218, 218)),),
+                    Text("Home", style: TextStyle(color: currentIndex == 0 ? Colors.orange : Colors.white),),
                   ],
                 ),
               ),
@@ -82,9 +82,9 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
                   children: [
                     Icon(
                       Icons.contacts_outlined,
-                      color: currentIndex == 1 ? Colors.orange : Color.fromARGB(255, 218, 218, 218),
+                      color: currentIndex == 1 ? Colors.orange : Colors.white,
                     ),
-                    Text("Contacts", style: TextStyle(color: currentIndex == 1 ? Colors.orange : Color.fromARGB(255, 218, 218, 218)),),
+                    Text("Contacts", style: TextStyle(color: currentIndex == 1 ? Colors.orange : Colors.white),),
                   ],
                 ),
               ),
@@ -101,9 +101,9 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
                   children: [
                     Icon(
                       Icons.person,
-                      color: currentIndex == 2 ? Colors.orange : Color.fromARGB(255, 218, 218, 218),
+                      color: currentIndex == 2 ? Colors.orange : Colors.white,
                     ),
-                    Text("Profile", style: TextStyle(color: currentIndex == 2 ? Colors.orange : Color.fromARGB(255, 218, 218, 218)),),
+                    Text("Profile", style: TextStyle(color: currentIndex == 2 ? Colors.orange : Colors.white),),
                   ],
                 ),
               ),
@@ -120,9 +120,9 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
                   children: [
                     Icon(
                       Icons.more_horiz_outlined,
-                      color: currentIndex == 3 ? Colors.orange : Color.fromARGB(255, 218, 218, 218),
+                      color: currentIndex == 3 ? Colors.orange : Colors.white,
                     ),
-                    Text("More", style: TextStyle(color: currentIndex == 3 ? Colors.orange : Color.fromARGB(255, 218, 218, 218)),),
+                    Text("More", style: TextStyle(color: currentIndex == 3 ? Colors.orange : Colors.white),),
                   ],
                 ),
               )

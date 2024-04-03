@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
@@ -12,7 +13,7 @@ class UserService extends GetxController {
   }
   final isLoading = false.obs;
   var userObj =
-      User(nrc: '', full_names: '', phone_number: '', email: '', password: '')
+      User(nrc: '', first_name: '', last_name: '', phone_number: '', email: '', password: '', profilePicture: '')
           .obs;
   final box = GetStorage();
   final nrcStorage = GetStorage();
@@ -21,9 +22,11 @@ class UserService extends GetxController {
   Future<void> getUser() async {
     String accessToken = box.read('token');
     String storedNrc = nrcStorage.read('nrcNumber');
-
+    isLoading.value = true; 
     if (storedNrc == null) {
+      isLoading.value = false;
       throw Exception("Stored 'nrcNumber' is null");
+      
     }
 
     final response = await http.get(
@@ -37,11 +40,66 @@ class UserService extends GetxController {
       var responseData = jsonDecode(response.body);
       if (responseData['user'] != null) {
         userObj.value = User.fromJson(responseData['user']);
+        isLoading.value = false;
       } else {
+        isLoading.value = false;
         throw Exception("User data is null");
+        
       }
     } else {
+      isLoading.value = false;
       throw Exception('Failed to load user data: ${response.statusCode}');
+      
     }
   }
+
+  Future<void> updateUserDetails({
+    required String first_name,
+    required String last_name,
+    required String phone_number,
+    required String email,
+  }) async {
+    try {
+      String accessToken = box.read('token');
+      String storedNrc = nrcStorage.read('nrcNumber');
+      final url = baseUrl + updateUser + '/$storedNrc';
+      isLoading.value = true;
+       
+      final data = {
+        'first_name': first_name,
+        'last_name': last_name,
+        'phone_number': phone_number,
+        'email': email,
+      };
+
+      final response = await http.put(Uri.parse(url),
+          headers: {'Accept': 'application/json','Authorization': 'Bearer $accessToken',}, body: data);
+
+      if (response.statusCode == 200) {
+        isLoading.value = false;
+        Get.snackbar(
+          'Success',
+          json.decode(response.body)['message'],
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );        
+        getUser();
+      } else {
+        isLoading.value = false;
+        print(json.decode(response.body)['message']);
+        Get.snackbar(
+          'Error',
+          json.decode(response.body)['message'],
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      isLoading.value = false;
+    }
+  }
+
 }

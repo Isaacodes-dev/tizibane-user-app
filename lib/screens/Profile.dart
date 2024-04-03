@@ -6,6 +6,8 @@ import 'package:tizibane/Services/ProfileService.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/screens/ProfileScreen/EmployeeHistory.dart';
+import 'package:tizibane/screens/ProfileScreen/UserProfile.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -35,172 +37,38 @@ class _ProfileState extends State<Profile> {
     _profileService.getImagePath();
   }
 
-  // Future<void> _changeProfilePicture() async {
-  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       imageFile = File(pickedFile.path);
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => ProfileService());
-    String defaultProfilePic = 'assets/images/user.jpg';
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 0, 52, 105),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 25.0),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    GetBuilder<ProfileService>(builder: (ProfileService) {
-                      return Container(
-                        width: 140,
-                        child: ClipOval(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                ProfileService.changeProfilePicture();
-                              },
-                              child: ProfileService.pickedFile != null
-                                  ? Image.file(
-                                      File(ProfileService.pickedFile!.path),
-                                      width: 150,
-                                      height: 150,
-                                      fit: BoxFit.cover)
-                                  : Image.network(
-                                      imageBaseUrl +
-                                          _profileService.imagePath.value,
-                                      fit: BoxFit.cover,
-                                      width: 150,
-                                      height: 150,
-                                    ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Container(
-                      width: 400,
-                      height: 300,
-                      child: Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      child: Image.asset(
-                                        'assets/images/samplelogo.png',
-                                        height: 100,
-                                        width: 100,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Name:"),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 12.0),
-                                      child: Text(_userService
-                                          .userObj.value.full_names),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Email:"),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 12.0),
-                                      child: Text(
-                                          _userService.userObj.value.email),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Phone:"),
-                                    Text(_userService
-                                        .userObj.value.phone_number),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Company:"),
-                                    Text(""),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Position:"),
-                                    Text(""),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Center(
-                      child: GestureDetector(
-                        child: Text('Upload'),
-                        onTap: () => Get.find<ProfileService>().upload(),
-                      ),
-                    )
-                  ],
-                ),
-              ],
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 2, 
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          bottom: TabBar(
+            indicatorColor: Colors.orange,
+            labelColor: Colors.orange,
+            unselectedLabelColor: Colors.white,
+            
+            tabs:[
+            Tab(
+              text: 'Profile',
+              icon: Icon(Icons.person)
             ),
+            Tab(
+              text: 'Employee History',
+              icon: Icon(Icons.history)
+            ),
+          ],
+          
           ),
+        ),
+        body: TabBarView(
+          children: [
+            UserProfile(),
+            EmployeeHistory()
+          ],
         ),
       ),
     );

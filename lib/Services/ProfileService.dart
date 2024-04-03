@@ -14,6 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:tizibane/constants/constants.dart';
 
 class ProfileService extends GetxController {
+  
+  RxBool isLoading = false.obs;
+
+  RxBool isVisible = false.obs;
+  
   final url = baseUrl + uploadProfilePic;
 
   var imagePath = ''.obs;
@@ -61,6 +66,7 @@ Future<XFile?> convertAssetToXFile() async {
 }
 
   Future<void> setDefaultPicture(nrc) async {
+    isLoading.value = true;
     XFile? xFile = await convertAssetToXFile();
     print(xFile );
     http.StreamedResponse response =
@@ -68,23 +74,19 @@ Future<XFile?> convertAssetToXFile() async {
     if (response.statusCode == 200) {
       Map map = jsonDecode(await response.stream.bytesToString());
       String message = map['message'];
-      Get.snackbar(
-        'Success',
-        'Default Image uploaded Successfully',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+      isLoading.value = false;
       //getImagePath();
     } else {
       print('Error uploading image');
       print(response.reasonPhrase);
+      isLoading.value = false;
     }
     update();
   }
 
   Future<void> changeProfilePicture() async {
     _pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    isVisible.value = true;
     update();
   }
 
@@ -106,6 +108,7 @@ Future<XFile?> convertAssetToXFile() async {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+        isVisible.value = false;
         getImagePath();
       } else {
         print('Error uploading image');
@@ -142,7 +145,6 @@ Future<XFile?> convertAssetToXFile() async {
   }
 
   Future<http.StreamedResponse> updateDefaultProfile(XFile? data, nrc) async {
-    String storedNrc = nrcStorage.read('nrcNumber');
     
     http.MultipartRequest request = http.MultipartRequest(
         'POST', Uri.parse(baseUrl + uploadDefaultProfilePic + '/$nrc'));

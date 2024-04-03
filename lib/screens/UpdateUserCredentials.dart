@@ -21,7 +21,7 @@ class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Color.fromARGB(255, 0, 52, 105),
+        backgroundColor: Colors.black,
         title: Text('Update User Credentials'),
       ),
       body: Column(

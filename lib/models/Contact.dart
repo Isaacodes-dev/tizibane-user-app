@@ -1,6 +1,7 @@
 class ContactModel {
   final String nrc;
-  final String fullNames;
+  final String firstName;
+  final String lastName;
   final String phoneNumber;
   final String email;
   final String? companyId;
@@ -9,10 +10,12 @@ class ContactModel {
   final String createdAt;
   final String updatedAt;
   final String profilePicture;
+  final String positionName;
 
   ContactModel({
     required this.nrc,
-    required this.fullNames,
+    required this.firstName,
+    required this.lastName,
     required this.phoneNumber,
     required this.email,
     this.companyId,
@@ -21,12 +24,14 @@ class ContactModel {
     required this.createdAt,
     required this.updatedAt,
     required this.profilePicture,
+    required this.positionName
   });
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
     return ContactModel(
       nrc: json['nrc'] ?? '',
-      fullNames: json['full_names'] ?? '',
+      firstName: json['first_name'] ?? '',
+      lastName: json['last_name'] ?? '',
       phoneNumber: json['phone_number'] ?? '',
       email: json['email'] ?? '',
       companyId: json['company_id'],
@@ -35,6 +40,7 @@ class ContactModel {
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
       profilePicture: json['profile_picture'] ?? '',
+      positionName: json['position_name'] ?? '',
     );
   }
 }
