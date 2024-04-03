@@ -22,7 +22,7 @@ class _NotificationsState extends State<Notifications> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Color.fromARGB(255, 0, 52, 105),
+        backgroundColor: Colors.black,
         title: Text('Notifications'),
       ),
       body: Column(

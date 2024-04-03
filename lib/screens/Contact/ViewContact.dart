@@ -1,20 +1,28 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/constants/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewContact extends StatefulWidget {
   final String contactNrc;
-  final String fullNames;
+  final String firstName;
+  final String lastName;
   final String email;
   final String phoneNumber;
   final String profilePicture;
- 
- ViewContact(
+  final String positionName;
+
+  ViewContact(
       {super.key,
       required this.contactNrc,
-      required this.fullNames,
+      required this.firstName,
+      required this.lastName,
       required this.email,
       required this.phoneNumber,
-      required this.profilePicture});
+      required this.profilePicture,
+      required this.positionName
+      });
 
   @override
   State<ViewContact> createState() => _ViewContactState();
@@ -23,7 +31,6 @@ class ViewContact extends StatefulWidget {
 class _ViewContactState extends State<ViewContact> {
   @override
   Widget build(BuildContext context) {
-    String defaultProfilePic = 'assets/images/user.jpg';
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -35,143 +42,360 @@ class _ViewContactState extends State<ViewContact> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Color.fromARGB(255, 0, 52, 105),
-        title: Text('Contact Details'),
+        backgroundColor: Colors.black,
+        title: Text('Contact Details', style: GoogleFonts.lexendDeca()),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 25.0),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Stack(
-              children: [
-                Column(
+      body: widget.profilePicture == ''
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: Colors.white,
+                child: Column(
                   children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                    ),
                     Container(
                       width: 140,
                       child: ClipOval(
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            child: widget.profilePicture != ''
-                                ? Image.network(
-                                    imageBaseUrl + widget.profilePicture,
-                                    fit: BoxFit.cover,
-                                    width: 150,
-                                    height: 150,
-                                  )
-                                : Image.asset(
-                                    defaultProfilePic,
-                                    fit: BoxFit.cover,
-                                    width: 150,
-                                    height: 150,
-                                  ),
-                          ),
+                              child: Image.network(
+                            imageBaseUrl + widget.profilePicture,
+                            fit: BoxFit.cover,
+                            width: 150,
+                            height: 150,
+                          )),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 24,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(widget.firstName + '' + widget.lastName, style: GoogleFonts.lexendDeca()),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(widget.positionName, style: GoogleFonts.lexendDeca()),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Text('Company', style: GoogleFonts.lexendDeca()),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Divider(
+                      thickness: 1.15,
+                      indent: MediaQuery.of(context).size.width * 0.1,
+                      endIndent: MediaQuery.of(context).size.width * 0.1,
+                      color: Colors.grey.shade400,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.12,
+                          height: 20,
+                        ),
+                        Text('Personal Details',
+                            style: GoogleFonts.lexendDeca()),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Container(
-                      width: 400,
-                      height: 300,
-                      child: Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Container(
-                            child: Column(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        border: Border.all(color: Colors.grey.shade200),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Phone', style: GoogleFonts.lexendDeca()),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Text(widget.phoneNumber,
+                                  style: GoogleFonts.lexendDeca())
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black,
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _openDialPad();
+                                },
+                                child: Icon(
+                                  CupertinoIcons.phone,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                          color: Colors.grey.shade100,
+                          border: Border.all(
+                            color: Colors.grey.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      child: Image.asset(
-                                        'assets/images/samplelogo.png',
-                                        height: 100,
-                                        width: 100,
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                Text('Email', style: GoogleFonts.lexendDeca()),
                                 SizedBox(
-                                  height: 10,
+                                  height: 3,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Name:"),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 12.0),
-                                      child: Text(widget.fullNames),
-                                    ),
-                                  ],
+                                Text(widget.email,
+                                    style: GoogleFonts.lexendDeca()),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.07,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.07,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black),
+                                child: Icon(
+                                  CupertinoIcons.mail,
+                                  color: Colors.white,
+                                  size: 16,
                                 ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                          color: Colors.grey.shade100,
+                          border: Border.all(
+                            color: Colors.grey.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Nrc', style: GoogleFonts.lexendDeca()),
                                 SizedBox(
-                                  height: 10,
+                                  height: 3,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Email:"),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 12.0),
-                                      child: Text(widget.email),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Phone:"),
-                                    Text(widget.phoneNumber),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Company:"),
-                                    Text(""),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Position:"),
-                                    Text(""),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
+                                Text(
+                                  formatNrc(widget.contactNrc),
+                                  style: GoogleFonts.lexendDeca(),
                                 ),
                               ],
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.07,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.07,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black,
+                                ),
+                                child: Icon(
+                                  Icons.credit_card,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Divider(
+                      indent: MediaQuery.of(context).size.width * 0.1,
+                      endIndent: MediaQuery.of(context).size.width * 0.1,
+                      color: Colors.grey.shade400,
+                      thickness: 1,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.12,
+                          height: 20,
+                        ),
+                        Text('Groups', style: GoogleFonts.lexendDeca()),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Divider(
+                      indent: MediaQuery.of(context).size.width * 0.1,
+                      endIndent: MediaQuery.of(context).size.width * 0.1,
+                      color: Colors.grey.shade400,
+                      thickness: 1,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.12,
+                          height: 20,
+                        ),
+                        Text('Social', style: GoogleFonts.lexendDeca()),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: 0,
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.09,
+                            height: MediaQuery.of(context).size.width * 0.09,
+                            child: Image(
+                              image: AssetImage('assets/images/fb1.png'),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.09,
+                            height: MediaQuery.of(context).size.width * 0.09,
+                            child: Image(
+                              image: AssetImage('assets/images/x.png'),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.1,
+                            height: MediaQuery.of(context).size.width * 0.1,
+                            child: Image(
+                              image: AssetImage('assets/images/linkedIn.png'),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.1,
+                            height: MediaQuery.of(context).size.width * 0.1,
+                            child: Image(
+                              image: AssetImage('assets/images/insta-logo.png'),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.1,
+                            height: MediaQuery.of(context).size.width * 0.1,
+                            child: Image(
+                              image: AssetImage('assets/images/git.png'),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Divider(
+                      indent: MediaQuery.of(context).size.width * 0.1,
+                      endIndent: MediaQuery.of(context).size.width * 0.1,
+                      color: Colors.grey.shade400,
+                      thickness: 1,
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
+  }
+
+  String formatNrc(String userNrc) {
+    String formattedNrc = userNrc.substring(0, 6) +
+        '/' +
+        userNrc.substring(6, 8) +
+        '/' +
+        userNrc.substring(8);
+
+    return formattedNrc;
+  }
+  void _openDialPad() async {
+    const phoneNumber = '1234567890'; // Replace with the phone number you want to dial
+    final url = 'tel:$phoneNumber';
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

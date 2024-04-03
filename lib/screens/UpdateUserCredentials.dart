@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
-class Settings extends StatefulWidget {
-  const Settings({super.key});
+
+class UpdateUserCredentials extends StatefulWidget {
+  const UpdateUserCredentials({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<UpdateUserCredentials> createState() => _UpdateUserCredentialsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,15 +22,11 @@ class _SettingsState extends State<Settings> {
           },
         ),
         backgroundColor: Colors.black,
-        title: Text('Settings'),
+        title: Text('Update User Credentials'),
       ),
       body: Column(
-        children: [
-          Text('Page Coming Soon'),
-        ],
         
       ),
     );
   }
-
 }

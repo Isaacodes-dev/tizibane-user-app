@@ -18,17 +18,14 @@ class _LoginState extends State<Login> {
   final TextEditingController nrcController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final AuthService _authService = Get.put(AuthService());
-  
 
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -41,13 +38,9 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: width,
-                height: height * 0.35,
-                child: Image.asset(
-                  'assets/images/Tizibane.png',
-                  fit: BoxFit.fill,
-                ),
-              ),
+                  child: Image.asset(
+                'assets/images/Tizibane.png',
+              )),
               const Padding(
                 padding: EdgeInsets.all(10.0),
                 child:
@@ -68,6 +61,9 @@ class _LoginState extends State<Login> {
                       obscureText: false,
                       decoration: InputDecoration(
                         hintText: 'Nrc',
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
+                        hintStyle: TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0)),
                       ),
@@ -78,6 +74,9 @@ class _LoginState extends State<Login> {
                       obscureText: true,
                       decoration: InputDecoration(
                         hintText: 'Password',
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
+                        hintStyle: TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -86,22 +85,23 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Obx((){
-                        return _authService.isLoading.value
+                    Obx(() {
+                      return _authService.isLoading.value
                           ? const CircularProgressIndicator()
-                          :  SubmitButton(
-                          text: 'Sign In',
-                          onTap: () async {
-                            await _authService.loginUser(nrc: nrcController.text.trim(), password: passwordController.text.trim());
-                          },
-                        );
-                      }
-                    ),
+                          : SubmitButton(
+                              text: 'Sign In',
+                              onTap: () async {
+                                await _authService.loginUser(
+                                    nrc: nrcController.text.trim(),
+                                    password: passwordController.text.trim());
+                              },
+                            );
+                    }),
                   ],
                 ),
               ),
@@ -136,5 +136,4 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
 }

@@ -16,20 +16,18 @@ class ContactService extends GetxController {
   final nrcStorage = GetStorage();
   var contactDetails = ContactModel(
           nrc: '',
-          fullNames: '',
+          firstName: '',
+          lastName: '',
           phoneNumber: '',
           email: '',
           roleId: '',
           createdAt: '',
           updatedAt: '',
-          profilePicture: '')
+          profilePicture: '',
+          positionName: '')
       .obs;
 
   var contactsList = <ContactModel>[].obs;
-
-  var recentContactsList = <ContactModel>[].obs;
-
-  var getRecentContactsDetails = <ContactModel>[].obs;
 
   final contactStorage = GetStorage();
 
@@ -37,7 +35,6 @@ class ContactService extends GetxController {
   void onInit() {
     super.onInit();
     getContacts();
-    getRecentContacts();
   }
 
   Future<void> getContact(String nrc) async {
@@ -57,10 +54,8 @@ class ContactService extends GetxController {
       if (responseData['contact'] != null) {
         ContactModel contact;
         if (responseData['contact'] is List) {
-          // If responseData['contact'] is a list, assume the first element contains the contact
           contact = ContactModel.fromJson(responseData['contact'][0]);
         } else if (responseData['contact'] is Map) {
-          // If responseData['contact'] is a map, assume it contains the contact directly
           contact = ContactModel.fromJson(responseData['contact']);
         } else {
           throw Exception('Unexpected response format');
@@ -68,9 +63,10 @@ class ContactService extends GetxController {
 
         contactDetails.value = contact;
 
-        Get.offAll(() => NewContact(
+        Get.to(() => NewContact(
               contactNrc: contactDetails.value.nrc,
-              fullNames: contactDetails.value.fullNames,
+              firstName: contactDetails.value.firstName,
+              lastName: contactDetails.value.lastName,
               email: contactDetails.value.email,
               phoneNumber: contactDetails.value.phoneNumber,
               profilePicture: contactDetails.value.profilePicture,
@@ -84,65 +80,37 @@ class ContactService extends GetxController {
     }
   }
 
-Future<void> getContacts() async {
-  String accessToken = box.read('token');
-  String contactSaver = nrcStorage.read('nrcNumber');
-  isLoading.value = true;
-  final response = await http.get(
-    Uri.parse(baseUrl + getContactsDetails + "/$contactSaver"),
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    },
-  );
-
-  if (response.statusCode == 200) {
-    List<dynamic> data = jsonDecode(response.body)['contacts'];
-    contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
-    isLoading.value = false;
-    update(); // Notify the UI that data has changed
-  } else {
-    isLoading.value = false;
-    Get.snackbar(
-      'Error',
-      'Failed to Load Contacts',
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
+  Future<void> getContacts() async {
+    String accessToken = box.read('token');
+    String contactSaver = nrcStorage.read('nrcNumber');
+    isLoading.value = true;
+    final response = await http.get(
+      Uri.parse(baseUrl + getContactsDetails + "/$contactSaver"),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
     );
-    print('${response.statusCode} :${response.reasonPhrase}');
-  }
-}
 
-Future<void> getRecentContacts() async {
-  String accessToken = box.read('token');
-  String contactSaver = nrcStorage.read('nrcNumber');
-  isLoading.value = true;
-  final response = await http.get(
-    Uri.parse(baseUrl + getRecentAddedContacts + "/$contactSaver"),
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    },
-  );
-
-  if (response.statusCode == 200) {
-    List<dynamic> data = jsonDecode(response.body)['contacts'];
-    recentContactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
-    isLoading.value = false;
-    update(); // Notify the UI that data has changed
-  } else {
-    isLoading.value = false;
-    Get.snackbar(
-      'Error',
-      'Failed to Load Contacts',
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-    );
-    print('${response.statusCode} :${response.reasonPhrase}');
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body)['contacts'];
+      contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
+      isLoading.value = false;
+      update();
+    } else if (response.statusCode == 404) {
+      isLoading.value = false;
+    } else {
+      isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        'Failed to Load Contacts',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      print('${response.statusCode} :${response.reasonPhrase}');
+    }
   }
-}
 
   Future<void> saveContact(Map<String, dynamic> contactBody) async {
     isLoading.value = true;
@@ -165,18 +133,30 @@ Future<void> getRecentContacts() async {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
+      getContacts();
       saveContactToPhonebook();
       contactDetails.value = ContactModel(
               nrc: '',
-              fullNames: '',
+              firstName: '',
+              lastName: '',
               phoneNumber: '',
               email: '',
               roleId: '',
               createdAt: '',
               updatedAt: '',
-              profilePicture: '')
+              profilePicture: '',
+              positionName: '')
           .obs as ContactModel;
       ;
+    } else if (response.statusCode == 409) {
+      isLoading.value = false;
+      Get.snackbar(
+        'Info',
+        'Contact already exits',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.blueAccent,
+        colorText: Colors.white,
+      );
     } else {
       isLoading.value = false;
       print('Data not posted ${response.body}');
@@ -185,32 +165,29 @@ Future<void> getRecentContacts() async {
 
   Future<void> saveContactToPhonebook() async {
     update();
-    // Request permission to access contacts
+
     PermissionStatus permissionStatus = await Permission.contacts.request();
     if (permissionStatus.isGranted) {
-      // Permission granted, proceed to save contact
       try {
-        // Create a new contact
+        String combineNames =
+            contactDetails.value.firstName + '' + contactDetails.value.lastName;
         Contact contact = Contact(
-          givenName: contactDetails.value.fullNames,
+          givenName: combineNames,
           phones: [
             Item(label: 'mobile', value: contactDetails.value.phoneNumber)
           ],
           emails: [Item(label: 'work', value: contactDetails.value.email)],
         );
-        // Save the contact
+
         await ContactsService.addContact(contact);
         print('Contact saved successfully');
-        // Navigate to the desired screen
+
         Get.offAll(() => BottomMenuBarItems());
       } catch (e) {
         print('Failed to save contact: $e');
-        // Handle the error as needed (e.g., show an error message to the user)
       }
     } else {
-      // Permission to access contacts is denied
       print('Permission to access contacts is denied');
-      // Handle the denied permission (e.g., show a dialog or request permission again)
     }
   }
 }

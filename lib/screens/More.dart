@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';
 import 'package:get/get.dart';
+import 'package:tizibane/screens/UpdateUserCredentials.dart';
 
 class More extends StatefulWidget {
   const More({super.key});
@@ -21,17 +23,16 @@ final nrcStorage = GetStorage();
 String nrcNumber = nrcStorage.read('nrcNumber');
 
 class _MoreState extends State<More> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 0, 52, 105),
+        backgroundColor: Colors.black,
       ),
       body: Column(
         children: [
           Container(
-            color: Color.fromARGB(255, 0, 52, 105),
+            color: Colors.black,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -42,7 +43,7 @@ class _MoreState extends State<More> {
                     child: QrImageView(
                       data: nrcNumber,
                       size: 200,
-                      foregroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
                     ),
                   ),
                 ),
@@ -59,27 +60,39 @@ class _MoreState extends State<More> {
     var listView = ListView(
       children: <Widget>[
         ListTile(
-          leading: Icon(Icons.notifications),
-          title: Text('Notifications'),
+          leading: Icon(Icons.notifications,color: Colors.black,),
+          title: Text('Notifications',style: GoogleFonts.lexendDeca()),
           onTap: () => {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => Notifications()))
           },
         ),
         ListTile(
-          leading: Icon(Icons.settings),
-          title: Text('Settings'),
+          leading: Icon(Icons.settings, color: Colors.black),
+          title: Text('Settings',style: GoogleFonts.lexendDeca()),
           onTap: () => {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Settings()))
           },
         ),
+        ListTile(
+          leading: Icon(Icons.person, color: Colors.black),
+          title: Text('Update User Credentials',style: GoogleFonts.lexendDeca()),
+          onTap: () => {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => UpdateUserCredentials()))
+          },
+        ),
         Obx(() {
           return _authService.isLoading.value
-              ? Center(child: Text('Please Wait...',style: TextStyle(fontSize: 14),))
+              ? Center(
+                  child: Text(
+                  'Please Wait...',
+                  style: TextStyle(fontSize: 14),
+                ))
               : ListTile(
-                  leading: Icon(Icons.logout),
-                  title: Text('Logout'),
+                  leading: Icon(Icons.logout, color: Colors.black),
+                  title: Text('Logout',style: GoogleFonts.lexendDeca()),
                   onTap: () async {
                     await _authService.logOut();
                   },

@@ -6,17 +6,23 @@ const String register = 'registeruser';
 
 const String login = 'loginuser';
 
+const String updateUser = 'updateuser/';
+
 const String logout = 'logoutuser';
 
 const String tizibaneUser = 'tizibaneuser';
 
 const String uploadProfilePic = 'uploadimage';
 
+const String uploadDefaultProfilePic = 'uploaddefaultimage';
+
 const String getImage = 'getimage';
 
 const String getContactDetails = 'getcontact';
 
 const String getContactsDetails = 'getcontacts';
+
+const String getEmploymentHistoryDetails = 'getemploymenthistory';
 
 const String getRecentAddedContacts = 'getrecentcontacts';
 
