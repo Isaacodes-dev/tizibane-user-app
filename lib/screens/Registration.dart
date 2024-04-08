@@ -35,7 +35,7 @@ class _RegistrationState extends State<Registration> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 230, 230, 230),
-      body: Container(
+      body: SizedBox(
         width: width,
         height: height,
         child: SingleChildScrollView(
@@ -65,8 +65,8 @@ class _RegistrationState extends State<Registration> {
                       controller: nrcController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                        hintStyle: TextStyle(fontSize: 14),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        hintStyle: const TextStyle(fontSize: 14),
                         hintText: 'Nrc',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0)),

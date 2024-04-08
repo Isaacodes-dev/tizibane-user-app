@@ -1,10 +1,15 @@
 import 'dart:ffi';
 
+import 'package:contacts_service/contacts_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:tizibane/Services/ContactService.dart';
+import 'package:tizibane/Services/EmploymentHistoryService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
+import 'package:tizibane/models/Contact.dart';
+import 'package:tizibane/models/EmploymentHistory.dart';
 import 'package:tizibane/models/LoginUser.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:get/get.dart';
@@ -12,11 +17,17 @@ import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'package:tizibane/models/User.dart';
 import 'package:tizibane/screens/Login.dart';
+import 'package:tizibane/screens/ProfileScreen/EmployeeHistory.dart';
 
 class AuthService extends GetxController {
   final UserService _userService = Get.put(UserService());
 
   final ProfileService _profileService = Get.put(ProfileService());
+
+  final ContactService _contactService = Get.put(ContactService());
+
+  final EmployeeHistoryService _employeeHistory = Get.put(EmployeeHistoryService());
+
   final isLoading = false.obs;
 
   final token = ''.obs;
@@ -104,7 +115,7 @@ class AuthService extends GetxController {
         token.value = json.decode(response.body)['token'];
         box.write('token', token.value);
         nrcStorage.write('nrcNumber', nrc);
-        Get.offAll(() => BottomMenuBarItems());
+        Get.offAll(() => BottomMenuBarItems(selectedIndex: 0,));
       } else {
         isLoading.value = false;
         if (response.statusCode == 401) {
@@ -119,7 +130,6 @@ class AuthService extends GetxController {
           box.remove('token');
 
         } else {
-          // Handle other error codes
           Get.snackbar(
             'Error',
             json.decode(response.body)['message'],
@@ -135,46 +145,78 @@ class AuthService extends GetxController {
     }
   }
 
-  Future logOut() async {
-    try {
-      final url = baseUrl + logout;
-      isLoading.value = true;
-      String? accessToken = token.value;
-      final response = await http.post(Uri.parse(url),
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $accessToken',
-          },
-          );
+  Future<void> logOut() async {
 
-      if (response.statusCode == 200) {
-        isLoading.value = false;
-        box.remove('token');
-        nrcStorage.remove('nrcNumber');
-        _userService.userObj.value = User(nrc: '', first_name: '', last_name: '', phone_number: '', email: '', password: '', profilePicture: '');
-        Get.snackbar(
-          'Success',
-          'You have logged out Successfully',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-        Get.deleteAll();
-        Get.offAll(() => Login());
-      } else {
-        Get.snackbar(
-          'Error',
-          'logout not Successful',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-        print(response.body);
-        isLoading.value = false;
-      }
-    } catch (e) {
-      print('Error: $e');
+  try {
+
+    final url = baseUrl + logout;
+
+    isLoading.value = true;
+
+    String? accessToken = token.value;
+
+    final response = await http.post(
+
+      Uri.parse(url),
+
+      headers: {
+
+        'Accept': 'application/json',
+
+        'Authorization': 'Bearer $accessToken',
+
+      },
+
+    );
+
+    if (response.statusCode == 200) {
+      
+      isLoading.value = false;
+      
+      box.remove('token');
+      
+      nrcStorage.remove('nrcNumber');
+      
+      _userService.userObj.value = <User>[].obs;
+      
+      _contactService.contactsList.value = <ContactModel>[].obs;
+      
+      _employeeHistory.contactEmployeeHistoryDetails.value = <EmploymentHistory>[].obs;
+      
+      _employeeHistory.contactEmployeeHistoryDetails.value = <EmploymentHistory>[].obs;
+
+      Get.snackbar(
+        
+        'Success',
+
+        'You have logged out Successfully',
+
+        snackPosition: SnackPosition.TOP,
+
+        backgroundColor: Colors.green,
+
+        colorText: Colors.white,
+
+      );
+
+      await Future.delayed(Duration(milliseconds: 500));
+      
+      Get.offAll(Login());
+      
+    } else {
+      Get.snackbar(
+        'Error',
+        'Logout not successful',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      print(response.body);
       isLoading.value = false;
     }
+  } catch (e) {
+    print('Error: $e');
+    isLoading.value = false;
   }
+}
 }

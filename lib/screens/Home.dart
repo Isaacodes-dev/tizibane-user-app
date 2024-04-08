@@ -11,6 +11,7 @@ import 'package:tizibane/models/Contact.dart';
 import 'package:tizibane/screens/Contact/ViewContact.dart';
 import 'package:tizibane/models/User.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:tizibane/screens/Groups/Groups.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -20,37 +21,64 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final nrcStorage = GetStorage();
-
   final UserService _userService = Get.put(UserService());
-
   final ProfileService _profileService = Get.put(ProfileService());
-
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _profileService.getImagePath();
-    _userService.getUser().then((_) {
+    _profileService.isVisible.value = false;
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+      await _userService.getUser();
       setState(() {
         isLoading = false;
       });
-    }).catchError((error) {
-      setState(() {
-        isLoading = false;
-      });
+    } catch (error) {
       print('Error fetching user data: $error');
-    });
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+        ),
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    final user = _userService.userObj.value.isNotEmpty ? _userService.userObj.value[0] : null;
+
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+        ),
+        body: Center(
+          child: Text('User data not available'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
       ),
-      body: _profileService.imagePath.value == '' &&
+      body: 
+          _profileService.imagePath.value == '' &&
               _userService.isLoading.value
           ? const Center(
               child: CircularProgressIndicator(),
@@ -99,18 +127,18 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(_userService.userObj.value.first_name + ' ' + _userService.userObj.value.last_name,
+                    Text(_userService.userObj.value[0].first_name + ' ' + _userService.userObj.value[0].last_name,
                         style: GoogleFonts.lexendDeca(
                             textStyle: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18))),
                     SizedBox(
                       height: 5,
                     ),
-                    Text('Position', style: GoogleFonts.lexendDeca()),
+                    Text(_userService.userObj.value[0].position_name, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 3,
                     ),
-                    Text('Company', style: GoogleFonts.lexendDeca()),
+                    Text(_userService.userObj.value[0].company_name, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 15,
                     ),
@@ -154,7 +182,7 @@ class _HomeState extends State<Home> {
                               SizedBox(
                                 height: 3,
                               ),
-                              Text(_userService.userObj.value.phone_number,
+                              Text(_userService.userObj.value[0].phone_number,
                                   style: GoogleFonts.lexendDeca())
                             ],
                           ),
@@ -205,7 +233,7 @@ class _HomeState extends State<Home> {
                                 SizedBox(
                                   height: 3,
                                 ),
-                                Text(_userService.userObj.value.email,
+                                Text(_userService.userObj.value[0].email,
                                     style: GoogleFonts.lexendDeca()),
                               ],
                             ),
@@ -257,7 +285,7 @@ class _HomeState extends State<Home> {
                                 SizedBox(
                                   height: 3,
                                 ),
-                                Text(formatNrc(_userService.userObj.value.nrc),
+                                Text(formatNrc(_userService.userObj.value[0].nrc),
                                     style: GoogleFonts.lexendDeca()),
                               ],
                             ),
@@ -291,15 +319,20 @@ class _HomeState extends State<Home> {
                       color: Colors.grey.shade400,
                       thickness: 1,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.12,
-                          height: 20,
-                        ),
-                        Text('Groups', style: GoogleFonts.lexendDeca()),
-                      ],
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(Groups());
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.12,
+                            height: 20,
+                          ),
+                          Text('Groups', style: GoogleFonts.lexendDeca()),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 15,
@@ -395,7 +428,8 @@ class _HomeState extends State<Home> {
               ),
             ),
     );
-  }
+       
+}
 
   String formatNrc(String userNrc) {
     String formattedNrc = userNrc.substring(0, 6) +
@@ -407,39 +441,3 @@ class _HomeState extends State<Home> {
     return formattedNrc;
   }
 }
-
-// class CurvePainter extends CustomPainter {
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     var paint = Paint();
-//     paint.style = PaintingStyle.fill;
-//     paint.shader = LinearGradient(colors: [
-//       Color.fromARGB(255, 0, 52, 105),
-//       Color.fromARGB(255, 0, 52, 105),
-//       Color.fromARGB(255, 0, 52, 105)
-//     ], begin: Alignment.topLeft, end: Alignment.bottomRight)
-//         .createShader(
-//       Rect.fromLTRB(
-//         size.width * 0.15,
-//         size.height * 0.15,
-//         size.width,
-//         size.height * 0.1,
-//       ),
-//     );
-//     var path = Path();
-//     path.moveTo(0, size.height * 0.15);
-//     path.quadraticBezierTo(
-//         size.width * 0.48, size.height * 0.38, size.width, size.height * 0.25);
-//     path.quadraticBezierTo(
-//         size.width * 0.9, size.height * 0.38, size.width, size.height * 0.25);
-//     path.lineTo(size.width, 0);
-//     path.lineTo(0, 0);
-//     canvas.drawPath(path, paint);
-//   }
-
-//   @override
-//   bool shouldRepaint(CustomPainter oldDelegate) {
-//     // TODO: implement shouldRepaint
-//     return true;
-//   }
-// }

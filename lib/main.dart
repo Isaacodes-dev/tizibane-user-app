@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
      //final nrcNumber = nrcStorage.read('nrcNumber');
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: token == null ? Login() : BottomMenuBarItems(),
+      home: token == null ? Login() : const BottomMenuBarItems(selectedIndex: 0,),
     );
   }
 }

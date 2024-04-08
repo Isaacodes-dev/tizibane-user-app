@@ -11,6 +11,7 @@ class ContactModel {
   final String updatedAt;
   final String profilePicture;
   final String positionName;
+  final String companyName;
 
   ContactModel({
     required this.nrc,
@@ -24,7 +25,8 @@ class ContactModel {
     required this.createdAt,
     required this.updatedAt,
     required this.profilePicture,
-    required this.positionName
+    required this.positionName,
+    required this.companyName
   });
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class ContactModel {
       updatedAt: json['updated_at'] ?? '',
       profilePicture: json['profile_picture'] ?? '',
       positionName: json['position_name'] ?? '',
+      companyName: json['company_name'] ?? '',
     );
   }
 }

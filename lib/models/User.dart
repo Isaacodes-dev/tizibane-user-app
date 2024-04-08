@@ -8,8 +8,8 @@ class User{
   final String email;
   final String password;
   final String profilePicture;
-
-  static const String defaultProfilePic = 'assets/images/user.jpg';
+  final String position_name;
+  final String company_name;
 
   const User({
     required this.nrc,
@@ -18,7 +18,9 @@ class User{
     required this.phone_number,
     required this.email,
     required this.password,
-    required this.profilePicture
+    required this.profilePicture,
+    required this.position_name,
+    required this.company_name
   });
 
 factory User.fromJson(Map<String, dynamic> json) {
@@ -29,7 +31,9 @@ factory User.fromJson(Map<String, dynamic> json) {
     phone_number: json['phone_number'] ?? '',
     email: json['email'] ?? '',
     password: json['password'] ?? '',
-    profilePicture: json['profilePicture'] ?? ''
+    profilePicture: json['profilePicture'] ?? '',
+    position_name: json['position_name'] ?? '',
+    company_name: json['company_name'] ?? '',
   );
 }
     Map<String, dynamic> toJson() {
@@ -41,6 +45,8 @@ factory User.fromJson(Map<String, dynamic> json) {
       'email': email,
       'password': password,
       'profilePicture': profilePicture,
+      'position_name': position_name,
+      'company_name': company_name
     };
   }
 }

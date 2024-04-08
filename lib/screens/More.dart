@@ -60,39 +60,33 @@ class _MoreState extends State<More> {
     var listView = ListView(
       children: <Widget>[
         ListTile(
-          leading: Icon(Icons.notifications,color: Colors.black,),
-          title: Text('Notifications',style: GoogleFonts.lexendDeca()),
-          onTap: () => {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Notifications()))
-          },
+          leading: Icon(
+            Icons.notifications,
+            color: Colors.black,
+          ),
+          title: Text('Notifications', style: GoogleFonts.lexendDeca()),
+          onTap: () => {Get.to(Notifications())},
         ),
         ListTile(
           leading: Icon(Icons.settings, color: Colors.black),
-          title: Text('Settings',style: GoogleFonts.lexendDeca()),
-          onTap: () => {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Settings()))
-          },
+          title: Text('Settings', style: GoogleFonts.lexendDeca()),
+          onTap: () => {Get.to(Settings())},
         ),
         ListTile(
-          leading: Icon(Icons.person, color: Colors.black),
-          title: Text('Update User Credentials',style: GoogleFonts.lexendDeca()),
-          onTap: () => {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => UpdateUserCredentials()))
-          },
+          leading: Icon(Icons.lock, color: Colors.black),
+          title: Text('Change Password', style: GoogleFonts.lexendDeca()),
+          onTap: () => {Get.to(UpdateUserCredentials())},
         ),
         Obx(() {
           return _authService.isLoading.value
-              ? Center(
+              ? const Center(
                   child: Text(
                   'Please Wait...',
                   style: TextStyle(fontSize: 14),
                 ))
               : ListTile(
-                  leading: Icon(Icons.logout, color: Colors.black),
-                  title: Text('Logout',style: GoogleFonts.lexendDeca()),
+                  leading: const Icon(Icons.logout, color: Colors.black),
+                  title: Text('Logout', style: GoogleFonts.lexendDeca()),
                   onTap: () async {
                     await _authService.logOut();
                   },

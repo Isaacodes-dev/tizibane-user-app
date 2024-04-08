@@ -20,6 +20,8 @@ class EmployeeHistoryService extends GetxController {
 
   final employeeHistoryDetails = <EmploymentHistory>[].obs;
 
+  final contactEmployeeHistoryDetails = <EmploymentHistory>[].obs;
+
   Future<void> getEmploymentHistory() async {
     String accessToken = box.read('token');
 
@@ -39,6 +41,39 @@ class EmployeeHistoryService extends GetxController {
       isLoading.value = false;
       List<dynamic> data = jsonDecode(response.body)['employmentHistory'];
       employeeHistoryDetails.value = data.map((e) => EmploymentHistory.fromJson(e)).toList();
+      update();
+    }else if (response.statusCode == 404) {
+      isLoading.value = false;
+    } else {
+      isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        'Failed to Load Employment History',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      print('${response.statusCode} :${response.reasonPhrase}');
+    }
+  }
+
+  Future<void> getContactEmploymentHistory(String contactNrc) async {
+    String accessToken = box.read('token');
+
+    isLoading.value = true;
+
+    final response = await http.get(
+      Uri.parse(baseUrl + getEmploymentHistoryDetails + "/$contactNrc"),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    
+    if (response.statusCode == 200) {
+      isLoading.value = false;
+      List<dynamic> data = jsonDecode(response.body)['employmentHistory'];
+      contactEmployeeHistoryDetails.value = data.map((e) => EmploymentHistory.fromJson(e)).toList();
       update();
     }else if (response.statusCode == 404) {
       isLoading.value = false;
