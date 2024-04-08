@@ -24,7 +24,8 @@ class ContactService extends GetxController {
           createdAt: '',
           updatedAt: '',
           profilePicture: '',
-          positionName: '')
+          positionName: '',
+          companyName: '')
       .obs;
 
   var contactsList = <ContactModel>[].obs;
@@ -113,6 +114,7 @@ class ContactService extends GetxController {
   }
 
   Future<void> saveContact(Map<String, dynamic> contactBody) async {
+    print(contactBody);
     isLoading.value = true;
     String contactSaverNrc = nrcStorage.read('nrcNumber');
     String accessToken = box.read('token');
@@ -145,9 +147,10 @@ class ContactService extends GetxController {
               createdAt: '',
               updatedAt: '',
               profilePicture: '',
-              positionName: '')
+              positionName: '',
+              companyName: ''
+              )
           .obs as ContactModel;
-      ;
     } else if (response.statusCode == 409) {
       isLoading.value = false;
       Get.snackbar(
@@ -182,7 +185,7 @@ class ContactService extends GetxController {
         await ContactsService.addContact(contact);
         print('Contact saved successfully');
 
-        Get.offAll(() => BottomMenuBarItems());
+        Get.offAll(() => BottomMenuBarItems(selectedIndex: 2,));
       } catch (e) {
         print('Failed to save contact: $e');
       }

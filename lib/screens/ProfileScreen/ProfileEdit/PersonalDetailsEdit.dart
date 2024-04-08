@@ -39,6 +39,7 @@ class _PersonalDetailsEditState extends State<PersonalDetailsEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final userService = Get.put(UserService());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -96,9 +97,14 @@ class _PersonalDetailsEditState extends State<PersonalDetailsEdit> {
               ),
             ),
             SizedBox(height: 10),
-            SubmitButton(text: 'Update',onTap: () {
-              
-            },)
+            Obx((){
+                return userService.isLoading.value ?
+                 CircularProgressIndicator():
+                SubmitButton(text: 'Update',onTap: () {
+                  userService.updateUserDetails(first_name: firstNameText.text.trim(), last_name: lastNameText.text.trim(), phone_number: phoneNumberText.text.trim(), email: emailText.text.trim());
+                },);
+              }
+            )
           ],
         ),
       ),

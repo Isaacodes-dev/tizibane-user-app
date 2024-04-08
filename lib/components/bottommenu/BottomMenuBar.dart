@@ -5,41 +5,33 @@ import 'package:tizibane/screens/More.dart';
 import 'package:tizibane/screens/Profile.dart';
 
 class BottomMenuBarItems extends StatefulWidget {
-  final int selectedIndex = 0;
-  
+  final int selectedIndex;
 
-  const BottomMenuBarItems({Key? key}) : super(key: key);
+  const BottomMenuBarItems({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   State<BottomMenuBarItems> createState() => _BottomMenuBarItemsState();
 }
-
 class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
-
-  int currentIndex = 0;
+  late int currentIndex;
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
+    currentIndex = widget.selectedIndex;
   }
 
-  // final List<Widget> pages =[
-  //   Home(nrc: widget.nrc),
-  //   Profile(),
-  //   Contacts(),
-  //   More()
-  // ];
-
-  final PageStorageBucket bucket = PageStorageBucket();
   @override
   Widget build(BuildContext context) {
-    Widget currentScreen = currentIndex == 0 ? Home() : currentIndex == 1 ? Contacts() : currentIndex == 2 ? Profile() : More();
+    Widget currentScreen = currentIndex == 0
+        ? Home()
+        : currentIndex == 1
+            ? Contacts()
+            : currentIndex == 2
+                ? Profile()
+                : More();
     return Scaffold(
-      body: PageStorage(
-        child: currentScreen,
-        bucket: bucket,
-      ),
+      body: currentScreen,
       bottomNavigationBar: BottomAppBar(
         color: Colors.black,
         shape: CircularNotchedRectangle(),
@@ -50,82 +42,10 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MaterialButton(
-                minWidth: 50,
-                onPressed: (){
-                  setState(() {
-                    currentScreen = Home();
-                    currentIndex = 0;
-                  });
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.home_filled,
-                      color: currentIndex == 0 ? Colors.orange : Colors.white,
-                    ),
-                    Text("Home", style: TextStyle(color: currentIndex == 0 ? Colors.orange : Colors.white),),
-                  ],
-                ),
-              ),
-              MaterialButton(
-                minWidth: 50,
-                onPressed: (){
-                  setState(() {
-                    currentScreen = Contacts();
-                    currentIndex = 1;
-                  });
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.contacts_outlined,
-                      color: currentIndex == 1 ? Colors.orange : Colors.white,
-                    ),
-                    Text("Contacts", style: TextStyle(color: currentIndex == 1 ? Colors.orange : Colors.white),),
-                  ],
-                ),
-              ),
-              MaterialButton(
-                minWidth: 50,
-                onPressed: (){
-                  setState(() {
-                    currentScreen = Profile();
-                    currentIndex = 2;
-                  });
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.person,
-                      color: currentIndex == 2 ? Colors.orange : Colors.white,
-                    ),
-                    Text("Profile", style: TextStyle(color: currentIndex == 2 ? Colors.orange : Colors.white),),
-                  ],
-                ),
-              ),
-              MaterialButton(
-                minWidth: 50,
-                onPressed: (){
-                  setState(() {
-                    currentScreen = More();
-                    currentIndex = 3;
-                  });
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.more_horiz_outlined,
-                      color: currentIndex == 3 ? Colors.orange : Colors.white,
-                    ),
-                    Text("More", style: TextStyle(color: currentIndex == 3 ? Colors.orange : Colors.white),),
-                  ],
-                ),
-              )
+              buildMaterialButton(0, Icons.home_filled, "Home"),
+              buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
+              buildMaterialButton(2, Icons.person, "Profile"),
+              buildMaterialButton(3, Icons.more_horiz_outlined, "More"),
             ],
           ),
         ),
@@ -133,4 +53,27 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
     );
   }
 
+  MaterialButton buildMaterialButton(int index, IconData icon, String label) {
+    return MaterialButton(
+      minWidth: 50,
+      onPressed: () {
+        setState(() {
+          currentIndex = index;
+        });
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: currentIndex == index ? Colors.orange : Colors.white,
+          ),
+          Text(
+            label,
+            style: TextStyle(color: currentIndex == index ? Colors.orange : Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -3,8 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/User.dart';
+import 'package:tizibane/screens/ProfileScreen/UserProfile.dart';
 
 class UserService extends GetxController {
   @override
@@ -12,9 +14,10 @@ class UserService extends GetxController {
     getUser();
   }
   final isLoading = false.obs;
+  final isLoaded = false.obs;
   var userObj =
-      User(nrc: '', first_name: '', last_name: '', phone_number: '', email: '', password: '', profilePicture: '')
-          .obs;
+      <User>[].obs;
+          
   final box = GetStorage();
   final nrcStorage = GetStorage();
   final url = baseUrl + tizibaneUser;
@@ -39,8 +42,10 @@ class UserService extends GetxController {
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
       if (responseData['user'] != null) {
-        userObj.value = User.fromJson(responseData['user']);
+         List<dynamic> data = jsonDecode(response.body)['user'];
+        userObj.value = data.map((e) => User.fromJson(e)).toList();
         isLoading.value = false;
+        isLoaded.value = true;
       } else {
         isLoading.value = false;
         throw Exception("User data is null");
@@ -51,6 +56,7 @@ class UserService extends GetxController {
       throw Exception('Failed to load user data: ${response.statusCode}');
       
     }
+    update();
   }
 
   Future<void> updateUserDetails({
@@ -62,7 +68,7 @@ class UserService extends GetxController {
     try {
       String accessToken = box.read('token');
       String storedNrc = nrcStorage.read('nrcNumber');
-      final url = baseUrl + updateUser + '/$storedNrc';
+      final url = baseUrl + updateUser + '$storedNrc';
       isLoading.value = true;
        
       final data = {
@@ -84,7 +90,8 @@ class UserService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );        
-        getUser();
+        await getUser();
+        Get.offAll(BottomMenuBarItems(selectedIndex: 3,));
       } else {
         isLoading.value = false;
         print(json.decode(response.body)['message']);

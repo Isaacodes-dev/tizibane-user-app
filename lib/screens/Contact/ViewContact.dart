@@ -12,6 +12,7 @@ class ViewContact extends StatefulWidget {
   final String phoneNumber;
   final String profilePicture;
   final String positionName;
+  final String companyName;
 
   ViewContact(
       {super.key,
@@ -21,7 +22,8 @@ class ViewContact extends StatefulWidget {
       required this.email,
       required this.phoneNumber,
       required this.profilePicture,
-      required this.positionName
+      required this.positionName,
+      required this.companyName
       });
 
   @override
@@ -32,19 +34,6 @@ class _ViewContactState extends State<ViewContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.black,
-        title: Text('Contact Details', style: GoogleFonts.lexendDeca()),
-      ),
       body: widget.profilePicture == ''
           ? const Center(
               child: CircularProgressIndicator(),
@@ -77,7 +66,7 @@ class _ViewContactState extends State<ViewContact> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(widget.firstName + '' + widget.lastName, style: GoogleFonts.lexendDeca()),
+                    Text(widget.firstName + ' ' + widget.lastName, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 5,
                     ),
@@ -85,7 +74,7 @@ class _ViewContactState extends State<ViewContact> {
                     SizedBox(
                       height: 3,
                     ),
-                    Text('Company', style: GoogleFonts.lexendDeca()),
+                    Text(widget.companyName, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 15,
                     ),
@@ -144,7 +133,7 @@ class _ViewContactState extends State<ViewContact> {
                               ),
                               child: GestureDetector(
                                 onTap: () {
-                                  _openDialPad();
+                                  _openDialPad(widget.phoneNumber);
                                 },
                                 child: Icon(
                                   CupertinoIcons.phone,
@@ -160,44 +149,46 @@ class _ViewContactState extends State<ViewContact> {
                     SizedBox(
                       height: 10,
                     ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          color: Colors.grey.shade100,
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 1,
-                          ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Email', style: GoogleFonts.lexendDeca()),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Text(widget.email,
-                                    style: GoogleFonts.lexendDeca()),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.07,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.07,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.black),
+                        color: Colors.grey.shade100,
+                        border: Border.all(
+                          color: Colors.grey.shade200,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Email', style: GoogleFonts.lexendDeca()),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Text(widget.email,
+                                  style: GoogleFonts.lexendDeca()),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height:
+                                  MediaQuery.of(context).size.width * 0.07,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _openDefaultEmailClient(widget.email);
+                                },
                                 child: Icon(
                                   CupertinoIcons.mail,
                                   color: Colors.white,
@@ -205,67 +196,12 @@ class _ViewContactState extends State<ViewContact> {
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
                       height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          color: Colors.grey.shade100,
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Nrc', style: GoogleFonts.lexendDeca()),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Text(
-                                  formatNrc(widget.contactNrc),
-                                  style: GoogleFonts.lexendDeca(),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.07,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.07,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black,
-                                ),
-                                child: Icon(
-                                  Icons.credit_card,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
                     ),
                     Divider(
                       indent: MediaQuery.of(context).size.width * 0.1,
@@ -388,8 +324,8 @@ class _ViewContactState extends State<ViewContact> {
 
     return formattedNrc;
   }
-  void _openDialPad() async {
-    const phoneNumber = '1234567890'; // Replace with the phone number you want to dial
+  void _openDialPad(String contactNumber) async {
+    String phoneNumber = contactNumber; // Replace with the phone number you want to dial
     final url = 'tel:$phoneNumber';
 
     if (await canLaunchUrl(Uri.parse(url))) {
@@ -398,4 +334,13 @@ class _ViewContactState extends State<ViewContact> {
       throw 'Could not launch $url';
     }
   }
+  void _openDefaultEmailClient(String contactEmail) async {
+    String emailUrl = 'mailto:$contactEmail';
+    if (await canLaunchUrl(Uri.parse(emailUrl))) {
+      await launchUrl(Uri.parse(emailUrl));
+    } else {
+      throw 'Could not launch $emailUrl';
+    }
+  }
 }
+

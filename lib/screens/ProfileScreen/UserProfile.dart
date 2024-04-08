@@ -10,12 +10,23 @@ import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/ProfileScreen/ProfileEdit/PersonalDetailsEdit.dart';
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends StatefulWidget {
   UserProfile({super.key});
 
+  @override
+  State<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
   final UserService _userService = Get.put(UserService());
 
   final ProfileService _profileService = Get.put(ProfileService());
+
+  @override
+  void initState() {
+    super.initState();
+    _userService.getUser();
+  }
 
   File? imageFile;
 
@@ -24,313 +35,229 @@ class UserProfile extends StatelessWidget {
   final picker = ImagePicker();
 
   late Future<String?> userProfilePicFuture;
+
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => ProfileService());
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 25.0),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Stack(
-              children: [
-                Column(
+        padding: const EdgeInsets.only(top:50.0),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              GetBuilder<ProfileService>(builder: (ProfileService) {
+                return Container(
+                  width: 160,
+                  height: 160,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.orange,
+                        width: 2.0,
+                      )),
+                  child: ClipOval(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          ProfileService.changeProfilePicture();
+                        },
+                        child: ProfileService.pickedFile != null
+                            ? Image.file(File(ProfileService.pickedFile!.path),
+                                width: 150, height: 150, fit: BoxFit.cover)
+                            : Image.network(
+                                imageBaseUrl + _profileService.imagePath.value,
+                                fit: BoxFit.cover,
+                                width: 150,
+                                height: 150,
+                              ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                  _userService.userObj.value[0].first_name +
+                      ' ' +
+                      _userService.userObj.value[0].last_name,
+                  style: GoogleFonts.lexendDeca(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18))),
+              SizedBox(
+                height: 15,
+              ),
+              Center(
+                child: Obx(
+                  () => Visibility(
+                    visible: _profileService.isVisible.value,
+                    child: GestureDetector(
+                      child: Text('Upload',style: TextStyle(color: Colors.orange),),
+                      onTap: () => Get.find<ProfileService>().upload(),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Container(
+                child: Column(
                   children: [
-                    GetBuilder<ProfileService>(builder: (ProfileService) {
-                      return Container(
-                        width: 160,
-                        height: 160,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.orange,
-                              width: 2.0,
-                            )),
-                        child: ClipOval(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                ProfileService.changeProfilePicture();
-                              },
-                              child: ProfileService.pickedFile != null
-                                  ? Image.file(
-                                      File(ProfileService.pickedFile!.path),
-                                      width: 150,
-                                      height: 150,
-                                      fit: BoxFit.cover)
-                                  : Image.network(
-                                      imageBaseUrl +
-                                          _profileService.imagePath.value,
-                                      fit: BoxFit.cover,
-                                      width: 150,
-                                      height: 150,
-                                    ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+                    Divider(
+                      thickness: 1.15,
+                      indent: MediaQuery.of(context).size.width * 0.1,
+                      endIndent: MediaQuery.of(context).size.width * 0.1,
+                      color: Colors.grey.shade400,
+                    ),
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                        _userService.userObj.value.first_name +
-                            ' ' +
-                            _userService.userObj.value.last_name,
-                        style: GoogleFonts.lexendDeca(
-                            textStyle: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18))),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: Obx(
-                        () => Visibility(
-                          visible: _profileService.isVisible.value,
-                          child: GestureDetector(
-                            child: Text('Upload'),
-                            onTap: () => Get.find<ProfileService>().upload(),
-                          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.12,
+                          height: 20,
                         ),
-                      ),
+                        Text('Personal Details',
+                            style: GoogleFonts.lexendDeca()),
+                      ],
                     ),
                     SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
                     Container(
-                      width: 400,
-                      height: 300,
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Container(
-                          child: Column(
-                            children: [
-                              Divider(
-                                thickness: 1.15,
-                                indent: MediaQuery.of(context).size.width * 0.1,
-                                endIndent:
-                                    MediaQuery.of(context).size.width * 0.1,
-                                color: Colors.grey.shade400,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text('Personal Details',
-                                      style: GoogleFonts.lexendDeca()),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.to(PersonalDetailsEdit(
-                                          firstName: _userService
-                                              .userObj.value.first_name,
-                                          lastName: _userService
-                                              .userObj.value.last_name,
-                                          phoneNumber: _userService
-                                              .userObj.value.phone_number,
-                                          email: _userService
-                                              .userObj.value.email));
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 5),
-                                      decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: Text('Edit',
-                                          style: GoogleFonts.lexendDeca(
-                                              textStyle: TextStyle(
-                                                  color: Colors.white))),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade100,
-                                  border:
-                                      Border.all(color: Colors.grey.shade200),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Phone',
-                                            style: GoogleFonts.lexendDeca()),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Text(
-                                            _userService
-                                                .userObj.value.phone_number,
-                                            style: GoogleFonts.lexendDeca())
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.07,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.07,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.black,
-                                        ),
-                                        child: Icon(
-                                          CupertinoIcons.phone,
-                                          color: Colors.white,
-                                          size: 18,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                  color: Colors.grey.shade100,
-                                  border: Border.all(
-                                    color: Colors.grey.shade200,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Email',
-                                            style: GoogleFonts.lexendDeca()),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Text(_userService.userObj.value.email,
-                                            style: GoogleFonts.lexendDeca()),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.07,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.07,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.black),
-                                        child: Icon(
-                                          CupertinoIcons.mail,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                  color: Colors.grey.shade100,
-                                  border: Border.all(
-                                    color: Colors.grey.shade200,
-                                    width: 1,
-                                  ),
-                                ),
-                                // child: Row(
-                                //   mainAxisAlignment:
-                                //       MainAxisAlignment.spaceBetween,
-                                //   children: [
-                                //     Column(
-                                //       crossAxisAlignment:
-                                //           CrossAxisAlignment.start,
-                                //       children: [
-                                //         Text('Nrc',
-                                //             style: GoogleFonts.lexendDeca()),
-                                //         SizedBox(
-                                //           height: 3,
-                                //         ),
-                                //         Text(
-                                //             formatNrc(
-                                //                 _userService.userObj.value.nrc),
-                                //             style: GoogleFonts.lexendDeca()),
-                                //       ],
-                                //     ),
-                                //     Padding(
-                                //       padding:
-                                //           const EdgeInsets.only(right: 8.0),
-                                //       child: Container(
-                                //         width:
-                                //             MediaQuery.of(context).size.width *
-                                //                 0.07,
-                                //         height:
-                                //             MediaQuery.of(context).size.width *
-                                //                 0.07,
-                                //         decoration: BoxDecoration(
-                                //           shape: BoxShape.circle,
-                                //           color: Colors.black,
-                                //         ),
-                                //         child: Icon(
-                                //           Icons.credit_card,
-                                //           color: Colors.white,
-                                //           size: 16,
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
-                              ),
-                            ],
-                          ),
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        border: Border.all(color: Colors.grey.shade200),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
                         ),
                       ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Phone', style: GoogleFonts.lexendDeca()),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Text(_userService.userObj.value[0].phone_number,
+                                  style: GoogleFonts.lexendDeca())
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black,
+                              ),
+                              child: Icon(
+                                CupertinoIcons.phone,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                        color: Colors.grey.shade100,
+                        border: Border.all(
+                          color: Colors.grey.shade200,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Email', style: GoogleFonts.lexendDeca()),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Text(_userService.userObj.value[0].email,
+                                  style: GoogleFonts.lexendDeca()),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.black),
+                              child: Icon(
+                                CupertinoIcons.mail,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(PersonalDetailsEdit(
+                                firstName:
+                                    _userService.userObj.value[0].first_name,
+                                lastName:
+                                    _userService.userObj.value[0].last_name,
+                                phoneNumber:
+                                    _userService.userObj.value[0].phone_number,
+                                email: _userService.userObj.value[0].email));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 25, horizontal: 105),
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Text('Edit',
+                                style: GoogleFonts.lexendDeca(
+                                    textStyle: TextStyle(color: Colors.white))),
+                          ),
+                        ),
+                      ]),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

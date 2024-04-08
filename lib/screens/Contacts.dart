@@ -13,6 +13,7 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
+import 'package:tizibane/screens/Contact/MainViewContact.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
 import 'package:tizibane/screens/Contact/ViewContact.dart';
 import 'package:tizibane/screens/QRScanner.dart';
@@ -160,7 +161,7 @@ class _ContactsState extends State<Contacts> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ViewContact(contactNrc: contact.nrc,firstName: contact.firstName,lastName: contact.lastName,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture,positionName: contact.positionName,),
+                                    builder: (context) => MainViewContact(contactNrc: contact.nrc,firstName: contact.firstName,lastName: contact.lastName,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture,positionName: contact.positionName,companyName: contact.companyName,),
                                   ),
                                   
                                 );
