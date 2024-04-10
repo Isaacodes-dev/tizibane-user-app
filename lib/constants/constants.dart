@@ -18,6 +18,8 @@ const String uploadDefaultProfilePic = 'uploaddefaultimage';
 
 const String getImage = 'getimage';
 
+const String groupsdetails = 'groups';
+
 const String getContactDetails = 'getcontact';
 
 const String getContactsDetails = 'getcontacts';
