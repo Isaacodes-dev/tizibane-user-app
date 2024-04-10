@@ -11,7 +11,7 @@ import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/ProfileScreen/ProfileEdit/PersonalDetailsEdit.dart';
 
 class UserProfile extends StatefulWidget {
-  UserProfile({super.key});
+  const UserProfile({super.key});
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -43,7 +43,7 @@ class _UserProfileState extends State<UserProfile> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top:50.0),
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Column(
@@ -79,7 +79,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                 );
               }),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(

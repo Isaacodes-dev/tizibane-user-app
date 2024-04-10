@@ -9,7 +9,7 @@ import 'package:tizibane/screens/ProfileScreen/EmployeeHistoryCard/EmployeeHisto
 class EmployeeHistory extends StatefulWidget {
   final int? employeeIndex; // Make the employeeIndex parameter optional
 
-  EmployeeHistory({Key? key, this.employeeIndex}) : super(key: key);
+  const EmployeeHistory({Key? key, this.employeeIndex}) : super(key: key);
 
   @override
   _EmployeeHistoryState createState() => _EmployeeHistoryState();
@@ -37,15 +37,15 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
     return Obx((){
         return Scaffold(
           body: _employeeHistoryService.isLoading.value
-              ? Column(
+              ? const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Center(
+                     Center(
                       child: CircularProgressIndicator(),
                     ),
                   ],
                 )
-              : Container(
+              : SizedBox(
                   height: 350,
                   child: _employeeHistoryService.employeeHistoryDetails.length > 0
                       ? ListView.builder(
@@ -68,7 +68,7 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
                         )
                       : Center(
                         child: Padding(
-                            padding: EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(30),
                             child: Text('No Employee History to display',
                                 style: GoogleFonts.lexendDeca()),
                           ),
@@ -100,7 +100,7 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
       final double offset = index * cardWidth;
       _scrollController.animateTo(
         offset,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     }

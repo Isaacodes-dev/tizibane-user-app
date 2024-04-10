@@ -37,7 +37,7 @@ class _NewContactState extends State<NewContact> {
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
@@ -46,7 +46,7 @@ class _NewContactState extends State<NewContact> {
           },
         ),
         backgroundColor: Colors.black,
-        title: Text('Add Contact'),
+        title: const Text('Add Contact'),
       ),
       body: widget.profilePicture == ''
           ? const Center(
@@ -77,26 +77,26 @@ class _NewContactState extends State<NewContact> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       widget.firstName + '' + widget.lastName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                         letterSpacing: 1.15,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Text('Position', style: GoogleFonts.lexendDeca()),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
                     Text('Company', style: GoogleFonts.lexendDeca()),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Divider(
@@ -116,16 +116,16 @@ class _NewContactState extends State<NewContact> {
                             style: GoogleFonts.lexendDeca()),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade100,
                         border: Border.all(color: Colors.grey.shade200),
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(20),
                         ),
                       ),
@@ -136,7 +136,7 @@ class _NewContactState extends State<NewContact> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Phone', style: GoogleFonts.lexendDeca()),
-                              SizedBox(
+                              const SizedBox(
                                 height: 3,
                               ),
                               Text(widget.phoneNumber,
@@ -148,11 +148,11 @@ class _NewContactState extends State<NewContact> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.07,
                               height: MediaQuery.of(context).size.width * 0.07,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.black,
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 CupertinoIcons.phone,
                                 color: Colors.white,
                                 size: 18,
@@ -162,16 +162,16 @@ class _NewContactState extends State<NewContact> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     GestureDetector(
                       onTap: () {},
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.8,
-                        padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                        padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(20),
                           ),
                           color: Colors.grey.shade100,
@@ -187,7 +187,7 @@ class _NewContactState extends State<NewContact> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Email', style: GoogleFonts.lexendDeca()),
-                                SizedBox(
+                                const SizedBox(
                                   height: 3,
                                 ),
                                 Text(widget.email,
@@ -200,10 +200,10 @@ class _NewContactState extends State<NewContact> {
                                 width: MediaQuery.of(context).size.width * 0.07,
                                 height:
                                     MediaQuery.of(context).size.width * 0.07,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.black),
-                                child: Icon(
+                                child: const Icon(
                                   CupertinoIcons.mail,
                                   color: Colors.white,
                                   size: 16,
@@ -214,16 +214,16 @@ class _NewContactState extends State<NewContact> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     GestureDetector(
                       onTap: () {},
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.8,
-                        padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                        padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
+                          borderRadius: const  BorderRadius.all(
                             Radius.circular(20),
                           ),
                           color: Colors.grey.shade100,
@@ -239,7 +239,7 @@ class _NewContactState extends State<NewContact> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Nrc', style: GoogleFonts.lexendDeca()),
-                                SizedBox(
+                                const SizedBox(
                                   height: 3,
                                 ),
                                 Text(formatNrc(widget.contactNrc),
@@ -252,11 +252,11 @@ class _NewContactState extends State<NewContact> {
                                 width: MediaQuery.of(context).size.width * 0.07,
                                 height:
                                     MediaQuery.of(context).size.width * 0.07,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.black,
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.credit_card,
                                   color: Colors.white,
                                   size: 16,
@@ -267,7 +267,7 @@ class _NewContactState extends State<NewContact> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Divider(
@@ -286,7 +286,7 @@ class _NewContactState extends State<NewContact> {
                         Text('Groups', style: GoogleFonts.lexendDeca()),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Divider(
@@ -305,13 +305,13 @@ class _NewContactState extends State<NewContact> {
                         Text('Social', style: GoogleFonts.lexendDeca()),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: 0,
                         ),
                         GestureDetector(
@@ -319,7 +319,7 @@ class _NewContactState extends State<NewContact> {
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.09,
                             height: MediaQuery.of(context).size.width * 0.09,
-                            child: Image(
+                            child: const Image(
                               image: AssetImage(
                                 'assets/images/fb1.png',
                               ),
@@ -331,7 +331,7 @@ class _NewContactState extends State<NewContact> {
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.09,
                             height: MediaQuery.of(context).size.width * 0.09,
-                            child: Image(
+                            child: const Image(
                               image: AssetImage('assets/images/x.png'),
                             ),
                           ),
@@ -341,7 +341,7 @@ class _NewContactState extends State<NewContact> {
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.1,
                             height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
+                            child: const Image(
                               image: AssetImage('assets/images/linkedIn.png'),
                             ),
                           ),
@@ -351,7 +351,7 @@ class _NewContactState extends State<NewContact> {
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.1,
                             height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
+                            child: const Image(
                               image: AssetImage('assets/images/insta-logo.png'),
                             ),
                           ),
@@ -361,14 +361,14 @@ class _NewContactState extends State<NewContact> {
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.1,
                             height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
+                            child: const Image(
                               image: AssetImage('assets/images/git.png'),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Divider(

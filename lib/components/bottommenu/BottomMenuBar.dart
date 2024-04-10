@@ -24,17 +24,17 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
   @override
   Widget build(BuildContext context) {
     Widget currentScreen = currentIndex == 0
-        ? Home()
+        ? const Home()
         : currentIndex == 1
             ? Contacts()
             : currentIndex == 2
-                ? Profile()
-                : More();
+                ? const Profile()
+                : const More();
     return Scaffold(
       body: currentScreen,
       bottomNavigationBar: BottomAppBar(
         color: Colors.black,
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         notchMargin: 10,
         child: Container(
           height: 60,

@@ -34,7 +34,7 @@ class _MainViewContactState extends State<MainViewContact> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorColor: Colors.orange,
             labelColor: Colors.orange,
             unselectedLabelColor: Colors.white,

@@ -36,10 +36,10 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
     return Obx((){
         return Scaffold(
           body: _employeeHistoryService.isLoading.value
-              ? Column(
+              ? const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Center(
+                       Center(
                       child: CircularProgressIndicator(),
                     ),
                   ],
@@ -67,7 +67,7 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
                         )
                       : Center(
                         child: Padding(
-                            padding: EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(30),
                             child: Text('No Employee History to display',
                                 style: GoogleFonts.lexendDeca()),
                           ),
@@ -98,7 +98,7 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
       final double offset = index * cardWidth;
       _scrollController.animateTo(
         offset,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     }

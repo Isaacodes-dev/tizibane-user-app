@@ -10,7 +10,7 @@ class GroupMembershipCard extends StatefulWidget {
 class _GroupMembershipCardState extends State<GroupMembershipCard> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       
     );
   }

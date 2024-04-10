@@ -18,7 +18,7 @@ class _SideMenuState extends State<SideMenu> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          DrawerHeader(
+          const DrawerHeader(
               child: Text(''),
             decoration: BoxDecoration(
               image: DecorationImage(image: AssetImage('assets/images/Tizibane.png'),fit: BoxFit.cover,),
@@ -29,31 +29,31 @@ class _SideMenuState extends State<SideMenu> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home_filled),
-            title: Text("Home"),
+            leading: const Icon(Icons.home_filled),
+            title: const Text("Home"),
             onTap: () => {
 
             },
           ),
           ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text("Notifications"),
+            leading: const Icon(Icons.notifications),
+            title: const Text("Notifications"),
             onTap: () => {
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Notifications()))
+                  context, MaterialPageRoute(builder: (context) => const Notifications()))
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text("Settings"),
+            leading: const Icon(Icons.settings),
+            title: const Text("Settings"),
             onTap: () => {
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => Settings()))
+                  context, MaterialPageRoute(builder: (context) => const Settings()))
             },
           ),
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text("Logout"),
+            leading: const Icon(Icons.logout),
+            title: const Text("Logout"),
             onTap: () => {
               Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => Login()))
