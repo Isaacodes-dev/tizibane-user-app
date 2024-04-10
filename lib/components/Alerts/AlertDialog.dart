@@ -7,8 +7,7 @@ class AlertBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(alertTitle),
-      content: Text(text),
+      title: Text(alertTitle),content: Text(text),
     );
   }
 }
