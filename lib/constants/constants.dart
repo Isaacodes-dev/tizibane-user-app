@@ -2,6 +2,8 @@ const String baseUrl = 'http://192.168.0.109:8000/api/';
 
 const String imageBaseUrl = 'http://192.168.0.109:8000/storage/test/';
 
+const String companyLogoUrl = 'http://192.168.0.109:8000/storage/logos/';
+
 const String register = 'registeruser';
 
 const String login = 'loginuser';

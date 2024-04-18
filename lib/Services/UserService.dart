@@ -91,7 +91,7 @@ class UserService extends GetxController {
           colorText: Colors.white,
         );        
         await getUser();
-        Get.offAll(BottomMenuBarItems(selectedIndex: 3,));
+        Get.offAll(BottomMenuBarItems(selectedIndex: 0,));
       } else {
         isLoading.value = false;
         print(json.decode(response.body)['message']);

@@ -14,6 +14,8 @@ class NewContact extends StatefulWidget {
   final String email;
   final String phoneNumber;
   final String profilePicture;
+  final String positionName;
+  final String companyName;
 
   const NewContact(
       {super.key,
@@ -22,7 +24,10 @@ class NewContact extends StatefulWidget {
       required this.lastName,
       required this.email,
       required this.phoneNumber,
-      required this.profilePicture});
+      required this.profilePicture,
+      required this.positionName,
+      required this.companyName
+      });
 
   @override
   State<NewContact> createState() => _NewContactState();
@@ -81,7 +86,7 @@ class _NewContactState extends State<NewContact> {
                       height: 10,
                     ),
                     Text(
-                      widget.firstName + '' + widget.lastName,
+                      widget.firstName + ' ' + widget.lastName,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -91,11 +96,11 @@ class _NewContactState extends State<NewContact> {
                     SizedBox(
                       height: 5,
                     ),
-                    Text('Position', style: GoogleFonts.lexendDeca()),
+                    Text(widget.positionName, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 3,
                     ),
-                    Text('Company', style: GoogleFonts.lexendDeca()),
+                    Text(widget.companyName, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 15,
                     ),
@@ -214,61 +219,9 @@ class _NewContactState extends State<NewContact> {
                         ),
                       ),
                     ),
+
                     SizedBox(
                       height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          color: Colors.grey.shade100,
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Nrc', style: GoogleFonts.lexendDeca()),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Text(formatNrc(widget.contactNrc),
-                                    style: GoogleFonts.lexendDeca()),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.07,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.07,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black,
-                                ),
-                                child: Icon(
-                                  Icons.credit_card,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
                     ),
                     Divider(
                       indent: MediaQuery.of(context).size.width * 0.1,
@@ -287,7 +240,7 @@ class _NewContactState extends State<NewContact> {
                       ],
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
                     Divider(
                       indent: MediaQuery.of(context).size.width * 0.1,

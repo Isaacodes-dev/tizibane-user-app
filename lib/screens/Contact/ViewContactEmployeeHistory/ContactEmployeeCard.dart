@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/constants/constants.dart';
 
 class ContactEmployeeCard extends StatefulWidget {
   final String startDate;
@@ -9,6 +10,7 @@ class ContactEmployeeCard extends StatefulWidget {
   final String companyPhone;
   final String companyEmail;
   final String companyAddress;
+  final String companyLogo;
 
   const ContactEmployeeCard({
     super.key,
@@ -19,6 +21,7 @@ class ContactEmployeeCard extends StatefulWidget {
     required this.companyPhone,
     required this.companyEmail,
     required this.companyAddress,
+    required this.companyLogo
   });
 
   @override
@@ -40,8 +43,8 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: Image.asset(
-                        'assets/images/samplelogo.png',
+                      child: Image.network(
+                        companyLogoUrl + widget.companyLogo,
                         height: 100,
                         width: 100,
                       ),

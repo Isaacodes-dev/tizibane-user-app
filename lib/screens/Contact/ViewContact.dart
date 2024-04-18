@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/screens/Contact/ViewCurrentEmployeeDetails.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewContact extends StatefulWidget {
@@ -13,6 +15,7 @@ class ViewContact extends StatefulWidget {
   final String profilePicture;
   final String positionName;
   final String companyName;
+  final String CompanyLogo;
 
   ViewContact(
       {super.key,
@@ -23,7 +26,8 @@ class ViewContact extends StatefulWidget {
       required this.phoneNumber,
       required this.profilePicture,
       required this.positionName,
-      required this.companyName
+      required this.companyName,
+      required this.CompanyLogo
       });
 
   @override
@@ -66,7 +70,8 @@ class _ViewContactState extends State<ViewContact> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(widget.firstName + ' ' + widget.lastName, style: GoogleFonts.lexendDeca()),
+                    Text(widget.firstName + ' ' + widget.lastName,
+                        style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 5,
                     ),
@@ -75,6 +80,30 @@ class _ViewContactState extends State<ViewContact> {
                       height: 3,
                     ),
                     Text(widget.companyName, style: GoogleFonts.lexendDeca()),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(ViewCurrentEmployeeDetails(profile_path: widget.profilePicture,firstName: widget.firstName,lastName: widget.lastName,positionName: widget.positionName,companyLogo: widget.CompanyLogo,));
+                      },
+                      child: Container(
+                        
+                        padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 10.0), 
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.0
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        
+                        child: Text(
+                          'More',
+                          style: GoogleFonts.lexendDeca(color: Colors.orange),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 15,
                     ),
@@ -180,11 +209,9 @@ class _ViewContactState extends State<ViewContact> {
                             padding: const EdgeInsets.only(right: 8.0),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.07,
-                              height:
-                                  MediaQuery.of(context).size.width * 0.07,
+                              height: MediaQuery.of(context).size.width * 0.07,
                               decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black),
+                                  shape: BoxShape.circle, color: Colors.black),
                               child: GestureDetector(
                                 onTap: () {
                                   _openDefaultEmailClient(widget.email);
@@ -324,8 +351,10 @@ class _ViewContactState extends State<ViewContact> {
 
     return formattedNrc;
   }
+
   void _openDialPad(String contactNumber) async {
-    String phoneNumber = contactNumber; // Replace with the phone number you want to dial
+    String phoneNumber =
+        contactNumber; // Replace with the phone number you want to dial
     final url = 'tel:$phoneNumber';
 
     if (await canLaunchUrl(Uri.parse(url))) {
@@ -334,6 +363,7 @@ class _ViewContactState extends State<ViewContact> {
       throw 'Could not launch $url';
     }
   }
+
   void _openDefaultEmailClient(String contactEmail) async {
     String emailUrl = 'mailto:$contactEmail';
     if (await canLaunchUrl(Uri.parse(emailUrl))) {
@@ -343,4 +373,3 @@ class _ViewContactState extends State<ViewContact> {
     }
   }
 }
-

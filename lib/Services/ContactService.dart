@@ -25,7 +25,8 @@ class ContactService extends GetxController {
           updatedAt: '',
           profilePicture: '',
           positionName: '',
-          companyName: '')
+          companyName: '',
+          companyLogo: '')
       .obs;
 
   var contactsList = <ContactModel>[].obs;
@@ -54,24 +55,36 @@ class ContactService extends GetxController {
 
       if (responseData['contact'] != null) {
         ContactModel contact;
+
         if (responseData['contact'] is List) {
-          contact = ContactModel.fromJson(responseData['contact'][0]);
+          if (responseData['contact'].isNotEmpty) {
+            contact = ContactModel.fromJson(responseData['contact'][0]);
+            contactDetails.value = contact;
+            print(contactDetails.value.positionName);
+            Get.to(() => NewContact(
+                  contactNrc: contactDetails.value.nrc,
+                  firstName: contactDetails.value.firstName,
+                  lastName: contactDetails.value.lastName,
+                  email: contactDetails.value.email,
+                  phoneNumber: contactDetails.value.phoneNumber,
+                  profilePicture: contactDetails.value.profilePicture,
+                  positionName: contactDetails.value.positionName,
+                  companyName: contactDetails.value.companyName,
+                ));
+          } else {
+            Get.snackbar(
+              'Info',
+              'Contact Does not Exit',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.blueAccent,
+              colorText: Colors.white,
+            );
+          }
         } else if (responseData['contact'] is Map) {
           contact = ContactModel.fromJson(responseData['contact']);
         } else {
           throw Exception('Unexpected response format');
         }
-
-        contactDetails.value = contact;
-
-        Get.to(() => NewContact(
-              contactNrc: contactDetails.value.nrc,
-              firstName: contactDetails.value.firstName,
-              lastName: contactDetails.value.lastName,
-              email: contactDetails.value.email,
-              phoneNumber: contactDetails.value.phoneNumber,
-              profilePicture: contactDetails.value.profilePicture,
-            ));
       } else {
         throw Exception("Contact data is null");
       }
@@ -148,8 +161,8 @@ class ContactService extends GetxController {
               updatedAt: '',
               profilePicture: '',
               positionName: '',
-              companyName: ''
-              )
+              companyName: '',
+              companyLogo: '')
           .obs as ContactModel;
     } else if (response.statusCode == 409) {
       isLoading.value = false;
@@ -185,7 +198,9 @@ class ContactService extends GetxController {
         await ContactsService.addContact(contact);
         print('Contact saved successfully');
 
-        Get.offAll(() => BottomMenuBarItems(selectedIndex: 2,));
+        Get.offAll(() => BottomMenuBarItems(
+              selectedIndex: 2,
+            ));
       } catch (e) {
         print('Failed to save contact: $e');
       }
