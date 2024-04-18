@@ -53,11 +53,7 @@ class _NewContactState extends State<NewContact> {
         backgroundColor: Colors.black,
         title: Text('Add Contact'),
       ),
-      body: widget.profilePicture == ''
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : SingleChildScrollView(
+      body: SingleChildScrollView(
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,

@@ -77,10 +77,10 @@ class _QRScannerState extends State<QRScanner> {
           userNrc = result!.code.toString();
           loadUser(userNrc);
           isUserLoaded = true; 
+          controller.dispose();
         });
       }else{
         Get.offAll(BottomMenuBarItems(selectedIndex: 1));
-        controller.dispose();
       }
     });
   }
