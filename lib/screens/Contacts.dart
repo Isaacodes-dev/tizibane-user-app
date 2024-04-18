@@ -87,6 +87,13 @@ class _ContactsState extends State<Contacts> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _contactService.getContacts();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final getContacts = Get.put<ContactService>(ContactService());
    
@@ -161,7 +168,7 @@ class _ContactsState extends State<Contacts> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => MainViewContact(contactNrc: contact.nrc,firstName: contact.firstName,lastName: contact.lastName,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture,positionName: contact.positionName,companyName: contact.companyName,),
+                                    builder: (context) => MainViewContact(contactNrc: contact.nrc,firstName: contact.firstName,lastName: contact.lastName,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture,positionName: contact.positionName,companyName: contact.companyName,companyLogo: contact.companyLogo,),
                                   ),
                                   
                                 );

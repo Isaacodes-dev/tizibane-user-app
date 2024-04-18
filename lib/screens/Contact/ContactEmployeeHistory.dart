@@ -8,16 +8,20 @@ import 'package:tizibane/screens/Contact/ViewContactEmployeeHistory/ContactEmplo
 class ContactEmployeeHistory extends StatefulWidget {
   final int? employeeIndex;
   final String contactNrc;
-  const ContactEmployeeHistory({super.key,required this.contactNrc, this.employeeIndex});
+  const ContactEmployeeHistory(
+      {super.key, required this.contactNrc, this.employeeIndex});
 
   @override
   State<ContactEmployeeHistory> createState() => _ContactEmployeeHistoryState();
 }
-final _employeeHistoryService = Get.put(EmployeeHistoryService(), permanent: true);
+
+final _employeeHistoryService =
+    Get.put(EmployeeHistoryService(), permanent: true);
+
 class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
-    final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   double _previousOffset = 0.0;
-  
+
   @override
   void initState() {
     super.initState();
@@ -33,51 +37,63 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx((){
-        return Scaffold(
-          body: _employeeHistoryService.isLoading.value
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ],
-                )
-              : Container(
-                  height: 350,
-                  child: _employeeHistoryService.contactEmployeeHistoryDetails.length > 0
-                      ? ListView.builder(
-                          controller: _scrollController,
-                          scrollDirection: Axis.horizontal,
-                          itemCount:
-                              _employeeHistoryService.contactEmployeeHistoryDetails.length,
-                          itemBuilder: (context, index) {
-                            EmploymentHistory employeeHistory = _employeeHistoryService.contactEmployeeHistoryDetails[index];
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 400,
-                                  child: ContactEmployeeCard(startDate: employeeHistory.startDate, endDate: employeeHistory.endDate,positionName: employeeHistory.positionName, companyName: employeeHistory.companyName, companyEmail: employeeHistory.companyEmail, companyPhone: employeeHistory.companyPhone, companyAddress: employeeHistory.companyAddress,),
-                                ),
-                              ],
-                            );
-                          },
-                        )
-                      : Center(
+    return Obx(() {
+      return Scaffold(
+        body: _employeeHistoryService.isLoading.value
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              )
+            : Container(
+                height: 350,
+                child: _employeeHistoryService
+                            .contactEmployeeHistoryDetails.length >
+                        0
+                    ? ListView.builder(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _employeeHistoryService
+                            .contactEmployeeHistoryDetails.length,
+                        itemBuilder: (context, index) {
+                          EmploymentHistory employeeHistory =
+                              _employeeHistoryService
+                                  .contactEmployeeHistoryDetails[index];
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 400,
+                                child: ContactEmployeeCard(
+                                    startDate: employeeHistory.startDate,
+                                    endDate: employeeHistory.endDate,
+                                    positionName: employeeHistory.positionName,
+                                    companyName: employeeHistory.companyName,
+                                    companyEmail: employeeHistory.companyEmail,
+                                    companyPhone: employeeHistory.companyPhone,
+                                    companyAddress: employeeHistory.companyAddress,
+                                    companyLogo: employeeHistory.companyLogo),
+                              ),
+                            ],
+                          );
+                        },
+                      )
+                    : Center(
                         child: Padding(
-                            padding: EdgeInsets.all(30),
-                            child: Text('No Employee History to display',
-                                style: GoogleFonts.lexendDeca()),
-                          ),
+                          padding: EdgeInsets.all(30),
+                          child: Text('No Employee History to display',
+                              style: GoogleFonts.lexendDeca()),
+                        ),
                       ),
-                ),
-        );
-      }
-    );
+              ),
+      );
+    });
   }
-    @override
+
+  @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();

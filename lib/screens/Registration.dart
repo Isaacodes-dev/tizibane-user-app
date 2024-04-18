@@ -65,7 +65,8 @@ class _RegistrationState extends State<Registration> {
                       controller: nrcController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
                         hintStyle: const TextStyle(fontSize: 14),
                         hintText: 'Nrc',
                         border: OutlineInputBorder(
@@ -77,7 +78,8 @@ class _RegistrationState extends State<Registration> {
                       controller: firstNameController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
                         hintText: 'First Name',
                         hintStyle: TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
@@ -89,7 +91,8 @@ class _RegistrationState extends State<Registration> {
                       controller: lastNameController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
                         hintText: 'Last Name',
                         hintStyle: TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
@@ -101,7 +104,8 @@ class _RegistrationState extends State<Registration> {
                       controller: phoneController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
                         hintText: 'Phone Number',
                         hintStyle: TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
@@ -113,7 +117,8 @@ class _RegistrationState extends State<Registration> {
                       controller: emailController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
                         hintText: 'Email',
                         hintStyle: TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
@@ -125,7 +130,8 @@ class _RegistrationState extends State<Registration> {
                       controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
                         hintText: 'Password',
                         hintStyle: TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
@@ -138,7 +144,8 @@ class _RegistrationState extends State<Registration> {
                       controller: confirmPasswordController,
                       obscureText: true,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 15.0),
                         hintText: 'Confirm Password',
                         hintStyle: TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
@@ -159,6 +166,7 @@ class _RegistrationState extends State<Registration> {
                               text: 'Sign Up',
                               onTap: () async {
                                 if (isValid(
+                                    nrcController.text.trim(),
                                     firstNameController.text.trim(),
                                     lastNameController.text.trim(),
                                     phoneController.text.trim(),
@@ -226,7 +234,13 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  bool isValid(String firstName ,String lastName, String phoneNumber, String emailText) {
+  bool isValid(String nrcText, String firstName, String lastName,
+      String phoneNumber, String emailText) {
+    RegExp nrcRegex = RegExp(
+      r'^[0-9.]+',
+      caseSensitive: false,
+    );
+
     RegExp emailRegex = RegExp(
       r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+.[a-zA-Z]+',
       caseSensitive: false,
@@ -247,17 +261,50 @@ class _RegistrationState extends State<Registration> {
       caseSensitive: false,
     );
 
-    if (!firstNameRegex .hasMatch(firstName)) {
-      Get.snackbar('Error', 'Invalid First Name Format');
+    if (!firstNameRegex.hasMatch(firstName)) {
+      Get.snackbar(
+        'Info',
+        'Invalid First Name Format',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.blueAccent,
+        colorText: Colors.white,
+      );
       return false;
     } else if (!lastNameRegex.hasMatch(lastName)) {
-      Get.snackbar('Error', 'Invalid Last Name Format');
+      Get.snackbar(
+        'Info',
+        'Invalid Last Name Format',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.blueAccent,
+        colorText: Colors.white,
+      );
       return false;
-    }  else if (!emailRegex.hasMatch(emailText)) {
-      Get.snackbar('Error', 'Invalid email Format');
+    } else if (!emailRegex.hasMatch(emailText)) {
+      Get.snackbar(
+        'Info',
+        'Invalid email Format',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.blueAccent,
+        colorText: Colors.white,
+      );
       return false;
-    }else if (!phoneNumberRegex.hasMatch(phoneNumber)) {
-      Get.snackbar('Error', 'Invalid phone Format');
+    } else if (!phoneNumberRegex.hasMatch(phoneNumber)) {
+      Get.snackbar(
+        'Info',
+        'Invalid phone Format',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.blueAccent,
+        colorText: Colors.white,
+      );
+      return false;
+    } else if (!nrcRegex.hasMatch(nrcText)) {
+      Get.snackbar(
+        'Info',
+        'Invalid Nrc Format',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.blueAccent,
+        colorText: Colors.white,
+      );
       return false;
     } else {
       return true;

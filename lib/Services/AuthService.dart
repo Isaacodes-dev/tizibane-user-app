@@ -185,6 +185,8 @@ class AuthService extends GetxController {
       
       _employeeHistory.contactEmployeeHistoryDetails.value = <EmploymentHistory>[].obs;
 
+      _profileService.resetPickedFile();
+
       Get.snackbar(
         
         'Success',
