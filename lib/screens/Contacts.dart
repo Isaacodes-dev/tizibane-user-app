@@ -52,10 +52,7 @@ class _ContactsState extends State<Contacts> {
   }
 
   void scanQR() {
-    setState(() {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => QRScanner()));
-    });
+  Get.to(QRScanner());
   }
 
   void _tagRead() {
