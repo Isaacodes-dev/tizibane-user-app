@@ -150,20 +150,6 @@ class ContactService extends GetxController {
       );
       getContacts();
       saveContactToPhonebook();
-      contactDetails.value = ContactModel(
-              nrc: '',
-              firstName: '',
-              lastName: '',
-              phoneNumber: '',
-              email: '',
-              roleId: '',
-              createdAt: '',
-              updatedAt: '',
-              profilePicture: '',
-              positionName: '',
-              companyName: '',
-              companyLogo: '')
-          .obs as ContactModel;
     } else if (response.statusCode == 409) {
       isLoading.value = false;
       Get.snackbar(
@@ -199,7 +185,7 @@ class ContactService extends GetxController {
         print('Contact saved successfully');
 
         Get.offAll(() => BottomMenuBarItems(
-              selectedIndex: 2,
+              selectedIndex: 1,
             ));
       } catch (e) {
         print('Failed to save contact: $e');
