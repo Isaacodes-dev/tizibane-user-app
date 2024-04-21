@@ -59,9 +59,9 @@ class AuthService extends GetxController {
 
       final response = await http.post(Uri.parse(url),
           headers: {'Accept': 'application/json'}, body: data);
-
       if (response.statusCode == 201) {
         isLoading.value = false;
+        
         Get.snackbar(
           'Success',
           json.decode(response.body)['message'],
@@ -76,7 +76,6 @@ class AuthService extends GetxController {
         
       } else {
         isLoading.value = false;
-        print(json.decode(response.body)['message']);
         Get.snackbar(
           'Error',
           json.decode(response.body)['message'],

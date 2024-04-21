@@ -194,15 +194,15 @@ Future<XFile?> convertAssetToXFile() async {
 
   Future<void> setDefaultPictureOnLogout() async {
   isLoading.value = true;
-  XFile? xFile = await convertAssetToXFile(); // Use your method to convert the asset to XFile
+  XFile? xFile = await convertAssetToXFile(); 
   String storedNrc = nrcStorage.read('nrcNumber');
   http.StreamedResponse response = await updateDefaultProfile(xFile, storedNrc);
   if (response.statusCode == 200) {
     Map map = jsonDecode(await response.stream.bytesToString());
     String message = map['message'];
     isLoading.value = false;
-    // Update the image path to the default picture after setting it
-    imagePath.value = 'assets/images/user.jpg'; // Update with your default image path
+    
+    imagePath.value = 'assets/images/user.jpg'; 
   } else {
     print('Error setting default picture');
     print(response.reasonPhrase);

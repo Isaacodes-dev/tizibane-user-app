@@ -18,7 +18,7 @@ class EmployeeHistory extends StatefulWidget {
 class _EmployeeHistoryState extends State<EmployeeHistory> {
   final ScrollController _scrollController = ScrollController();
   double _previousOffset = 0.0;
-  
+  final _employeeHistoryService = Get.put(EmployeeHistoryService(), permanent: true);
   @override
   void initState() {
     super.initState();
@@ -27,13 +27,13 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
         scrollToCard(widget.employeeIndex!);
       }
     });
-
+    _employeeHistoryService.getEmploymentHistory();
     _scrollController.addListener(_onScroll);
   }
 
   @override
   Widget build(BuildContext context) {
-    final _employeeHistoryService = Get.put(EmployeeHistoryService(), permanent: true);
+    
     return Obx((){
         return Scaffold(
           body: _employeeHistoryService.isLoading.value
@@ -60,7 +60,7 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
                               children: [
                                 Container(
                                   width: 400,
-                                  child: EmployeeHistoryCard(startDate: employeeHistory.startDate, endDate: employeeHistory.endDate,positionName: employeeHistory.positionName, companyName: employeeHistory.companyName, companyEmail: employeeHistory.companyEmail, companyPhone: employeeHistory.companyPhone, companyAddress: employeeHistory.companyAddress,),
+                                  child: EmployeeHistoryCard(startDate: employeeHistory.startDate, endDate: employeeHistory.endDate,positionName: employeeHistory.positionName, companyName: employeeHistory.companyName, companyEmail: employeeHistory.companyEmail, companyPhone: employeeHistory.companyPhone, companyAddress: employeeHistory.companyAddress,companyLogo: employeeHistory.companyLogo,),
                                 ),
                               ],
                             );

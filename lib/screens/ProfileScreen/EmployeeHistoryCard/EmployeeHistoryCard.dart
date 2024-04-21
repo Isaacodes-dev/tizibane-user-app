@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/constants/constants.dart';
 
 class EmployeeHistoryCard extends StatefulWidget {
   final String startDate;
   final String endDate;
   final String positionName;
   final String companyName;
+  final String companyLogo;
   final String companyPhone;
   final String companyEmail;
   final String companyAddress;
@@ -17,6 +19,7 @@ class EmployeeHistoryCard extends StatefulWidget {
     required this.endDate,
     required this.positionName,
     required this.companyName,
+    required this.companyLogo,
     required this.companyPhone,
     required this.companyEmail,
     required this.companyAddress,
@@ -41,8 +44,8 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: Image.asset(
-                        'assets/images/samplelogo.png',
+                      child: Image.network(
+                        companyLogoUrl + widget.companyLogo,
                         height: 100,
                         width: 100,
                       ),
