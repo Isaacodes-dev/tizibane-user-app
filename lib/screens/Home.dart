@@ -12,6 +12,7 @@ import 'package:tizibane/screens/Contact/ViewContact.dart';
 import 'package:tizibane/models/User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tizibane/screens/Groups/Groups.dart';
+import 'package:tizibane/screens/ViewEmployeCurrentDetails.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -60,7 +61,9 @@ class _HomeState extends State<Home> {
       );
     }
 
-    final user = _userService.userObj.value.isNotEmpty ? _userService.userObj.value[0] : null;
+    final user = _userService.userObj.value.isNotEmpty
+        ? _userService.userObj.value[0]
+        : null;
 
     if (user == null) {
       return Scaffold(
@@ -77,8 +80,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.black,
       ),
-      body: 
-          _profileService.imagePath.value == '' &&
+      body: _profileService.imagePath.value == '' &&
               _userService.isLoading.value
           ? const Center(
               child: CircularProgressIndicator(),
@@ -100,11 +102,9 @@ class _HomeState extends State<Home> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color:
-                                  Colors.black.withOpacity(0.5), 
+                              color: Colors.black.withOpacity(0.5),
                               spreadRadius: 5,
-                              blurRadius: 4, 
-                              
+                              blurRadius: 4,
                             ),
                           ],
                           border: Border.all(
@@ -127,18 +127,35 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(_userService.userObj.value[0].first_name + ' ' + _userService.userObj.value[0].last_name,
-                        style: GoogleFonts.lexendDeca(
+                    Column(
+                      children: [
+                        Text(
+                          _userService.userObj.value[0].first_name +
+                              ' ' +
+                              _userService.userObj.value[0].last_name,
+                          style: GoogleFonts.lexendDeca(
                             textStyle: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18))),
-                    SizedBox(
-                      height: 5,
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                        ),
+                        if (_userService.userObj.value[0].company_name.isNotEmpty &&
+                            _userService.userObj.value[0].position_name.isNotEmpty)
+                          SizedBox(height: 5),
+                        if (_userService.userObj.value[0].company_name.isNotEmpty &&
+                            _userService.userObj.value[0].position_name.isNotEmpty)
+                          Text(_userService.userObj.value[0].position_name,
+                              style: GoogleFonts.lexendDeca()),
+                        if (_userService.userObj.value[0].company_name.isNotEmpty &&
+                            _userService.userObj.value[0].position_name.isNotEmpty)
+                          SizedBox(height: 3),
+                        if (_userService.userObj.value[0].company_name.isNotEmpty &&
+                            _userService.userObj.value[0].position_name.isNotEmpty)
+                          Text(
+                            _userService.userObj.value[0].company_name,
+                            style: GoogleFonts.lexendDeca(),
+                          ),
+                      ],
                     ),
-                    Text(_userService.userObj.value[0].position_name, style: GoogleFonts.lexendDeca()),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Text(_userService.userObj.value[0].company_name, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 15,
                     ),
@@ -162,65 +179,15 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        border: Border.all(color: Colors.grey.shade200),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Phone', style: GoogleFonts.lexendDeca()),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Text(_userService.userObj.value[0].phone_number,
-                                  style: GoogleFonts.lexendDeca())
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.07,
-                              height: MediaQuery.of(context).size.width * 0.07,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black,
-                              ),
-                              child: Icon(
-                                CupertinoIcons.phone,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
+                    if (_userService.userObj.value[0].phone_number.isNotEmpty)
+                      Container(
                         width: MediaQuery.of(context).size.width * 0.8,
                         padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
                         decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          border: Border.all(color: Colors.grey.shade200),
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
-                          ),
-                          color: Colors.grey.shade100,
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 1,
                           ),
                         ),
                         child: Row(
@@ -229,87 +196,144 @@ class _HomeState extends State<Home> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Email', style: GoogleFonts.lexendDeca()),
+                                Text('Phone', style: GoogleFonts.lexendDeca()),
                                 SizedBox(
                                   height: 3,
                                 ),
-                                Text(_userService.userObj.value[0].email,
-                                    style: GoogleFonts.lexendDeca()),
+                                Text(_userService.userObj.value[0].phone_number,
+                                    style: GoogleFonts.lexendDeca())
                               ],
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.07,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.07,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.black),
-                                child: Icon(
-                                  CupertinoIcons.mail,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          color: Colors.grey.shade100,
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Nrc', style: GoogleFonts.lexendDeca()),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Text(formatNrc(_userService.userObj.value[0].nrc),
-                                    style: GoogleFonts.lexendDeca()),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.07,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.07,
+                                height: MediaQuery.of(context).size.width * 0.07,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.black,
                                 ),
                                 child: Icon(
-                                  Icons.credit_card,
+                                  CupertinoIcons.phone,
                                   color: Colors.white,
-                                  size: 16,
+                                  size: 18,
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
+                    if (_userService.userObj.value[0].email.isNotEmpty)
+                      SizedBox(
+                        height: 10,
+                      ),
+                    if (_userService.userObj.value[0].email.isNotEmpty)
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            color: Colors.grey.shade100,
+                            border: Border.all(
+                              color: Colors.grey.shade200,
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Email', style: GoogleFonts.lexendDeca()),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text(_userService.userObj.value[0].email,
+                                      style: GoogleFonts.lexendDeca()),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.07,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.07,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black),
+                                  child: Icon(
+                                    CupertinoIcons.mail,
+                                    color: Colors.white,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (_userService.userObj.value[0].nrc.isNotEmpty)
+                      SizedBox(
+                        height: 10,
+                      ),
+                    if (_userService.userObj.value[0].nrc.isNotEmpty)
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            color: Colors.grey.shade100,
+                            border: Border.all(
+                              color: Colors.grey.shade200,
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Nrc', style: GoogleFonts.lexendDeca()),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text(
+                                      formatNrc(
+                                          _userService.userObj.value[0].nrc),
+                                      style: GoogleFonts.lexendDeca()),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.07,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.07,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black,
+                                  ),
+                                  child: Icon(
+                                    Icons.credit_card,
+                                    color: Colors.white,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     SizedBox(
                       height: 20,
                     ),
@@ -356,66 +380,66 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       height: 15,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: 0,
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.09,
-                            height: MediaQuery.of(context).size.width * 0.09,
-                            child: Image(
-                              image: AssetImage('assets/images/fb1.png'),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.09,
-                            height: MediaQuery.of(context).size.width * 0.09,
-                            child: Image(
-                              image: AssetImage('assets/images/x.png'),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
-                              image: AssetImage('assets/images/linkedIn.png'),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
-                              image: AssetImage('assets/images/insta-logo.png'),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
-                              image: AssetImage('assets/images/git.png'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: [
+                    //     SizedBox(
+                    //       width: 0,
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.09,
+                    //         height: MediaQuery.of(context).size.width * 0.09,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/fb1.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.09,
+                    //         height: MediaQuery.of(context).size.width * 0.09,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/x.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.1,
+                    //         height: MediaQuery.of(context).size.width * 0.1,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/linkedIn.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.1,
+                    //         height: MediaQuery.of(context).size.width * 0.1,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/insta-logo.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.1,
+                    //         height: MediaQuery.of(context).size.width * 0.1,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/git.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     SizedBox(
-                      height: 20,
+                      height: 5,
                     ),
                     Divider(
                       indent: MediaQuery.of(context).size.width * 0.1,
@@ -428,8 +452,7 @@ class _HomeState extends State<Home> {
               ),
             ),
     );
-       
-}
+  }
 
   String formatNrc(String userNrc) {
     String formattedNrc = userNrc.substring(0, 6) +

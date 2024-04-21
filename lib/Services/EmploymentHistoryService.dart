@@ -28,7 +28,6 @@ class EmployeeHistoryService extends GetxController {
     String employeeHistory = nrcStorage.read('nrcNumber');
 
     isLoading.value = true;
-
     final response = await http.get(
       Uri.parse(baseUrl + getEmploymentHistoryDetails + "/$employeeHistory"),
       headers: {
@@ -69,7 +68,6 @@ class EmployeeHistoryService extends GetxController {
         'Authorization': 'Bearer $accessToken',
       },
     );
-    
     if (response.statusCode == 200) {
       isLoading.value = false;
       List<dynamic> data = jsonDecode(response.body)['employmentHistory'];

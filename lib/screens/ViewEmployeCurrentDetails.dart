@@ -1,48 +1,45 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/constants/constants.dart';
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 
-class ViewCurrentEmployeeDetails extends StatefulWidget {
-  final String profile_path;
-  final String firstName;
-  final String lastName;
-  final String phoneNumber;
-  final String positionName;
-  final String companyName;
-  final String companyLogo;
+class ViewEmployeeDetails extends StatefulWidget {
+  final String first_name;
+  final String last_name;
+  final String position_name;
+  final String company_name;
   final String telephone;
-  final String companyAssignedEmail;
-  final String comapnyAddress;
-  const ViewCurrentEmployeeDetails({
-    super.key,
-    required this.profile_path,
-    required this.firstName,
-    required this.lastName,
-    required this.phoneNumber,
-    required this.companyName,
-    required this.positionName,
-    required this.companyLogo,
-    required this.telephone,
-    required this.companyAssignedEmail,
-    required this.comapnyAddress
+  final String cell;
+  final String email;
+  final String company_address;
+  final String user_profile_pic;
+  final String company_logo_url;
+
+  const ViewEmployeeDetails({super.key,
+  required this.first_name,
+  required this.last_name,
+  required this.position_name,
+  required this.company_name,
+  required this.cell,
+  required this.telephone,
+  required this.email,
+  required this.company_address,
+  required this.user_profile_pic,
+  required this.company_logo_url
   });
 
   @override
-  State<ViewCurrentEmployeeDetails> createState() =>
-      _ViewCurrentEmployeeDetailsState();
+  State<ViewEmployeeDetails> createState() => _ViewEmployeeCurrentDetailsState();
 }
 
-class _ViewCurrentEmployeeDetailsState
-    extends State<ViewCurrentEmployeeDetails> {
+class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
       ),
-      body: Stack(
+      body: widget.company_logo_url == '' ? Center(child: Text('No Employee Details',style: GoogleFonts.lexendDeca())) : Stack(
         children: [
           Positioned(
             top: 0,
@@ -55,7 +52,7 @@ class _ViewCurrentEmployeeDetailsState
                 fit: StackFit.expand,
                 children: [
                   Image.network(
-                    companyLogoUrl + widget.companyLogo, 
+                    companyLogoUrl + widget.company_logo_url, 
                     fit: BoxFit.cover,
                   ),
                   Container(
@@ -77,14 +74,14 @@ class _ViewCurrentEmployeeDetailsState
                     child: Column(
                       children: [
                         Text(
-                          widget.firstName + ' ' + widget.lastName,
+                          widget.first_name + ' ' + widget.last_name,
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 5),
-                        Text(widget.positionName),
+                        Text(widget.position_name),
                         SizedBox(height: 5),
-                        Text(widget.companyName)
+                        Text(widget.company_name)
                       ],
                     ),
                   ),
@@ -193,7 +190,7 @@ class _ViewCurrentEmployeeDetailsState
                               height: 3,
                             ),
                             Text(
-                              widget.phoneNumber,
+                              widget.cell,
                             )
                           ],
                         ),
@@ -242,7 +239,7 @@ class _ViewCurrentEmployeeDetailsState
                               height: 3,
                             ),
                             Text(
-                              widget.companyAssignedEmail,
+                              widget.email,
                             )
                           ],
                         ),
@@ -291,7 +288,7 @@ class _ViewCurrentEmployeeDetailsState
                               height: 3,
                             ),
                             Text(
-                              widget.comapnyAddress,
+                              widget.company_address,
                             )
                           ],
                         ),
@@ -317,55 +314,6 @@ class _ViewCurrentEmployeeDetailsState
                   SizedBox(
                     height: 10,
                   ),
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width * 0.8,
-                  //   padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.grey.shade100,
-                  //     border: Border.all(color: Colors.grey.shade200),
-                  //     borderRadius: BorderRadius.all(
-                  //       Radius.circular(20),
-                  //     ),
-                  //   ),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text(
-                  //             'Postal Address',
-                  //           ),
-                  //           SizedBox(
-                  //             height: 3,
-                  //           ),
-                  //           Text(
-                  //             'P.O. Box 90373, Luanshya',
-                  //           )
-                  //         ],
-                  //       ),
-                  //       Padding(
-                  //         padding: const EdgeInsets.only(right: 8.0),
-                  //         child: Container(
-                  //           width: MediaQuery.of(context).size.width * 0.07,
-                  //           height: MediaQuery.of(context).size.width * 0.07,
-                  //           decoration: BoxDecoration(
-                  //             shape: BoxShape.circle,
-                  //             color: Colors.black,
-                  //           ),
-                  //           child: Icon(
-                  //             CupertinoIcons.home,
-                  //             color: Colors.white,
-                  //             size: 18,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                        SizedBox(
-                    height: 0,
-                  ),
                 ],
               ),
             ),
@@ -388,7 +336,7 @@ class _ViewCurrentEmployeeDetailsState
                 ),
                 child: ClipOval(
                   child: Image.network(
-                    imageBaseUrl + widget.profile_path, // User image path
+                    imageBaseUrl + widget.user_profile_pic, // User image path
                     width: 100,
                     height: 100,
                     fit: BoxFit.cover,
@@ -399,7 +347,6 @@ class _ViewCurrentEmployeeDetailsState
           ),
         ],
       ),
-    );
+    );;
   }
 }
-

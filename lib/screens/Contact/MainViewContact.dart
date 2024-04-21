@@ -12,6 +12,9 @@ class MainViewContact extends StatefulWidget {
   final String positionName;
   final String companyName;
   final String companyLogo;
+  final String telephone;
+  final String companyAssignedEmail;
+  final String companyAddress;
   const MainViewContact({
     super.key,
     required this.contactNrc,
@@ -23,6 +26,9 @@ class MainViewContact extends StatefulWidget {
     required this.positionName,
     required this.companyName,
     required this.companyLogo,
+    required this.telephone,
+    required this.companyAddress,
+    required this.companyAssignedEmail
   });
 
   @override
@@ -30,8 +36,11 @@ class MainViewContact extends StatefulWidget {
 }
 
 class _MainViewContactState extends State<MainViewContact> {
+  
   @override
+  
   Widget build(BuildContext context) {
+  print(widget.contactNrc);
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
@@ -60,6 +69,9 @@ class _MainViewContactState extends State<MainViewContact> {
               profilePicture: widget.profilePicture,
               companyName: widget.companyName,
               CompanyLogo: widget.companyLogo,
+              telephone: widget.telephone,
+              comapnyAddress: widget.companyAddress,
+              companyAssignedEmail: widget.companyAssignedEmail,
             ),
             ContactEmployeeHistory(
               contactNrc: widget.contactNrc,

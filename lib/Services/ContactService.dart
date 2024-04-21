@@ -26,7 +26,11 @@ class ContactService extends GetxController {
           profilePicture: '',
           positionName: '',
           companyName: '',
-          companyLogo: '')
+          companyLogo: '',
+          companyAssignedEmail: '',
+          comapnyAddress: '',
+          telephone: ''
+          )
       .obs;
 
   var contactsList = <ContactModel>[].obs;
@@ -105,7 +109,7 @@ class ContactService extends GetxController {
         'Authorization': 'Bearer $accessToken',
       },
     );
-
+    
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body)['contacts'];
       contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
@@ -127,7 +131,6 @@ class ContactService extends GetxController {
   }
 
   Future<void> saveContact(Map<String, dynamic> contactBody) async {
-    print(contactBody);
     isLoading.value = true;
     String contactSaverNrc = nrcStorage.read('nrcNumber');
     String accessToken = box.read('token');
@@ -182,7 +185,6 @@ class ContactService extends GetxController {
         );
 
         await ContactsService.addContact(contact);
-        print('Contact saved successfully');
 
         Get.offAll(() => BottomMenuBarItems(
               selectedIndex: 1,
