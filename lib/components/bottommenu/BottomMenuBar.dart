@@ -27,9 +27,7 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
         ? Home()
         : currentIndex == 1
             ? Contacts()
-            : currentIndex == 2
-                ? Profile()
-                : More();
+            : More();
     return Scaffold(
       body: currentScreen,
       bottomNavigationBar: BottomAppBar(
@@ -44,7 +42,6 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
             children: [
               buildMaterialButton(0, Icons.home_filled, "Home"),
               buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
-              buildMaterialButton(2, Icons.person, "Profile"),
               buildMaterialButton(3, Icons.more_horiz_outlined, "More"),
             ],
           ),

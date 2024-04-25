@@ -23,8 +23,10 @@ final nrcStorage = GetStorage();
 String nrcNumber = nrcStorage.read('nrcNumber');
 
 class _MoreState extends State<More> {
+  
   @override
   Widget build(BuildContext context) {
+  print('From QrCode' + nrcNumber);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,

@@ -67,8 +67,7 @@ class _QRScannerState extends State<QRScanner> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    bool isUserLoaded =
-        false; 
+    bool isUserLoaded = false;
 
     controller.scannedDataStream.listen((scanData) {
       if (!isUserLoaded) {
@@ -76,10 +75,10 @@ class _QRScannerState extends State<QRScanner> {
           result = scanData;
           userNrc = result!.code.toString();
           loadUser(userNrc);
-          isUserLoaded = true; 
-          controller.dispose();
+          isUserLoaded = true;
         });
-      }else{
+        controller.dispose(); // Dispose the controller outside of setState()
+      } else {
         Get.offAll(BottomMenuBarItems(selectedIndex: 1));
       }
     });

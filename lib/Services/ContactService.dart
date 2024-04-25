@@ -9,6 +9,7 @@ import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
+import 'package:tizibane/screens/Contacts.dart';
 
 class ContactService extends GetxController {
   final isLoading = false.obs;
@@ -34,6 +35,8 @@ class ContactService extends GetxController {
       .obs;
 
   var contactsList = <ContactModel>[].obs;
+
+  var filteredContacts = <ContactModel>[].obs;
 
   final contactStorage = GetStorage();
 
@@ -64,7 +67,6 @@ class ContactService extends GetxController {
           if (responseData['contact'].isNotEmpty) {
             contact = ContactModel.fromJson(responseData['contact'][0]);
             contactDetails.value = contact;
-            print(contactDetails.value.positionName);
             Get.to(() => NewContact(
                   contactNrc: contactDetails.value.nrc,
                   firstName: contactDetails.value.firstName,
@@ -151,8 +153,8 @@ class ContactService extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
-      getContacts();
       saveContactToPhonebook();
+      Get.to(Contacts());
     } else if (response.statusCode == 409) {
       isLoading.value = false;
       Get.snackbar(
@@ -194,6 +196,20 @@ class ContactService extends GetxController {
       }
     } else {
       print('Permission to access contacts is denied');
+    }
+  }
+
+    void filterContacts(String query) {
+    if (query.isEmpty) {
+      // If the query is empty, show all contacts
+      filteredContacts.value = contactsList;
+    } else {
+      // Filter contacts based on first name or last name containing the query
+      filteredContacts.value = contactsList
+          .where((contact) =>
+              contact.firstName.toLowerCase().contains(query.toLowerCase()) ||
+              contact.lastName.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     }
   }
 }
