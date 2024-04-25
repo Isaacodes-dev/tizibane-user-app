@@ -33,8 +33,7 @@ class ViewContact extends StatefulWidget {
       required this.CompanyLogo,
       required this.telephone,
       required this.comapnyAddress,
-      required this.companyAssignedEmail
-      });
+      required this.companyAssignedEmail});
 
   @override
   State<ViewContact> createState() => _ViewContactState();
@@ -83,45 +82,70 @@ class _ViewContactState extends State<ViewContact> {
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(widget.positionName, style: GoogleFonts.lexendDeca()),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Text(widget.companyName, style: GoogleFonts.lexendDeca()),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(ViewCurrentEmployeeDetails(
-                          profile_path: widget.profilePicture,
-                          firstName: widget.firstName,
-                          lastName: widget.lastName,
-                          phoneNumber: widget.phoneNumber,
-                          companyName: widget.companyName,
-                          positionName: widget.positionName,
-                          companyLogo: widget.CompanyLogo,
-                          telephone: widget.telephone,
-                          comapnyAddress: widget.comapnyAddress,
-                          companyAssignedEmail: widget.companyAssignedEmail,
-                        ));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 10.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 2.0),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Text(
-                          'More',
-                          style: GoogleFonts.lexendDeca(color: Colors.orange),
-                        ),
+                    if (widget.positionName.isNotEmpty &&
+                        widget.companyName.isNotEmpty)
+                      SizedBox(
+                        height: 5,
                       ),
+                    if (widget.positionName.isNotEmpty &&
+                        widget.companyName.isNotEmpty)
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(ViewCurrentEmployeeDetails(
+                            profile_path: widget.profilePicture,
+                            firstName: widget.firstName,
+                            lastName: widget.lastName,
+                            phoneNumber: widget.phoneNumber,
+                            companyName: widget.companyName,
+                            positionName: widget.positionName,
+                            companyLogo: widget.CompanyLogo,
+                            telephone: widget.telephone,
+                            comapnyAddress: widget.comapnyAddress,
+                            companyAssignedEmail: widget.companyAssignedEmail,
+                          ));
+                        },
+                        child: Text(widget.positionName,
+                            style: GoogleFonts.lexendDeca()),
+                      ),
+                    if (widget.positionName.isNotEmpty &&
+                        widget.companyName.isNotEmpty)
+                      SizedBox(
+                        height: 3,
+                      ),
+                    if (widget.positionName.isNotEmpty &&
+                        widget.companyName.isNotEmpty)
+                      Text(widget.companyName, style: GoogleFonts.lexendDeca()),
+                    SizedBox(
+                      height: 3,
                     ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Get.to(ViewCurrentEmployeeDetails(
+                    //       profile_path: widget.profilePicture,
+                    //       firstName: widget.firstName,
+                    //       lastName: widget.lastName,
+                    //       phoneNumber: widget.phoneNumber,
+                    //       companyName: widget.companyName,
+                    //       positionName: widget.positionName,
+                    //       companyLogo: widget.CompanyLogo,
+                    //       telephone: widget.telephone,
+                    //       comapnyAddress: widget.comapnyAddress,
+                    //       companyAssignedEmail: widget.companyAssignedEmail,
+                    //     ));
+                    //   },
+                    //   child: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //         vertical: 8.0, horizontal: 10.0),
+                    //     decoration: BoxDecoration(
+                    //       border: Border.all(color: Colors.black, width: 2.0),
+                    //       borderRadius: BorderRadius.circular(8.0),
+                    //     ),
+                    //     child: Text(
+                    //       'More',
+                    //       style: GoogleFonts.lexendDeca(color: Colors.orange),
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 15,
                     ),
@@ -283,9 +307,9 @@ class _ViewContactState extends State<ViewContact> {
                         Text('Social', style: GoogleFonts.lexendDeca()),
                       ],
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
+                    // SizedBox(
+                    //   height: 15,
+                    // ),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     //   children: [

@@ -42,7 +42,7 @@ class _ViewCurrentEmployeeDetailsState
       appBar: AppBar(
         backgroundColor: Colors.black,
       ),
-      body: Stack(
+      body: widget.companyLogo == '' ? Center(child: Text('No Employee Details')) : Stack(
         children: [
           Positioned(
             top: 0,
@@ -53,7 +53,7 @@ class _ViewCurrentEmployeeDetailsState
               height: MediaQuery.of(context).size.width / 2,
               child: Stack(
                 fit: StackFit.expand,
-                children: [
+                children: [ 
                   Image.network(
                     companyLogoUrl + widget.companyLogo, 
                     fit: BoxFit.cover,
@@ -114,7 +114,7 @@ class _ViewCurrentEmployeeDetailsState
                         height: 20,
                       ),
                       Text(
-                        'Coporate Details',
+                        'Corporate Details',
                       ),
                     ],
                   ),

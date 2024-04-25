@@ -89,13 +89,16 @@ class _NewContactState extends State<NewContact> {
                         letterSpacing: 1.15,
                       ),
                     ),
+                    if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
                     SizedBox(
                       height: 5,
                     ),
+                    if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
                     Text(widget.positionName, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 3,
                     ),
+                    if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
                     Text(widget.companyName, style: GoogleFonts.lexendDeca()),
                     SizedBox(
                       height: 15,
@@ -257,69 +260,69 @@ class _NewContactState extends State<NewContact> {
                     SizedBox(
                       height: 15,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: 0,
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.09,
-                            height: MediaQuery.of(context).size.width * 0.09,
-                            child: Image(
-                              image: AssetImage(
-                                'assets/images/fb1.png',
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.09,
-                            height: MediaQuery.of(context).size.width * 0.09,
-                            child: Image(
-                              image: AssetImage('assets/images/x.png'),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
-                              image: AssetImage('assets/images/linkedIn.png'),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
-                              image: AssetImage('assets/images/insta-logo.png'),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            height: MediaQuery.of(context).size.width * 0.1,
-                            child: Image(
-                              image: AssetImage('assets/images/git.png'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: [
+                    //     SizedBox(
+                    //       width: 0,
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.09,
+                    //         height: MediaQuery.of(context).size.width * 0.09,
+                    //         child: Image(
+                    //           image: AssetImage(
+                    //             'assets/images/fb1.png',
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.09,
+                    //         height: MediaQuery.of(context).size.width * 0.09,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/x.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.1,
+                    //         height: MediaQuery.of(context).size.width * 0.1,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/linkedIn.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.1,
+                    //         height: MediaQuery.of(context).size.width * 0.1,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/insta-logo.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {},
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.1,
+                    //         height: MediaQuery.of(context).size.width * 0.1,
+                    //         child: Image(
+                    //           image: AssetImage('assets/images/git.png'),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
                     Divider(
                       indent: MediaQuery.of(context).size.width * 0.1,
                       endIndent: MediaQuery.of(context).size.width * 0.1,

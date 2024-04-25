@@ -36,6 +36,28 @@ class AuthService extends GetxController {
 
   final nrcStorage = GetStorage();
 
+  final rememberMeValue = GetStorage();
+
+  final RxBool rememberMe = false.obs;
+
+  @override
+  void onInit(){
+    rememberMe.value = rememberMeValue.read('rememberMe') ?? false;
+    super.onInit();
+    if (rememberMe.value) {
+    final storedToken = box.read('token');
+    if (storedToken != null) {
+      // Try to auto-login with the stored token
+      // Call your auto-login method here if you have one
+    }
+  }
+  }
+
+  void toggleRememberMe(bool value){
+    rememberMe.value = value;
+    rememberMeValue.write('rememberMe', value);
+  }
+
   Future<void> createUser({
     required String nrc,
     required String first_name,
@@ -69,7 +91,6 @@ class AuthService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        await _profileService.setDefaultPicture(nrc);
         
         Get.offAll(() => Login());
         
@@ -114,6 +135,7 @@ class AuthService extends GetxController {
         token.value = json.decode(response.body)['token'];
         box.write('token', token.value);
         nrcStorage.write('nrcNumber', nrc);
+        
         Get.offAll(() => BottomMenuBarItems(selectedIndex: 0,));
       } else {
         isLoading.value = false;
@@ -182,9 +204,7 @@ class AuthService extends GetxController {
       
       _employeeHistory.contactEmployeeHistoryDetails.value = <EmploymentHistory>[].obs;
       
-      _employeeHistory.contactEmployeeHistoryDetails.value = <EmploymentHistory>[].obs;
-
-      _profileService.resetPickedFile();
+      _employeeHistory.employeeHistoryDetails.value = <EmploymentHistory>[].obs;
 
       Get.snackbar(
         

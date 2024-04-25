@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:tizibane/screens/Home.dart';
 import 'package:tizibane/screens/Registration.dart';
 import 'package:get/get.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
@@ -85,6 +86,21 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
+                    Row(
+                      children: [
+                        Obx(
+                          () => Checkbox(
+                            activeColor: Colors.black,
+                            checkColor: Colors.white,
+                            value: _authService.rememberMe.value,
+                            onChanged: (value) {
+                              _authService.toggleRememberMe(value!);
+                            },
+                          ),
+                        ),
+                        Text('Remember Me',style: GoogleFonts.lexendDeca())
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -113,7 +129,7 @@ class _LoginState extends State<Login> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Dont have an account?'),
+                    Text('Dont have an account?',style: GoogleFonts.lexendDeca()),
                     SizedBox(width: 4),
                     GestureDetector(
                       onTap: () {
@@ -121,10 +137,7 @@ class _LoginState extends State<Login> {
                       },
                       child: Text(
                         'Sign Up',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange,
-                        ),
+                        style: GoogleFonts.lexendDeca(textStyle: TextStyle(fontWeight: FontWeight.bold,color: Colors.orange)),
                       ),
                     ),
                   ],

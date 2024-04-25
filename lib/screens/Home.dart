@@ -11,7 +11,9 @@ import 'package:tizibane/models/Contact.dart';
 import 'package:tizibane/screens/Contact/ViewContact.dart';
 import 'package:tizibane/models/User.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:tizibane/screens/EmployeementDetails.dart';
 import 'package:tizibane/screens/Groups/Groups.dart';
+import 'package:tizibane/screens/More.dart';
 import 'package:tizibane/screens/ViewEmployeCurrentDetails.dart';
 
 class Home extends StatefulWidget {
@@ -125,7 +127,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
                     Column(
                       children: [
@@ -138,18 +140,53 @@ class _HomeState extends State<Home> {
                                 fontWeight: FontWeight.bold, fontSize: 18),
                           ),
                         ),
-                        if (_userService.userObj.value[0].company_name.isNotEmpty &&
-                            _userService.userObj.value[0].position_name.isNotEmpty)
+                        if (_userService
+                                .userObj.value[0].company_name.isNotEmpty &&
+                            _userService
+                                .userObj.value[0].position_name.isNotEmpty)
                           SizedBox(height: 5),
-                        if (_userService.userObj.value[0].company_name.isNotEmpty &&
-                            _userService.userObj.value[0].position_name.isNotEmpty)
-                          Text(_userService.userObj.value[0].position_name,
-                              style: GoogleFonts.lexendDeca()),
-                        if (_userService.userObj.value[0].company_name.isNotEmpty &&
-                            _userService.userObj.value[0].position_name.isNotEmpty)
+                        if (_userService
+                                .userObj.value[0].company_name.isNotEmpty &&
+                            _userService
+                                .userObj.value[0].position_name.isNotEmpty)
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(EmployeementDetails(
+                                cell:
+                                    _userService.userObj.value[0].phone_number,
+                                first_name:
+                                    _userService.userObj.value[0].first_name,
+                                last_name:
+                                    _userService.userObj.value[0].last_name,
+                                position_name:
+                                    _userService.userObj.value[0].position_name,
+                                email: _userService
+                                    .userObj.value[0].company_assigned_email,
+                                user_profile_pic:
+                                    _profileService.imagePath.value,
+                                company_logo_url: _userService
+                                    .userObj.value[0].company_logo_url,
+                                company_address: _userService
+                                    .userObj.value[0].company_address,
+                                telephone:
+                                    _userService.userObj.value[0].telephone,
+                                company_name:
+                                    _userService.userObj.value[0].company_name,
+                              ));
+                            },
+                            child: Text(
+                                _userService.userObj.value[0].position_name,
+                                style: GoogleFonts.lexendDeca()),
+                          ),
+                        if (_userService
+                                .userObj.value[0].company_name.isNotEmpty &&
+                            _userService
+                                .userObj.value[0].position_name.isNotEmpty)
                           SizedBox(height: 3),
-                        if (_userService.userObj.value[0].company_name.isNotEmpty &&
-                            _userService.userObj.value[0].position_name.isNotEmpty)
+                        if (_userService
+                                .userObj.value[0].company_name.isNotEmpty &&
+                            _userService
+                                .userObj.value[0].position_name.isNotEmpty)
                           Text(
                             _userService.userObj.value[0].company_name,
                             style: GoogleFonts.lexendDeca(),
@@ -157,8 +194,45 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 5,
                     ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Get.to(ViewEmployeeDetails(
+                    //       cell: _userService.userObj.value[0].phone_number,
+                    //       first_name: _userService.userObj.value[0].first_name,
+                    //       last_name: _userService.userObj.value[0].last_name,
+                    //       position_name:
+                    //           _userService.userObj.value[0].position_name,
+                    //       email: _userService
+                    //           .userObj.value[0].company_assigned_email,
+                    //       user_profile_pic: _profileService.imagePath.value,
+                    //       company_logo_url:
+                    //           _userService.userObj.value[0].company_logo_url,
+                    //       company_address:
+                    //           _userService.userObj.value[0].company_address,
+                    //       telephone: _userService.userObj.value[0].telephone,
+                    //       company_name:
+                    //           _userService.userObj.value[0].company_name,
+                    //     ));
+                    //   },
+                    //   child: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //         vertical: 8.0, horizontal: 10.0),
+                    //     decoration: BoxDecoration(
+                    //       border: Border.all(color: Colors.black, width: 2.0),
+                    //       borderRadius: BorderRadius.circular(8.0),
+                    //     ),
+                    //     child: Text(
+                    //       'More',
+                    //       style: GoogleFonts.lexendDeca(color: Colors.orange),
+                    //     ),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+
                     Divider(
                       thickness: 1.15,
                       indent: MediaQuery.of(context).size.width * 0.1,
@@ -208,7 +282,8 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.07,
-                                height: MediaQuery.of(context).size.width * 0.07,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.07,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.black,
@@ -249,7 +324,8 @@ class _HomeState extends State<Home> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Email', style: GoogleFonts.lexendDeca()),
+                                  Text('Email',
+                                      style: GoogleFonts.lexendDeca()),
                                   SizedBox(
                                     height: 3,
                                   ),
@@ -260,7 +336,8 @@ class _HomeState extends State<Home> {
                               Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.07,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.07,
                                   height:
                                       MediaQuery.of(context).size.width * 0.07,
                                   decoration: BoxDecoration(
@@ -316,7 +393,8 @@ class _HomeState extends State<Home> {
                               Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.07,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.07,
                                   height:
                                       MediaQuery.of(context).size.width * 0.07,
                                   decoration: BoxDecoration(

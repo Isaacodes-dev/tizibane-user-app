@@ -62,13 +62,7 @@ class _UserProfileState extends State<UserProfile> {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () {
-                          ProfileService.changeProfilePicture();
-                        },
-                        child: ProfileService.pickedFile != null
-                            ? Image.file(File(ProfileService.pickedFile!.path),
-                                width: 150, height: 150, fit: BoxFit.cover)
-                            : Image.network(
+                        child: Image.network(
                                 imageBaseUrl + _profileService.imagePath.value,
                                 fit: BoxFit.cover,
                                 width: 150,
@@ -91,20 +85,6 @@ class _UserProfileState extends State<UserProfile> {
                           fontWeight: FontWeight.bold, fontSize: 18))),
               SizedBox(
                 height: 15,
-              ),
-              Center(
-                child: Obx(
-                  () => Visibility(
-                    visible: _profileService.isVisible.value,
-                    child: GestureDetector(
-                      child: Text('Upload',style: TextStyle(color: Colors.orange),),
-                      onTap: () => Get.find<ProfileService>().upload(),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 5,
               ),
               Container(
                 child: Column(
