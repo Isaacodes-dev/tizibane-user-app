@@ -128,16 +128,17 @@ class _ContactsState extends State<Contacts> {
               ),
             ]),
             const SizedBox(height: 20),
-            // TextField(
-            //   decoration: InputDecoration(
-            //     labelText: 'Search',
-            //     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-            //     border: OutlineInputBorder(
-            //         borderRadius: BorderRadius.circular(20.0)),
-            //     prefixIcon: Icon(Icons.search),
-            //   ),
-            // ),
-            // const SizedBox(height: 15),
+            TextField(
+              onChanged: (value)=>_contactService.filterContact(value),
+              decoration: InputDecoration(
+                labelText: 'Search',
+                contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+            const SizedBox(height: 15),
             Obx(() {
               return getContacts.isLoading.value
                   ? Column(
@@ -150,10 +151,10 @@ class _ContactsState extends State<Contacts> {
                   )
                   : Expanded(
                     
-                      child: _contactService.contactsList.length > 0 ? ListView.builder(
-                        itemCount: _contactService.contactsList.length,
+                      child: _contactService.foundContacts.value.length > 0 ? ListView.builder(
+                        itemCount: _contactService.foundContacts.value.length,
                         itemBuilder: (context, index) {
-                          ContactModel contact = _contactService.contactsList[index];
+                          ContactModel contact = _contactService.foundContacts.value[index];
                         return  Card(
                           shadowColor: Colors.black,
                           elevation: 3,
