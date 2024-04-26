@@ -13,7 +13,7 @@ class EmployeeHistoryCard extends StatefulWidget {
   final String companyEmail;
   final String companyAddress;
 
- const EmployeeHistoryCard({
+  const EmployeeHistoryCard({
     Key? key,
     required this.startDate,
     required this.endDate,
@@ -44,10 +44,16 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: Image.network(
-                        companyLogoUrl + widget.companyLogo,
-                        height: 100,
-                        width: 100,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            10), // Adjust the value as needed
+                        child: Image.network(
+                          companyLogoUrl + widget.companyLogo,
+                          height: 100,
+                          width: 100,
+                          fit: BoxFit
+                              .cover, // Ensure the image fills the container
+                        ),
                       ),
                     )
                   ],

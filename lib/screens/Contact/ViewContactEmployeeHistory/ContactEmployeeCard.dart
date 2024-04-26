@@ -12,17 +12,16 @@ class ContactEmployeeCard extends StatefulWidget {
   final String companyAddress;
   final String companyLogo;
 
-  const ContactEmployeeCard({
-    super.key,
-    required this.startDate,
-    required this.endDate,
-    required this.positionName,
-    required this.companyName,
-    required this.companyPhone,
-    required this.companyEmail,
-    required this.companyAddress,
-    required this.companyLogo
-  });
+  const ContactEmployeeCard(
+      {super.key,
+      required this.startDate,
+      required this.endDate,
+      required this.positionName,
+      required this.companyName,
+      required this.companyPhone,
+      required this.companyEmail,
+      required this.companyAddress,
+      required this.companyLogo});
 
   @override
   State<ContactEmployeeCard> createState() => _ContactEmployeeCardState();
@@ -43,10 +42,18 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: Image.network(
-                        companyLogoUrl + widget.companyLogo,
-                        height: 100,
-                        width: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            50),
+                        child: Image.network(
+                          companyLogoUrl + widget.companyLogo,
+                          height: 100,
+                          width:100,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     )
                   ],

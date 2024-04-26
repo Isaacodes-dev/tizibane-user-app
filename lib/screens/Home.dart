@@ -82,8 +82,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.black,
       ),
-      body: _profileService.imagePath.value == '' &&
-              _userService.isLoading.value
+      body: _userService.isLoading.value
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -172,6 +171,7 @@ class _HomeState extends State<Home> {
                                     _userService.userObj.value[0].telephone,
                                 company_name:
                                     _userService.userObj.value[0].company_name,
+                                    company_website: _userService.userObj.value[0].comapny_website,
                               ));
                             },
                             child: Text(
@@ -196,42 +196,6 @@ class _HomeState extends State<Home> {
                     SizedBox(
                       height: 5,
                     ),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Get.to(ViewEmployeeDetails(
-                    //       cell: _userService.userObj.value[0].phone_number,
-                    //       first_name: _userService.userObj.value[0].first_name,
-                    //       last_name: _userService.userObj.value[0].last_name,
-                    //       position_name:
-                    //           _userService.userObj.value[0].position_name,
-                    //       email: _userService
-                    //           .userObj.value[0].company_assigned_email,
-                    //       user_profile_pic: _profileService.imagePath.value,
-                    //       company_logo_url:
-                    //           _userService.userObj.value[0].company_logo_url,
-                    //       company_address:
-                    //           _userService.userObj.value[0].company_address,
-                    //       telephone: _userService.userObj.value[0].telephone,
-                    //       company_name:
-                    //           _userService.userObj.value[0].company_name,
-                    //     ));
-                    //   },
-                    //   child: Container(
-                    //     padding: EdgeInsets.symmetric(
-                    //         vertical: 8.0, horizontal: 10.0),
-                    //     decoration: BoxDecoration(
-                    //       border: Border.all(color: Colors.black, width: 2.0),
-                    //       borderRadius: BorderRadius.circular(8.0),
-                    //     ),
-                    //     child: Text(
-                    //       'More',
-                    //       style: GoogleFonts.lexendDeca(color: Colors.orange),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
 
                     Divider(
                       thickness: 1.15,

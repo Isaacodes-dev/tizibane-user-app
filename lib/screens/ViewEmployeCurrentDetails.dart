@@ -14,6 +14,7 @@ class ViewEmployeeDetails extends StatefulWidget {
   final String company_address;
   final String user_profile_pic;
   final String company_logo_url;
+  final String comapny_website;
 
   const ViewEmployeeDetails({
     Key? key,
@@ -27,6 +28,7 @@ class ViewEmployeeDetails extends StatefulWidget {
     required this.company_address,
     required this.user_profile_pic,
     required this.company_logo_url,
+    required this.comapny_website
   }) : super(key: key);
 
   @override
@@ -299,9 +301,9 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Web', style: GoogleFonts.lexendDeca()),
+                                    Text('Company Website', style: GoogleFonts.lexendDeca()),
                                     SizedBox(height: 3),
-                                    Text('', style: GoogleFonts.lexendDeca())
+                                    Text(widget.comapny_website, style: GoogleFonts.lexendDeca())
                                   ],
                                 ),
                                 Padding(

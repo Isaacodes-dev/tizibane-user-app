@@ -16,6 +16,7 @@ class ViewContact extends StatefulWidget {
   final String positionName;
   final String companyName;
   final String CompanyLogo;
+  final String companyWebsite;
   final String telephone;
   final String comapnyAddress;
   final String companyAssignedEmail;
@@ -31,6 +32,7 @@ class ViewContact extends StatefulWidget {
       required this.positionName,
       required this.companyName,
       required this.CompanyLogo,
+      required this.companyWebsite,
       required this.telephone,
       required this.comapnyAddress,
       required this.companyAssignedEmail});
@@ -100,7 +102,9 @@ class _ViewContactState extends State<ViewContact> {
                             positionName: widget.positionName,
                             companyLogo: widget.CompanyLogo,
                             telephone: widget.telephone,
+                            email: widget.email,
                             comapnyAddress: widget.comapnyAddress,
+                            companyWebsite: widget.companyWebsite,
                             companyAssignedEmail: widget.companyAssignedEmail,
                           ));
                         },
@@ -118,34 +122,6 @@ class _ViewContactState extends State<ViewContact> {
                     SizedBox(
                       height: 3,
                     ),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Get.to(ViewCurrentEmployeeDetails(
-                    //       profile_path: widget.profilePicture,
-                    //       firstName: widget.firstName,
-                    //       lastName: widget.lastName,
-                    //       phoneNumber: widget.phoneNumber,
-                    //       companyName: widget.companyName,
-                    //       positionName: widget.positionName,
-                    //       companyLogo: widget.CompanyLogo,
-                    //       telephone: widget.telephone,
-                    //       comapnyAddress: widget.comapnyAddress,
-                    //       companyAssignedEmail: widget.companyAssignedEmail,
-                    //     ));
-                    //   },
-                    //   child: Container(
-                    //     padding: EdgeInsets.symmetric(
-                    //         vertical: 8.0, horizontal: 10.0),
-                    //     decoration: BoxDecoration(
-                    //       border: Border.all(color: Colors.black, width: 2.0),
-                    //       borderRadius: BorderRadius.circular(8.0),
-                    //     ),
-                    //     child: Text(
-                    //       'More',
-                    //       style: GoogleFonts.lexendDeca(color: Colors.orange),
-                    //     ),
-                    //   ),
-                    // ),
                     SizedBox(
                       height: 15,
                     ),

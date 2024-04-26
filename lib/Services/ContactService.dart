@@ -29,14 +29,14 @@ class ContactService extends GetxController {
           companyName: '',
           companyLogo: '',
           companyAssignedEmail: '',
+          comapnyWebsite: '',
           comapnyAddress: '',
-          telephone: ''
-          )
+          telephone: '')
       .obs;
 
   var contactsList = <ContactModel>[].obs;
 
-  var filteredContacts = <ContactModel>[].obs;
+  Rx<List<ContactModel>> foundContacts = Rx<List<ContactModel>>([]);
 
   final contactStorage = GetStorage();
 
@@ -44,6 +44,7 @@ class ContactService extends GetxController {
   void onInit() {
     super.onInit();
     getContacts();
+    foundContacts.value = contactsList;
   }
 
   Future<void> getContact(String nrc) async {
@@ -111,7 +112,7 @@ class ContactService extends GetxController {
         'Authorization': 'Bearer $accessToken',
       },
     );
-    
+
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body)['contacts'];
       contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
@@ -154,7 +155,9 @@ class ContactService extends GetxController {
         colorText: Colors.white,
       );
       saveContactToPhonebook();
-      Get.to(Contacts());
+      Get.to(BottomMenuBarItems(
+        selectedIndex: 1,
+      ));
     } else if (response.statusCode == 409) {
       isLoading.value = false;
       Get.snackbar(
@@ -176,8 +179,9 @@ class ContactService extends GetxController {
     PermissionStatus permissionStatus = await Permission.contacts.request();
     if (permissionStatus.isGranted) {
       try {
-        String combineNames =
-            contactDetails.value.firstName + '' + contactDetails.value.lastName;
+        String combineNames = contactDetails.value.firstName +
+            ' ' +
+            contactDetails.value.lastName;
         Contact contact = Contact(
           givenName: combineNames,
           phones: [
@@ -187,10 +191,6 @@ class ContactService extends GetxController {
         );
 
         await ContactsService.addContact(contact);
-
-        Get.offAll(() => BottomMenuBarItems(
-              selectedIndex: 1,
-            ));
       } catch (e) {
         print('Failed to save contact: $e');
       }
@@ -199,17 +199,19 @@ class ContactService extends GetxController {
     }
   }
 
-    void filterContacts(String query) {
-    if (query.isEmpty) {
-      // If the query is empty, show all contacts
-      filteredContacts.value = contactsList;
-    } else {
-      // Filter contacts based on first name or last name containing the query
-      filteredContacts.value = contactsList
-          .where((contact) =>
-              contact.firstName.toLowerCase().contains(query.toLowerCase()) ||
-              contact.lastName.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    }
+void filterContact(String contact) {
+  List<ContactModel> results = [];
+  
+  if (contact.trim().isEmpty) {
+    results = contactsList;
+  } else {
+    results = contactsList.where((element) {
+      final trimmedContact = contact.toLowerCase().trim();
+      final fullName = '${element.firstName.toLowerCase()} ${element.lastName.toLowerCase()}';
+      return fullName.contains(trimmedContact);
+    }).toList();
   }
+  
+  foundContacts.value = results;
+}
 }

@@ -14,6 +14,7 @@ class ContactModel {
   final String companyName;
   final String companyLogo;
   final String comapnyAddress;
+  final String comapnyWebsite;
   final String companyAssignedEmail;
   final String telephone;
 
@@ -33,6 +34,7 @@ class ContactModel {
     required this.companyName,
     required this.companyLogo,
     required this.comapnyAddress,
+    required this.comapnyWebsite,
     required this.companyAssignedEmail,
     required this.telephone
   });
@@ -54,6 +56,7 @@ class ContactModel {
       companyName: json['company_name'] ?? '',
       companyLogo: json['company_logo_url'] ?? '',
       comapnyAddress: json['company_address'] ?? '',
+      comapnyWebsite: json['company_website'] ?? '',
       companyAssignedEmail: json['company_assigned_email'] ?? '',
       telephone: json['telephone'] ?? '',
     );

@@ -13,9 +13,11 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
+import 'package:tizibane/screens/Contact/ContactEmploymentDetails.dart';
 import 'package:tizibane/screens/Contact/MainViewContact.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
 import 'package:tizibane/screens/Contact/ViewContact.dart';
+import 'package:tizibane/screens/Contact/ViewCurrentEmployeeDetails.dart';
 import 'package:tizibane/screens/QRScanner.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -34,7 +36,7 @@ class _ContactsState extends State<Contacts> {
       Get.put(ContactService(), permanent: true);
 //final ContactService contactService = Get.find();
   //List<Contact> contacts = [];
-TextEditingController searchController = TextEditingController();
+
   final qrKey = GlobalKey(debugLabel: 'QR');
 
   Barcode? resultQr;
@@ -85,15 +87,12 @@ TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
+    _contactService.getContacts();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _contactService.getContacts();
     });
-
-        searchController.addListener(() {
-      _contactService.filterContacts(searchController.text); // Update filtered contacts on text change
-    });
-
   }
 
   @override
@@ -132,7 +131,7 @@ TextEditingController searchController = TextEditingController();
             ]),
             const SizedBox(height: 20),
             TextField(
-              controller: searchController,
+              onChanged: (value) => _contactService.filterContact(value),
               decoration: InputDecoration(
                 labelText: 'Search',
                 contentPadding:
@@ -154,12 +153,13 @@ TextEditingController searchController = TextEditingController();
                       ],
                     )
                   : Expanded(
-                      child: _contactService.contactsList.length > 0
+                      child: _contactService.foundContacts.value.length > 0
                           ? ListView.builder(
-                              itemCount: _contactService.contactsList.length,
+                              itemCount:
+                                  _contactService.foundContacts.value.length,
                               itemBuilder: (context, index) {
                                 ContactModel contact =
-                                    _contactService.contactsList[index];
+                                    _contactService.foundContacts.value[index];
                                 return Card(
                                   shadowColor: Colors.black,
                                   elevation: 3,
@@ -181,24 +181,28 @@ TextEditingController searchController = TextEditingController();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => MainViewContact(
-                                            contactNrc: contact.nrc,
-                                            firstName: contact.firstName,
-                                            lastName: contact.lastName,
-                                            phoneNumber: contact.phoneNumber,
-                                            email: contact.email,
-                                            profilePicture:
-                                                contact.profilePicture,
-                                            positionName: contact.positionName,
-                                            companyName: contact.companyName,
-                                            companyLogo: contact.companyLogo,
-                                            telephone: contact.telephone,
-                                            companyAddress:
-                                                contact.comapnyAddress,
-                                            companyAssignedEmail:
-                                                contact.companyAssignedEmail,
-                                          ),
-                                        ),
+                                            builder: (context) =>
+                                                ContactEmploymentDetails(
+                                                  nrc: contact.nrc,
+                                                  phoneNumber:
+                                                      contact.phoneNumber,
+                                                  comapnyAddress:
+                                                      contact.comapnyAddress,
+                                                  comapnyWebsite:
+                                                      contact.comapnyWebsite,
+                                                  companyAssignedEmail: contact
+                                                      .companyAssignedEmail,
+                                                  companyLogo:
+                                                      contact.companyLogo,
+                                                  companyName:
+                                                      contact.companyName,
+                                                      email: contact.email,
+                                                  telephone: contact.telephone,
+                                                  firstName: contact.firstName,
+                                                  lastName: contact.lastName,
+                                                  positionName: contact.positionName,
+                                                  profile_path: contact.profilePicture,
+                                                )),
                                       );
                                     },
                                   ),
@@ -218,23 +222,6 @@ TextEditingController searchController = TextEditingController();
     );
   }
 
-  void filterContacts(String query) {
-  // Convert the query to lowercase for case-insensitive search
-  String lowercaseQuery = query.toLowerCase();
-  
-  // Use where() to filter the contacts list based on the query
-  List<ContactModel> filteredContacts = _contactService.contactsList.where((contact) {
-    // Combine first name and last name for search
-    String fullName = '${contact.firstName} ${contact.lastName}'.toLowerCase();
-    
-    // Check if the full name contains the query
-    return fullName.contains(lowercaseQuery);
-  }).toList();
-  
-  // Update the UI with the filtered contacts
-  _contactService.filteredContacts.value = filteredContacts;
-}
-
   Future openDiaglog() => showDialog(
         context: context,
         builder: (context) => SimpleDialog(
@@ -247,9 +234,6 @@ TextEditingController searchController = TextEditingController();
                 style: TextStyle(fontSize: 16),
               ),
               onPressed: () {
-                // setState(() {
-
-                // });
                 _tagRead();
               },
             ),
