@@ -102,6 +102,7 @@ class _ViewContactState extends State<ViewContact> {
                             positionName: widget.positionName,
                             companyLogo: widget.CompanyLogo,
                             telephone: widget.telephone,
+                            email: widget.email,
                             comapnyAddress: widget.comapnyAddress,
                             companyWebsite: widget.companyWebsite,
                             companyAssignedEmail: widget.companyAssignedEmail,

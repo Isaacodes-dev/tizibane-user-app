@@ -200,6 +200,8 @@ class AuthService extends GetxController {
       _userService.userObj.value = <User>[].obs;
       
       _contactService.contactsList.value = <ContactModel>[].obs;
+
+      _contactService.foundContacts.value = <ContactModel>[].obs;
       
       _employeeHistory.contactEmployeeHistoryDetails.value = <EmploymentHistory>[].obs;
       

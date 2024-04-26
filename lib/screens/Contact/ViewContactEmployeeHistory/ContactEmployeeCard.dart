@@ -47,7 +47,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(
-                            50), // half of height or width to make it circular
+                            50),
                         child: Image.network(
                           companyLogoUrl + widget.companyLogo,
                           height: 100,

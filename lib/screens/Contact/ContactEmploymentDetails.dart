@@ -11,6 +11,7 @@ class ContactEmploymentDetails extends StatefulWidget {
   final String lastName;
   final String phoneNumber;
   final String positionName;
+  final String email;
   final String companyName;
   final String companyLogo;
   final String telephone;
@@ -23,6 +24,7 @@ class ContactEmploymentDetails extends StatefulWidget {
     required this.lastName,
     required this.phoneNumber,
     required this.companyName,
+    required this.email,
     required this.positionName,
     required this.companyLogo,
     required this.telephone,
@@ -63,6 +65,7 @@ class _ContactEmploymentDetailsState extends State<ContactEmploymentDetails> {
               telephone: widget.telephone,
               positionName: widget.positionName,
               comapnyAddress: widget.comapnyAddress,
+              email: widget.email,
               companyLogo: widget.companyLogo,
               companyName: widget.companyName,
               companyWebsite: widget.comapnyWebsite,

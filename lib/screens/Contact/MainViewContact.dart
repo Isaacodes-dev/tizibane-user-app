@@ -105,6 +105,7 @@ class _MainViewContactState extends State<MainViewContact> {
                             profile_path: widget.profilePicture,
                             firstName: widget.firstName,
                             lastName: widget.lastName,
+                            email: widget.email,
                             phoneNumber: widget.phoneNumber,
                             companyName: widget.companyName,
                             positionName: widget.positionName,
@@ -380,7 +381,7 @@ class _MainViewContactState extends State<MainViewContact> {
 
   void _openDialPad(String contactNumber) async {
     String phoneNumber =
-        contactNumber; // Replace with the phone number you want to dial
+        contactNumber;
     final url = 'tel:$phoneNumber';
 
     if (await canLaunchUrl(Uri.parse(url))) {
