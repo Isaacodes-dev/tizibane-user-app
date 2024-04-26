@@ -34,7 +34,7 @@ class _ContactsState extends State<Contacts> {
       Get.put(ContactService(), permanent: true);
 //final ContactService contactService = Get.find();
   //List<Contact> contacts = [];
-TextEditingController searchController = TextEditingController();
+
   final qrKey = GlobalKey(debugLabel: 'QR');
 
   Barcode? resultQr;
@@ -52,7 +52,7 @@ TextEditingController searchController = TextEditingController();
   }
 
   void scanQR() {
-    Get.to(QRScanner());
+  Get.to(QRScanner());
   }
 
   void _tagRead() {
@@ -85,21 +85,18 @@ TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    _contactService.getContacts();
+       WidgetsBinding.instance!.addPostFrameCallback((_) {
       _contactService.getContacts();
     });
-
-        searchController.addListener(() {
-      _contactService.filterContacts(searchController.text); // Update filtered contacts on text change
-    });
-
   }
 
   @override
   Widget build(BuildContext context) {
     final getContacts = Get.put<ContactService>(ContactService());
-
+   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -131,85 +128,58 @@ TextEditingController searchController = TextEditingController();
               ),
             ]),
             const SizedBox(height: 20),
-            TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                labelText: 'Search',
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-            const SizedBox(height: 15),
+            // TextField(
+            //   decoration: InputDecoration(
+            //     labelText: 'Search',
+            //     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+            //     border: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(20.0)),
+            //     prefixIcon: Icon(Icons.search),
+            //   ),
+            // ),
+            // const SizedBox(height: 15),
             Obx(() {
               return getContacts.isLoading.value
                   ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Center(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Center(
                           child: CircularProgressIndicator(),
                         ),
-                      ],
-                    )
+                    ],
+                  )
                   : Expanded(
-                      child: _contactService.contactsList.length > 0
-                          ? ListView.builder(
-                              itemCount: _contactService.contactsList.length,
-                              itemBuilder: (context, index) {
-                                ContactModel contact =
-                                    _contactService.contactsList[index];
-                                return Card(
-                                  shadowColor: Colors.black,
-                                  elevation: 3,
-                                  child: ListTile(
-                                    title: Text(
-                                        contact.firstName +
-                                            ' ' +
-                                            contact.lastName,
-                                        style: GoogleFonts.lexendDeca()),
-                                    subtitle: Text(contact.positionName,
-                                        style: GoogleFonts.lexendDeca()),
-                                    leading: CircleAvatar(
-                                      radius: 35,
-                                      foregroundImage: NetworkImage(
-                                        imageBaseUrl + contact.profilePicture,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MainViewContact(
-                                            contactNrc: contact.nrc,
-                                            firstName: contact.firstName,
-                                            lastName: contact.lastName,
-                                            phoneNumber: contact.phoneNumber,
-                                            email: contact.email,
-                                            profilePicture:
-                                                contact.profilePicture,
-                                            positionName: contact.positionName,
-                                            companyName: contact.companyName,
-                                            companyLogo: contact.companyLogo,
-                                            telephone: contact.telephone,
-                                            companyAddress:
-                                                contact.comapnyAddress,
-                                            companyAssignedEmail:
-                                                contact.companyAssignedEmail,
-                                          ),
-                                        ),
-                                      );
-                                    },
+                    
+                      child: _contactService.contactsList.length > 0 ? ListView.builder(
+                        itemCount: _contactService.contactsList.length,
+                        itemBuilder: (context, index) {
+                          ContactModel contact = _contactService.contactsList[index];
+                        return  Card(
+                          shadowColor: Colors.black,
+                          elevation: 3,
+                          child: ListTile(
+                              title: Text(contact.firstName + ' ' + contact.lastName,style: GoogleFonts.lexendDeca()),
+                              subtitle: Text(contact.positionName,style: GoogleFonts.lexendDeca()),
+                              leading: CircleAvatar(
+                                radius: 35,
+                                foregroundImage: NetworkImage(imageBaseUrl + contact.profilePicture,),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MainViewContact(contactNrc: contact.nrc,firstName: contact.firstName,lastName: contact.lastName,phoneNumber: contact.phoneNumber,email: contact.email,profilePicture: contact.profilePicture,positionName: contact.positionName,companyName: contact.companyName,companyLogo: contact.companyLogo,telephone: contact.telephone,companyAddress: contact.comapnyAddress,companyAssignedEmail: contact.companyAssignedEmail,comapnyWebsite: contact.comapnyWebsite,),
                                   ),
+                                  
                                 );
                               },
-                            )
-                          : Padding(
-                              padding: EdgeInsets.all(30),
-                              child: Text('No Contacts to display',
-                                  style: GoogleFonts.lexendDeca()),
                             ),
+                        );
+                        },
+                      ): Padding(
+                        padding: EdgeInsets.all(30),
+                        child: Text('No Contacts to display',style: GoogleFonts.lexendDeca()),
+                      ),
                     );
             }),
           ],
@@ -217,23 +187,6 @@ TextEditingController searchController = TextEditingController();
       ),
     );
   }
-
-  void filterContacts(String query) {
-  // Convert the query to lowercase for case-insensitive search
-  String lowercaseQuery = query.toLowerCase();
-  
-  // Use where() to filter the contacts list based on the query
-  List<ContactModel> filteredContacts = _contactService.contactsList.where((contact) {
-    // Combine first name and last name for search
-    String fullName = '${contact.firstName} ${contact.lastName}'.toLowerCase();
-    
-    // Check if the full name contains the query
-    return fullName.contains(lowercaseQuery);
-  }).toList();
-  
-  // Update the UI with the filtered contacts
-  _contactService.filteredContacts.value = filteredContacts;
-}
 
   Future openDiaglog() => showDialog(
         context: context,
@@ -247,9 +200,6 @@ TextEditingController searchController = TextEditingController();
                 style: TextStyle(fontSize: 16),
               ),
               onPressed: () {
-                // setState(() {
-
-                // });
                 _tagRead();
               },
             ),

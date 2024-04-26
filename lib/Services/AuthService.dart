@@ -44,13 +44,6 @@ class AuthService extends GetxController {
   void onInit(){
     rememberMe.value = rememberMeValue.read('rememberMe') ?? false;
     super.onInit();
-    if (rememberMe.value) {
-    final storedToken = box.read('token');
-    if (storedToken != null) {
-      // Try to auto-login with the stored token
-      // Call your auto-login method here if you have one
-    }
-  }
   }
 
   void toggleRememberMe(bool value){
@@ -135,6 +128,10 @@ class AuthService extends GetxController {
         token.value = json.decode(response.body)['token'];
         box.write('token', token.value);
         nrcStorage.write('nrcNumber', nrc);
+        print(rememberMe.value);
+        if(rememberMe.value){
+        box.write('password', password);  
+        }
         
         Get.offAll(() => BottomMenuBarItems(selectedIndex: 0,));
       } else {
@@ -197,6 +194,8 @@ class AuthService extends GetxController {
       box.remove('token');
       
       nrcStorage.remove('nrcNumber');
+
+      rememberMeValue.remove('rememberMe');
       
       _userService.userObj.value = <User>[].obs;
       

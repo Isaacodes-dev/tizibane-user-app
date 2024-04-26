@@ -14,6 +14,7 @@ class ViewCurrentEmployeeDetails extends StatefulWidget {
   final String companyLogo;
   final String telephone;
   final String companyAssignedEmail;
+  final String companyWebsite;
   final String comapnyAddress;
   const ViewCurrentEmployeeDetails({
     super.key,
@@ -25,6 +26,7 @@ class ViewCurrentEmployeeDetails extends StatefulWidget {
     required this.positionName,
     required this.companyLogo,
     required this.telephone,
+    required this.companyWebsite,
     required this.companyAssignedEmail,
     required this.comapnyAddress
   });
@@ -38,367 +40,328 @@ class _ViewCurrentEmployeeDetailsState
     extends State<ViewCurrentEmployeeDetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-      ),
-      body: widget.companyLogo == '' ? Center(child: Text('No Employee Details')) : Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.width / 2,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [ 
-                  Image.network(
-                    companyLogoUrl + widget.companyLogo, 
-                    fit: BoxFit.cover,
+    return  Scaffold(
+      body: widget.companyLogo == ''
+          ? Center(child: Text('No Employee Details', style: GoogleFonts.lexendDeca()))
+          : Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.width / 2,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.network(
+                          companyLogoUrl + widget.companyLogo,
+                          fit: BoxFit.cover,
+                        ),
+                        Container(
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                      ],
+                    ),
                   ),
-                  Container(
-                    color: Colors.black.withOpacity(0.3), 
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom:
-                365, 
-            left: 0,
-            right: 0,
-            child: Container(
-              child: Column(
-                children: [
-                  Center(
+                ),
+                Positioned(
+                  bottom: 315,
+                  left: 0,
+                  right: 0,
+                  child: Container(
                     child: Column(
                       children: [
-                        Text(
-                          widget.firstName + ' ' + widget.lastName,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 5),
-                        Text(widget.positionName),
-                        SizedBox(height: 5),
-                        Text(widget.companyName)
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom:
-                20, 
-            left: 0,
-            right: 0,
-            child: Container(
-              child: Column(
-                children: [
-                  Divider(
-                    thickness: 1.15,
-                    indent: MediaQuery.of(context).size.width * 0.1,
-                    endIndent: MediaQuery.of(context).size.width * 0.1,
-                    color: Colors.grey.shade400,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.12,
-                        height: 20,
-                      ),
-                      Text(
-                        'Corporate Details',
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      border: Border.all(color: Colors.grey.shade200),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Telephone',
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              widget.telephone,
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.07,
-                            height: MediaQuery.of(context).size.width * 0.07,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black,
-                            ),
-                            child: Icon(
-                              CupertinoIcons.phone,
-                              color: Colors.white,
-                              size: 18,
-                            ),
+                        Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                widget.firstName + ' ' + widget.lastName,
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 3),
+                              Text(widget.positionName, style: GoogleFonts.lexendDeca()),
+                              SizedBox(height: 3),
+                              Text(widget.companyName, style: GoogleFonts.lexendDeca()),
+                              
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      border: Border.all(color: Colors.grey.shade200),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Cell',
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              widget.phoneNumber,
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.07,
-                            height: MediaQuery.of(context).size.width * 0.07,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black,
-                            ),
-                            child: Icon(
-                              CupertinoIcons.phone,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      border: Border.all(color: Colors.grey.shade200),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Email',
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              widget.companyAssignedEmail,
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.07,
-                            height: MediaQuery.of(context).size.width * 0.07,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black,
-                            ),
-                            child: Icon(
-                              CupertinoIcons.mail,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      border: Border.all(color: Colors.grey.shade200),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Address',
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              widget.comapnyAddress,
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.07,
-                            height: MediaQuery.of(context).size.width * 0.07,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black,
-                            ),
-                            child: Icon(
-                              CupertinoIcons.home,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width * 0.8,
-                  //   padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.grey.shade100,
-                  //     border: Border.all(color: Colors.grey.shade200),
-                  //     borderRadius: BorderRadius.all(
-                  //       Radius.circular(20),
-                  //     ),
-                  //   ),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Text(
-                  //             'Postal Address',
-                  //           ),
-                  //           SizedBox(
-                  //             height: 3,
-                  //           ),
-                  //           Text(
-                  //             'P.O. Box 90373, Luanshya',
-                  //           )
-                  //         ],
-                  //       ),
-                  //       Padding(
-                  //         padding: const EdgeInsets.only(right: 8.0),
-                  //         child: Container(
-                  //           width: MediaQuery.of(context).size.width * 0.07,
-                  //           height: MediaQuery.of(context).size.width * 0.07,
-                  //           decoration: BoxDecoration(
-                  //             shape: BoxShape.circle,
-                  //             color: Colors.black,
-                  //           ),
-                  //           child: Icon(
-                  //             CupertinoIcons.home,
-                  //             color: Colors.white,
-                  //             size: 18,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                        SizedBox(
-                    height: 0,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 440,
-            left: 0,
-            right: 0,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white, // Change as needed
-                    width: 2,
                   ),
                 ),
-                child: ClipOval(
-                  child: Image.network(
-                    imageBaseUrl + widget.profile_path, // User image path
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
+                Positioned(
+                  top: 335,
+                  left: 0,
+                  right: 0,
+                  bottom: 10,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Divider(
+                            thickness: 1.15,
+                            indent: MediaQuery.of(context).size.width * 0.1,
+                            endIndent: MediaQuery.of(context).size.width * 0.1,
+                            color: Colors.grey.shade400,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.12,
+                                height: 20,
+                              ),
+                              Text(
+                                'Corporate Details',
+                                style: GoogleFonts.lexendDeca(textStyle: TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              border: Border.all(color: Colors.grey.shade200),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Telephone', style: GoogleFonts.lexendDeca()),
+                                    SizedBox(height: 3),
+                                    Text(widget.telephone, style: GoogleFonts.lexendDeca())
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.07,
+                                    height: MediaQuery.of(context).size.width * 0.07,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black,
+                                    ),
+                                    child: Icon(
+                                      CupertinoIcons.phone,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              border: Border.all(color: Colors.grey.shade200),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Cell', style: GoogleFonts.lexendDeca()),
+                                    SizedBox(height: 3),
+                                    Text(widget.phoneNumber, style: GoogleFonts.lexendDeca())
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.07,
+                                    height: MediaQuery.of(context).size.width * 0.07,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black,
+                                    ),
+                                    child: Icon(
+                                      CupertinoIcons.phone,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              border: Border.all(color: Colors.grey.shade200),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Email', style: GoogleFonts.lexendDeca()),
+                                    SizedBox(height: 3),
+                                    Text(widget.companyAssignedEmail, style: GoogleFonts.lexendDeca())
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.07,
+                                    height: MediaQuery.of(context).size.width * 0.07,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black,
+                                    ),
+                                    child: Icon(
+                                      CupertinoIcons.mail,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              border: Border.all(color: Colors.grey.shade200),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Address', style: GoogleFonts.lexendDeca()),
+                                    SizedBox(height: 3),
+                                    Text(widget.comapnyAddress, style: GoogleFonts.lexendDeca())
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.07,
+                                    height: MediaQuery.of(context).size.width * 0.07,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black,
+                                    ),
+                                    child: Icon(
+                                      CupertinoIcons.home,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                                                    Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              border: Border.all(color: Colors.grey.shade200),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Company Website', style: GoogleFonts.lexendDeca()),
+                                    SizedBox(height: 3),
+                                    Text(widget.companyWebsite, style: GoogleFonts.lexendDeca())
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.07,
+                                    height: MediaQuery.of(context).size.width * 0.07,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black,
+                                    ),
+                                    child: Icon(
+                                      CupertinoIcons.globe,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Positioned(
+                  bottom: 390,
+                  left: 0,
+                  right: 0,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white, // Change as needed
+                          width: 2,
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: Image.network(
+                          imageBaseUrl + widget.profile_path, // User image path
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

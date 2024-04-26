@@ -13,6 +13,7 @@ class EmployeementDetails extends StatefulWidget {
   final String company_address;
   final String user_profile_pic;
   final String company_logo_url;
+  final String company_website;
   const EmployeementDetails(
       {super.key,
       required this.first_name,
@@ -23,6 +24,7 @@ class EmployeementDetails extends StatefulWidget {
       required this.telephone,
       required this.email,
       required this.company_address,
+      required this.company_website,
       required this.user_profile_pic,
       required this.company_logo_url});
 
@@ -63,6 +65,7 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
               company_name: widget.company_name,
               email: widget.email,
               user_profile_pic: widget.user_profile_pic,
+              comapny_website: widget.company_website,
             ),
             EmployeeHistory()
           ],

@@ -29,6 +29,7 @@ class ContactService extends GetxController {
           companyName: '',
           companyLogo: '',
           companyAssignedEmail: '',
+          comapnyWebsite: '',
           comapnyAddress: '',
           telephone: ''
           )
@@ -36,7 +37,7 @@ class ContactService extends GetxController {
 
   var contactsList = <ContactModel>[].obs;
 
-  var filteredContacts = <ContactModel>[].obs;
+  var filteredContactsList = <ContactModel>[].obs;
 
   final contactStorage = GetStorage();
 
@@ -154,7 +155,9 @@ class ContactService extends GetxController {
         colorText: Colors.white,
       );
       saveContactToPhonebook();
-      Get.to(Contacts());
+      Get.to(BottomMenuBarItems(
+              selectedIndex: 1,
+            ));
     } else if (response.statusCode == 409) {
       isLoading.value = false;
       Get.snackbar(
@@ -177,7 +180,7 @@ class ContactService extends GetxController {
     if (permissionStatus.isGranted) {
       try {
         String combineNames =
-            contactDetails.value.firstName + '' + contactDetails.value.lastName;
+            contactDetails.value.firstName + ' ' + contactDetails.value.lastName;
         Contact contact = Contact(
           givenName: combineNames,
           phones: [
@@ -188,9 +191,6 @@ class ContactService extends GetxController {
 
         await ContactsService.addContact(contact);
 
-        Get.offAll(() => BottomMenuBarItems(
-              selectedIndex: 1,
-            ));
       } catch (e) {
         print('Failed to save contact: $e');
       }
@@ -199,17 +199,4 @@ class ContactService extends GetxController {
     }
   }
 
-    void filterContacts(String query) {
-    if (query.isEmpty) {
-      // If the query is empty, show all contacts
-      filteredContacts.value = contactsList;
-    } else {
-      // Filter contacts based on first name or last name containing the query
-      filteredContacts.value = contactsList
-          .where((contact) =>
-              contact.firstName.toLowerCase().contains(query.toLowerCase()) ||
-              contact.lastName.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    }
-  }
 }

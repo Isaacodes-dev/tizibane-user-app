@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
@@ -17,6 +18,16 @@ class _LoginState extends State<Login> {
   final TextEditingController passwordController = TextEditingController();
 
   final AuthService _authService = Get.put(AuthService());
+
+  final box = GetStorage();
+
+  final nrcStorage = GetStorage();
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+       super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,21 +97,21 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Obx(
-                          () => Checkbox(
-                            activeColor: Colors.black,
-                            checkColor: Colors.white,
-                            value: _authService.rememberMe.value,
-                            onChanged: (value) {
-                              _authService.toggleRememberMe(value!);
-                            },
-                          ),
-                        ),
-                        Text('Remember Me',style: GoogleFonts.lexendDeca())
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Obx(
+                    //       () => Checkbox(
+                    //         activeColor: Colors.black,
+                    //         checkColor: Colors.white,
+                    //         value: _authService.rememberMe.value,
+                    //         onChanged: (value) {
+                    //           _authService.toggleRememberMe(value!);
+                    //         },
+                    //       ),
+                    //     ),
+                    //     Text('Remember Me',style: GoogleFonts.lexendDeca())
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
@@ -125,24 +136,24 @@ class _LoginState extends State<Login> {
                 ),
               ),
               SizedBox(height: 25),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Dont have an account?',style: GoogleFonts.lexendDeca()),
-                    SizedBox(width: 4),
-                    GestureDetector(
-                      onTap: () {
-                        Get.off(() => Registration());
-                      },
-                      child: Text(
-                        'Sign Up',
-                        style: GoogleFonts.lexendDeca(textStyle: TextStyle(fontWeight: FontWeight.bold,color: Colors.orange)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Center(
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text('Dont have an account?',style: GoogleFonts.lexendDeca()),
+              //       SizedBox(width: 4),
+              //       GestureDetector(
+              //         onTap: () {
+              //           Get.off(() => Registration());
+              //         },
+              //         child: Text(
+              //           'Sign Up',
+              //           style: GoogleFonts.lexendDeca(textStyle: TextStyle(fontWeight: FontWeight.bold,color: Colors.orange)),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

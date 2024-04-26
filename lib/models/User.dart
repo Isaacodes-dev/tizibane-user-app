@@ -11,6 +11,7 @@ class User{
   final String position_name;
   final String company_name;
   final String company_address;
+  final String comapny_website;
   final String company_assigned_email;
   final String telephone;
   final String company_logo_url;
@@ -25,6 +26,7 @@ class User{
     required this.profilePicture,
     required this.position_name,
     required this.company_name,
+    required this.comapny_website,
     required this.company_address,
     required this.company_assigned_email,
     required this.company_logo_url,
@@ -46,6 +48,7 @@ factory User.fromJson(Map<String, dynamic> json) {
     company_assigned_email: json['company_assigned_email'] ?? '',
     telephone: json['telephone'] ?? '',
     company_logo_url: json['company_logo_url'] ?? '',
+    comapny_website: json['company_website'] ?? '',
   );
 }
     Map<String, dynamic> toJson() {

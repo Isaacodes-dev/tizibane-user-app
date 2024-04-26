@@ -82,8 +82,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.black,
       ),
-      body: _profileService.imagePath.value == '' &&
-              _userService.isLoading.value
+      body: _userService.isLoading.value
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -172,6 +171,7 @@ class _HomeState extends State<Home> {
                                     _userService.userObj.value[0].telephone,
                                 company_name:
                                     _userService.userObj.value[0].company_name,
+                                    company_website: _userService.userObj.value[0].comapny_website,
                               ));
                             },
                             child: Text(
