@@ -26,7 +26,7 @@ class EmploymentHistory {
       positionName: json['position_name'] ?? '',
       companyName: json['company_name'] ?? '',
       companyPhone: json['company_phone'] ?? '',
-      companyEmail: json['company_assigned_email'] ?? '',
+      companyEmail: json['company_email'] ?? '',
       companyAddress: json['company_address'] ?? '',
       companyLogo: json['company_logo_url'] ?? '',
     );

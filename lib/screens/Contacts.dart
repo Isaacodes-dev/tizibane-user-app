@@ -165,12 +165,19 @@ class _ContactsState extends State<Contacts> {
                                   elevation: 3,
                                   child: ListTile(
                                     title: Text(
-                                        contact.firstName +
+                                        contact.firstName.trim() +
                                             ' ' +
-                                            contact.lastName,
-                                        style: GoogleFonts.lexendDeca()),
-                                    subtitle: Text(contact.positionName,
-                                        style: GoogleFonts.lexendDeca()),
+                                            contact.lastName.trim(),
+                                        style: GoogleFonts.lexendDeca(textStyle: TextStyle(color: Color(0xFF727272),fontWeight: FontWeight.bold))),
+                                    subtitle: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(contact.positionName,
+                                            style: GoogleFonts.lexendDeca()),
+                                        Text(contact.companyName,
+                                            style: GoogleFonts.lexendDeca(textStyle: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold))),
+                                      ],
+                                    ),
                                     leading: CircleAvatar(
                                       radius: 35,
                                       foregroundImage: NetworkImage(
@@ -191,17 +198,19 @@ class _ContactsState extends State<Contacts> {
                                                   comapnyWebsite:
                                                       contact.comapnyWebsite,
                                                   companyAssignedEmail: contact
-                                                      .companyAssignedEmail,
+                                                      .companyEmail,
                                                   companyLogo:
                                                       contact.companyLogo,
                                                   companyName:
                                                       contact.companyName,
-                                                      email: contact.email,
-                                                  telephone: contact.telephone,
+                                                  email: contact.email,
+                                                  telephone: contact.companyPhone,
                                                   firstName: contact.firstName,
                                                   lastName: contact.lastName,
-                                                  positionName: contact.positionName,
-                                                  profile_path: contact.profilePicture,
+                                                  positionName:
+                                                      contact.positionName,
+                                                  profile_path:
+                                                      contact.profilePicture,
                                                 )),
                                       );
                                     },

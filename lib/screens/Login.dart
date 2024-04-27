@@ -7,6 +7,7 @@ import 'package:tizibane/screens/Home.dart';
 import 'package:tizibane/screens/Registration.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
@@ -22,17 +23,20 @@ class _LoginState extends State<Login> {
   final box = GetStorage();
 
   final nrcStorage = GetStorage();
-  
+
+  bool _obscureText = true;
+
   @override
   void initState() {
     // TODO: implement initState
-       super.initState();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 230, 230, 230),
       body: Container(
@@ -67,9 +71,17 @@ class _LoginState extends State<Login> {
                 child: Column(
                   children: [
                     TextField(
+                      cursorColor: Colors.black,
                       controller: nrcController,
                       obscureText: false,
                       decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black), // Set the color of the border when the TextField is focused
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        suffixIcon: Icon(Icons.credit_card,color: Colors.black,),
                         hintText: 'Nrc',
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0,
@@ -83,9 +95,29 @@ class _LoginState extends State<Login> {
                     ),
                     SizedBox(height: 20),
                     TextField(
+                      cursorColor: Colors.black,
                       controller: passwordController,
-                      obscureText: true,
+                      obscureText: _obscureText,
                       decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors
+                                  .black), // Set the color of the border when the TextField is focused
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        suffixIcon: IconButton(
+                          color: Colors.black,
+                          icon: Icon(
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
                         hintText: 'Password',
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0,
@@ -96,7 +128,7 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
-                    ),
+                    )
                     // Row(
                     //   children: [
                     //     Obx(
