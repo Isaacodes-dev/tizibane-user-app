@@ -219,7 +219,7 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Email', style: GoogleFonts.lexendDeca()),
+                                    Text('Corprate Email', style: GoogleFonts.lexendDeca()),
                                     SizedBox(height: 3),
                                     Text(widget.email, style: GoogleFonts.lexendDeca())
                                   ],

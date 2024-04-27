@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
                                 position_name:
                                     _userService.userObj.value[0].position_name,
                                 email: _userService
-                                    .userObj.value[0].company_assigned_email,
+                                    .userObj.value[0].companyEmail,
                                 user_profile_pic:
                                     _profileService.imagePath.value,
                                 company_logo_url: _userService
@@ -168,7 +168,7 @@ class _HomeState extends State<Home> {
                                 company_address: _userService
                                     .userObj.value[0].company_address,
                                 telephone:
-                                    _userService.userObj.value[0].telephone,
+                                    _userService.userObj.value[0].comapny_phone,
                                 company_name:
                                     _userService.userObj.value[0].company_name,
                                     company_website: _userService.userObj.value[0].comapny_website,

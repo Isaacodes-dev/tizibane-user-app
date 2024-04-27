@@ -12,7 +12,9 @@ class User{
   final String company_name;
   final String company_address;
   final String comapny_website;
+  final String comapny_phone;
   final String company_assigned_email;
+  final String companyEmail;
   final String telephone;
   final String company_logo_url;
 
@@ -26,7 +28,9 @@ class User{
     required this.profilePicture,
     required this.position_name,
     required this.company_name,
+    required this.companyEmail,
     required this.comapny_website,
+    required this.comapny_phone,
     required this.company_address,
     required this.company_assigned_email,
     required this.company_logo_url,
@@ -45,6 +49,8 @@ factory User.fromJson(Map<String, dynamic> json) {
     position_name: json['position_name'] ?? '',
     company_name: json['company_name'] ?? '',
     company_address: json['company_address'] ?? '',
+    comapny_phone: json['company_phone'] ?? '',
+    companyEmail: json['company_email'] ?? '',
     company_assigned_email: json['company_assigned_email'] ?? '',
     telephone: json['telephone'] ?? '',
     company_logo_url: json['company_logo_url'] ?? '',

@@ -12,7 +12,9 @@ class ContactModel {
   final String profilePicture;
   final String positionName;
   final String companyName;
+  final String companyEmail;
   final String companyLogo;
+  final String companyPhone;
   final String comapnyAddress;
   final String comapnyWebsite;
   final String companyAssignedEmail;
@@ -32,7 +34,9 @@ class ContactModel {
     required this.profilePicture,
     required this.positionName,
     required this.companyName,
+    required this.companyEmail,
     required this.companyLogo,
+    required this.companyPhone,
     required this.comapnyAddress,
     required this.comapnyWebsite,
     required this.companyAssignedEmail,
@@ -55,6 +59,8 @@ class ContactModel {
       positionName: json['position_name'] ?? '',
       companyName: json['company_name'] ?? '',
       companyLogo: json['company_logo_url'] ?? '',
+      companyEmail: json['company_email'] ?? '',
+      companyPhone: json['company_phone'] ?? '',
       comapnyAddress: json['company_address'] ?? '',
       comapnyWebsite: json['company_website'] ?? '',
       companyAssignedEmail: json['company_assigned_email'] ?? '',

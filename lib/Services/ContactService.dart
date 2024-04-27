@@ -29,6 +29,8 @@ class ContactService extends GetxController {
           companyName: '',
           companyLogo: '',
           companyAssignedEmail: '',
+          companyEmail: '',
+          companyPhone: '',
           comapnyWebsite: '',
           comapnyAddress: '',
           telephone: '')
