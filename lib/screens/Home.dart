@@ -81,6 +81,14 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Image.asset(
+            'assets/images/tizibaneicon.png',
+            width: 50,
+            height: 50,
+          ),
+        ),
       ),
       body: _userService.isLoading.value
           ? const Center(
@@ -159,8 +167,8 @@ class _HomeState extends State<Home> {
                                     _userService.userObj.value[0].last_name,
                                 position_name:
                                     _userService.userObj.value[0].position_name,
-                                email: _userService
-                                    .userObj.value[0].companyEmail,
+                                email:
+                                    _userService.userObj.value[0].companyEmail,
                                 user_profile_pic:
                                     _profileService.imagePath.value,
                                 company_logo_url: _userService
@@ -171,7 +179,8 @@ class _HomeState extends State<Home> {
                                     _userService.userObj.value[0].comapny_phone,
                                 company_name:
                                     _userService.userObj.value[0].company_name,
-                                    company_website: _userService.userObj.value[0].comapny_website,
+                                company_website: _userService
+                                    .userObj.value[0].comapny_website,
                               ));
                             },
                             child: Text(

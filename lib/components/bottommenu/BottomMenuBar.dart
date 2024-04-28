@@ -7,11 +7,13 @@ import 'package:tizibane/screens/Profile.dart';
 class BottomMenuBarItems extends StatefulWidget {
   final int selectedIndex;
 
-  const BottomMenuBarItems({Key? key, required this.selectedIndex}) : super(key: key);
+  const BottomMenuBarItems({Key? key, required this.selectedIndex})
+      : super(key: key);
 
   @override
   State<BottomMenuBarItems> createState() => _BottomMenuBarItemsState();
 }
+
 class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
   late int currentIndex;
 
@@ -28,22 +30,34 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
         : currentIndex == 1
             ? Contacts()
             : More();
-    return Scaffold(
-      body: currentScreen,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
-        shape: CircularNotchedRectangle(),
-        notchMargin: 10,
-        child: Container(
-          height: 60,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              buildMaterialButton(0, Icons.home_filled, "Home"),
-              buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
-              buildMaterialButton(3, Icons.more_horiz_outlined, "More"),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        if (currentIndex != 0) {
+          setState(() {
+            currentIndex = 0;
+          });
+          return false; 
+        } else {
+          return true; 
+        }
+      },
+      child: Scaffold(
+        body: currentScreen,
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.black,
+          shape: CircularNotchedRectangle(),
+          notchMargin: 10,
+          child: Container(
+            height: 60,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                buildMaterialButton(0, Icons.home_filled, "Home"),
+                buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
+                buildMaterialButton(2, Icons.more_horiz_outlined, "More"),
+              ],
+            ),
           ),
         ),
       ),
@@ -67,7 +81,8 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
           ),
           Text(
             label,
-            style: TextStyle(color: currentIndex == index ? Colors.orange : Colors.white),
+            style: TextStyle(
+                color: currentIndex == index ? Colors.orange : Colors.white),
           ),
         ],
       ),
