@@ -23,13 +23,19 @@ final nrcStorage = GetStorage();
 String nrcNumber = nrcStorage.read('nrcNumber');
 
 class _MoreState extends State<More> {
-  
   @override
   Widget build(BuildContext context) {
-  print('From QrCode' + nrcNumber);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Image.asset(
+            'assets/images/tizibaneicon.png',
+            width: 50,
+            height: 50,
+          ),
+        ),
       ),
       body: Column(
         children: [

@@ -102,6 +102,10 @@ class _ContactsState extends State<Contacts> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Image.asset('assets/images/tizibaneicon.png',width: 50,height: 50,),
+        ),
       ),
       body: Container(
         padding: EdgeInsets.all(20),
