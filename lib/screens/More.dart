@@ -3,6 +3,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tizibane/Services/AuthService.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';
@@ -18,11 +19,21 @@ class More extends StatefulWidget {
 
 final AuthService _authService = Get.put(AuthService());
 
+final ConnectivityService _connectivityService = Get.put(ConnectivityService());
+
 final nrcStorage = GetStorage();
 
 String nrcNumber = nrcStorage.read('nrcNumber');
 
 class _MoreState extends State<More> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _connectivityService.checkConnectivity();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
