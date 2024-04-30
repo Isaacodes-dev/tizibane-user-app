@@ -25,24 +25,20 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
 
   @override
   Widget build(BuildContext context) {
-    Widget currentScreen = currentIndex == 0
-        ? Home()
-        : currentIndex == 1
-            ? Contacts()
-            : More();
     return WillPopScope(
       onWillPop: () async {
         if (currentIndex != 0) {
           setState(() {
             currentIndex = 0;
           });
-          return false; 
+          return false; // Prevent app from closing
         } else {
-          return true; 
+          // If on home screen, allow the default behavior (closing the app)
+          return true;
         }
       },
       child: Scaffold(
-        body: currentScreen,
+        body: getCurrentScreen(),
         bottomNavigationBar: BottomAppBar(
           color: Colors.black,
           shape: CircularNotchedRectangle(),
@@ -62,6 +58,19 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
         ),
       ),
     );
+  }
+
+  Widget getCurrentScreen() {
+    switch (currentIndex) {
+      case 0:
+        return Home();
+      case 1:
+        return Contacts();
+      case 2:
+        return More();
+      default:
+        return Home(); // Default to home screen
+    }
   }
 
   MaterialButton buildMaterialButton(int index, IconData icon, String label) {

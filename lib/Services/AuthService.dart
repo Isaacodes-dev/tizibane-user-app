@@ -43,7 +43,7 @@ class AuthService extends GetxController {
 
   final RxBool rememberMe = false.obs;
 
-  ConnectivityService _connectivityService = Get.put(ConnectivityService());
+  //ConnectivityService _connectivityService = Get.put(ConnectivityService());
 
   @override
   void onInit() {
@@ -53,7 +53,7 @@ class AuthService extends GetxController {
 
   void toggleRememberMe(bool value) {
     rememberMe.value = value;
-    rememberMeValue.write('rememberMe', value);
+    rememberMeValue.write('rememberMe', rememberMe.value);
   }
 
   Future<void> createUser({
@@ -111,7 +111,6 @@ class AuthService extends GetxController {
     required String nrc,
     required String password,
   }) async {
-    if (_connectivityService.isConnected.value) {
       try {
         final url = baseUrl + login;
         isLoading.value = true;
@@ -132,7 +131,6 @@ class AuthService extends GetxController {
           token.value = json.decode(response.body)['token'];
           box.write('token', token.value);
           nrcStorage.write('nrcNumber', nrc);
-          print(rememberMe.value);
           if (rememberMe.value) {
             box.write('password', password);
           }
@@ -166,17 +164,7 @@ class AuthService extends GetxController {
         print('Error: $e');
         isLoading.value = false;
       }
-    }
-  }
-
-  Future<void> saveRememberMe(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('rememberMe', value);
-  }
-
-  Future<bool> getRememberMe() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('rememberMe') ?? false; 
+    
   }
 
   Future<void> logOut() async {

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -27,7 +29,9 @@ class _HomeState extends State<Home> {
   final UserService _userService = Get.put(UserService());
   final ProfileService _profileService = Get.put(ProfileService());
   bool isLoading = true;
-
+     final rememberMeValue = GetStorage();
+  final box = GetStorage();
+    
   @override
   void initState() {
     super.initState();
@@ -47,6 +51,12 @@ class _HomeState extends State<Home> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+
     }
   }
 

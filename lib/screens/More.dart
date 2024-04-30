@@ -19,8 +19,6 @@ class More extends StatefulWidget {
 
 final AuthService _authService = Get.put(AuthService());
 
-final ConnectivityService _connectivityService = Get.put(ConnectivityService());
-
 final nrcStorage = GetStorage();
 
 String nrcNumber = nrcStorage.read('nrcNumber');
@@ -31,7 +29,6 @@ class _MoreState extends State<More> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _connectivityService.checkConnectivity();
   }
 
   @override
