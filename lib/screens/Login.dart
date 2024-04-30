@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/AuthService.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:tizibane/screens/Home.dart';
 import 'package:tizibane/screens/Registration.dart';
@@ -20,16 +21,31 @@ class _LoginState extends State<Login> {
 
   final AuthService _authService = Get.put(AuthService());
 
+  final ConnectivityService _connectivityService =
+      Get.put(ConnectivityService());
+
   final box = GetStorage();
 
   final nrcStorage = GetStorage();
 
   bool _obscureText = true;
 
+  bool _rememberMe = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _connectivityService.checkConnectivity();
+    _authService.getRememberMe().then((value) {
+      setState(() {
+        _rememberMe = value;
+      });
+      if (_rememberMe) {
+        // If the user wants to be remembered, auto-fill the login form
+        // You can retrieve the saved username and password here and set them in the controllers
+      }
+    });
   }
 
   @override
@@ -81,7 +97,10 @@ class _LoginState extends State<Login> {
                                   .black), // Set the color of the border when the TextField is focused
                           borderRadius: BorderRadius.circular(40.0),
                         ),
-                        suffixIcon: Icon(Icons.credit_card,color: Colors.black,),
+                        suffixIcon: Icon(
+                          Icons.credit_card,
+                          color: Colors.black,
+                        ),
                         hintText: 'Nrc',
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0,
@@ -128,20 +147,19 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
-                    )
+                    ),
                     // Row(
                     //   children: [
-                    //     Obx(
-                    //       () => Checkbox(
+                    //     Checkbox(
                     //         activeColor: Colors.black,
                     //         checkColor: Colors.white,
-                    //         value: _authService.rememberMe.value,
+                    //         value: _rememberMe,
                     //         onChanged: (value) {
-                    //           _authService.toggleRememberMe(value!);
-                    //         },
-                    //       ),
-                    //     ),
-                    //     Text('Remember Me',style: GoogleFonts.lexendDeca())
+                    //           setState(() {
+                    //             _rememberMe = value!;
+                    //           });
+                    //         }),
+                    //     Text('Remember Me', style: GoogleFonts.lexendDeca())
                     //   ],
                     // ),
                   ],
@@ -161,6 +179,7 @@ class _LoginState extends State<Login> {
                                   nrc: nrcController.text.trim(),
                                   password: passwordController.text.trim(),
                                 );
+                                _authService.saveRememberMe(_rememberMe);
                               },
                             );
                     }),
