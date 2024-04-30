@@ -148,20 +148,20 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Checkbox(
-                            activeColor: Colors.black,
-                            checkColor: Colors.white,
-                            value: _rememberMe,
-                            onChanged: (value) {
-                              setState(() {
-                                _rememberMe = value!;
-                              });
-                            }),
-                        Text('Remember Me', style: GoogleFonts.lexendDeca())
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Checkbox(
+                    //         activeColor: Colors.black,
+                    //         checkColor: Colors.white,
+                    //         value: _rememberMe,
+                    //         onChanged: (value) {
+                    //           setState(() {
+                    //             _rememberMe = value!;
+                    //           });
+                    //         }),
+                    //     Text('Remember Me', style: GoogleFonts.lexendDeca())
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
