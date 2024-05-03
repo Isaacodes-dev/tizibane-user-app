@@ -6,7 +6,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/User.dart';
-import 'package:tizibane/screens/ProfileScreen/UserProfile.dart';
 
 class UserService extends GetxController {
   @override
@@ -26,12 +25,6 @@ class UserService extends GetxController {
     String accessToken = box.read('token');
     String storedNrc = nrcStorage.read('nrcNumber');
     isLoading.value = true; 
-    if (storedNrc == null) {
-      isLoading.value = false;
-      throw Exception("Stored 'nrcNumber' is null");
-      
-    }
-
     final response = await http.get(
       Uri.parse(url + "/$storedNrc"),
       headers: {

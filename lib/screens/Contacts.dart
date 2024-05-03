@@ -5,10 +5,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/ContactService.dart';
-import 'package:tizibane/Services/UserService.dart';
-import 'package:tizibane/components/Alerts/AlertDialog.dart';
-import 'package:tizibane/components/NFC.dart';
-import 'package:tizibane/components/drawer/sidemenu.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:tizibane/constants/constants.dart';
@@ -31,11 +27,9 @@ class Contacts extends StatefulWidget {
 
 class _ContactsState extends State<Contacts> {
   ValueNotifier<dynamic> result = ValueNotifier(null);
-
+//final getContacts = Get.put<ContactService>(ContactService());
   final ContactService _contactService =
-      Get.put(ContactService(), permanent: true);
-//final ContactService contactService = Get.find();
-  //List<Contact> contacts = [];
+      Get.put(ContactService());
 
   final qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -89,7 +83,7 @@ class _ContactsState extends State<Contacts> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _contactService.getContacts();
+    //_contactService.getContacts();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _contactService.getContacts();
     });
@@ -97,7 +91,7 @@ class _ContactsState extends State<Contacts> {
 
   @override
   Widget build(BuildContext context) {
-    final getContacts = Get.put<ContactService>(ContactService());
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -147,7 +141,7 @@ class _ContactsState extends State<Contacts> {
             ),
             const SizedBox(height: 15),
             Obx(() {
-              return getContacts.isLoading.value
+              return _contactService.isLoading.value
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -21,7 +21,7 @@ final AuthService _authService = Get.put(AuthService());
 
 final nrcStorage = GetStorage();
 
-String nrcNumber = nrcStorage.read('nrcNumber');
+late String nrcNumber;
 
 class _MoreState extends State<More> {
 
@@ -29,6 +29,7 @@ class _MoreState extends State<More> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    nrcNumber = nrcStorage.read('nrcNumber');
   }
 
   @override

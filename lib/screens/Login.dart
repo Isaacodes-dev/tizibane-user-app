@@ -6,9 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:tizibane/screens/Home.dart';
-import 'package:tizibane/screens/Registration.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -32,9 +30,17 @@ class _LoginState extends State<Login> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(_authService.rememberMe.value);
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    
+    nrcController.dispose();
+    passwordController.dispose();
+    super.dispose();
+
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -135,21 +141,21 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Obx((){
-                            return Checkbox(
-                                activeColor: Colors.black,
-                                checkColor: Colors.white,
-                                value: _authService.rememberMe.value,
-                                onChanged: (value) {
-                                  _authService.toggleRememberMe(value!);
-                                });
-                          }
-                        ),
-                        Text('Remember Me', style: GoogleFonts.lexendDeca())
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Obx((){
+                    //         return Checkbox(
+                    //             activeColor: Colors.black,
+                    //             checkColor: Colors.white,
+                    //             value: _authService.rememberMe.value,
+                    //             onChanged: (value) {
+                    //               _authService.toggleRememberMe(value!);
+                    //             });
+                    //       }
+                    //     ),
+                    //     Text('Remember Me', style: GoogleFonts.lexendDeca())
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
