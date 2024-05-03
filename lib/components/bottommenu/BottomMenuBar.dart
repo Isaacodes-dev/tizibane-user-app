@@ -49,8 +49,7 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
               children: [
                 buildMaterialButton(0, Icons.home_filled, "Home"),
                 buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
-                buildMaterialButton(2, Icons.more_horiz_outlined, "More"),
-              ],
+                buildMaterialButton(2, Icons.more_horiz_outlined, "More"),],
             ),
           ),
         ),
