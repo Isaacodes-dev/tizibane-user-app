@@ -164,14 +164,20 @@ class ContactService extends GetxController {
       isLoading.value = false;
       Get.snackbar(
         'Info',
-        'Contact already exits',
+        'You have already saved this contact',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.blueAccent,
         colorText: Colors.white,
       );
     } else {
       isLoading.value = false;
-      print('Data not posted ${response.body}');
+      Get.snackbar(
+        'Error',
+        jsonDecode(response.body)['message'],
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -201,19 +207,20 @@ class ContactService extends GetxController {
     }
   }
 
-void filterContact(String contact) {
-  List<ContactModel> results = [];
-  
-  if (contact.trim().isEmpty) {
-    results = contactsList;
-  } else {
-    results = contactsList.where((element) {
-      final trimmedContact = contact.toLowerCase().trim();
-      final fullName = '${element.firstName.toLowerCase()} ${element.lastName.toLowerCase()}';
-      return fullName.contains(trimmedContact);
-    }).toList();
+  void filterContact(String contact) {
+    List<ContactModel> results = [];
+
+    if (contact.trim().isEmpty) {
+      results = contactsList;
+    } else {
+      results = contactsList.where((element) {
+        final trimmedContact = contact.toLowerCase().trim();
+        final fullName =
+            '${element.firstName.toLowerCase()} ${element.lastName.toLowerCase()}';
+        return fullName.contains(trimmedContact);
+      }).toList();
+    }
+
+    foundContacts.value = results;
   }
-  
-  foundContacts.value = results;
-}
 }

@@ -83,24 +83,24 @@ class _NewContactState extends State<NewContact> {
                     ),
                     Text(
                       widget.firstName + ' ' + widget.lastName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                         letterSpacing: 1.15,
                       ),
                     ),
                     if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
                     Text(widget.positionName, style: GoogleFonts.lexendDeca()),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
                     if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
                     Text(widget.companyName, style: GoogleFonts.lexendDeca()),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Divider(

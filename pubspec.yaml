@@ -42,10 +42,8 @@ dependencies:
   qr_code_scanner: ^1.0.1
   flutter_barcode_scanner: ^2.0.0
   http: ^1.1.0
-  image_picker: ^1.0.7
   get: ^4.6.6
   get_storage: ^2.1.1
-  image_gallery_saver: ^2.0.3
   google_fonts: ^4.0.0
   url_launcher: ^6.0.0
   connectivity: ^3.0.6

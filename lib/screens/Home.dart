@@ -1,23 +1,13 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tizibane/Services/ContactService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/Services/UserService.dart';
-import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
-import 'package:tizibane/models/Contact.dart';
-import 'package:tizibane/screens/Contact/ViewContact.dart';
-import 'package:tizibane/models/User.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tizibane/screens/EmployeementDetails.dart';
 import 'package:tizibane/screens/Groups/Groups.dart';
-import 'package:tizibane/screens/More.dart';
-import 'package:tizibane/screens/ViewEmployeCurrentDetails.dart';
-
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -51,12 +41,6 @@ class _HomeState extends State<Home> {
       setState(() {
         isLoading = false;
       });
-    }
-  }
-
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
-
     }
   }
 

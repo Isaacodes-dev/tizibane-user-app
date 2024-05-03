@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tizibane/screens/Contacts.dart';
 import 'package:tizibane/screens/Home.dart';
 import 'package:tizibane/screens/More.dart';
-import 'package:tizibane/screens/Profile.dart';
 
 class BottomMenuBarItems extends StatefulWidget {
   final int selectedIndex;
@@ -31,9 +30,8 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
           setState(() {
             currentIndex = 0;
           });
-          return false; // Prevent app from closing
+          return false; 
         } else {
-          // If on home screen, allow the default behavior (closing the app)
           return true;
         }
       },
@@ -51,8 +49,7 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
               children: [
                 buildMaterialButton(0, Icons.home_filled, "Home"),
                 buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
-                buildMaterialButton(2, Icons.more_horiz_outlined, "More"),
-              ],
+                buildMaterialButton(2, Icons.more_horiz_outlined, "More"),],
             ),
           ),
         ),
@@ -63,13 +60,13 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
   Widget getCurrentScreen() {
     switch (currentIndex) {
       case 0:
-        return Home();
+        return const Home();
       case 1:
         return Contacts();
       case 2:
-        return More();
+        return const More();
       default:
-        return Home(); // Default to home screen
+        return const Home(); 
     }
   }
 

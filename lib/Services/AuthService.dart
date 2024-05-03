@@ -24,8 +24,6 @@ import 'package:tizibane/screens/ProfileScreen/EmployeeHistory.dart';
 class AuthService extends GetxController {
   final UserService _userService = Get.put(UserService());
 
-  final ProfileService _profileService = Get.put(ProfileService());
-
   final ContactService _contactService = Get.put(ContactService());
 
   final EmployeeHistoryService _employeeHistory =
@@ -43,8 +41,6 @@ class AuthService extends GetxController {
 
   final RxBool rememberMe = false.obs;
 
-  //ConnectivityService _connectivityService = Get.put(ConnectivityService());
-
   @override
   void onInit() {
     super.onInit();
@@ -54,57 +50,6 @@ class AuthService extends GetxController {
   void toggleRememberMe(bool value) {
     rememberMe.value = value;
     rememberMeValue.write('rememberMe', rememberMe.value);
-  }
-
-  Future<void> createUser({
-    required String nrc,
-    required String first_name,
-    required String last_name,
-    required String phone_number,
-    required String email,
-    required String password,
-  }) async {
-    try {
-      final url = baseUrl + register;
-      isLoading.value = true;
-
-      final data = {
-        'nrc': nrc,
-        'first_name': first_name,
-        'last_name': last_name,
-        'phone_number': phone_number,
-        'email': email,
-        'password': password,
-      };
-
-      final response = await http.post(Uri.parse(url),
-          headers: {'Accept': 'application/json'}, body: data);
-      if (response.statusCode == 201) {
-        isLoading.value = false;
-
-        Get.snackbar(
-          'Success',
-          json.decode(response.body)['message'],
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-
-        Get.offAll(() => Login());
-      } else {
-        isLoading.value = false;
-        Get.snackbar(
-          'Error',
-          json.decode(response.body)['message'],
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-    } catch (e) {
-      print('Error: $e');
-      isLoading.value = false;
-    }
   }
 
   Future<void> loginUser({
@@ -131,9 +76,6 @@ class AuthService extends GetxController {
           token.value = json.decode(response.body)['token'];
           box.write('token', token.value);
           nrcStorage.write('nrcNumber', nrc);
-          if (rememberMe.value) {
-            box.write('password', password);
-          }
 
           Get.offAll(() => BottomMenuBarItems(
                 selectedIndex: 0,
@@ -149,7 +91,6 @@ class AuthService extends GetxController {
               colorText: Colors.white,
             );
 
-            box.remove('token');
           } else {
             Get.snackbar(
               'Error',
@@ -173,7 +114,7 @@ class AuthService extends GetxController {
 
       isLoading.value = true;
 
-      String? accessToken = token.value;
+      String? accessToken = box.read('token');
 
       final response = await http.post(
         Uri.parse(url),
@@ -184,13 +125,14 @@ class AuthService extends GetxController {
       );
 
       if (response.statusCode == 200) {
+
+        await Future.delayed(Duration(milliseconds: 500));
+
         isLoading.value = false;
 
         box.remove('token');
 
         nrcStorage.remove('nrcNumber');
-
-        rememberMeValue.remove('rememberMe');
 
         _userService.userObj.value = <User>[].obs;
 
@@ -212,8 +154,6 @@ class AuthService extends GetxController {
           colorText: Colors.white,
         );
 
-        await Future.delayed(Duration(milliseconds: 500));
-
         Get.offAll(Login());
       } else {
         Get.snackbar(
@@ -223,7 +163,6 @@ class AuthService extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
-        print(response.body);
         isLoading.value = false;
       }
     } catch (e) {
