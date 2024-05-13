@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 
 class ViewEmployeeDetails extends StatefulWidget {
   final String first_name;
@@ -360,6 +361,7 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                 ),
               ],
             ),
+            floatingActionButton: ShareUrlLink(),
     );
   }
 }

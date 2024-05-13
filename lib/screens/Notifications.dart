@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -28,6 +29,7 @@ class _NotificationsState extends State<Notifications> {
       body: Column(
         children: [Text('Page Coming Soon')],
       ),
+      floatingActionButton: ShareUrlLink(),
     );
   }
 }

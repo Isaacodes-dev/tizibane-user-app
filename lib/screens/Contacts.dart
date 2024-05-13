@@ -17,6 +17,8 @@ import 'package:tizibane/screens/Contact/ViewCurrentEmployeeDetails.dart';
 import 'package:tizibane/screens/QRScanner.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
+
 
 class Contacts extends StatefulWidget {
   //const Contacts({super.key});
@@ -226,6 +228,8 @@ class _ContactsState extends State<Contacts> {
           ],
         ),
       ),
+      floatingActionButton: ShareUrlLink(),
+
     );
   }
 
