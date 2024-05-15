@@ -3,8 +3,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tizibane/Services/AuthService.dart';
-import 'package:tizibane/Services/Connectivity.dart';
-import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';
 import 'package:get/get.dart';
@@ -56,7 +54,7 @@ class _MoreState extends State<More> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: Container(
+                  child: SizedBox(
                     width: 140,
                     child: QrImageView(
                       data: nrcNumber,
@@ -71,7 +69,7 @@ class _MoreState extends State<More> {
           Expanded(child: getListView())
         ],
       ),
-      floatingActionButton: ShareUrlLink(),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 
@@ -79,22 +77,22 @@ class _MoreState extends State<More> {
     var listView = ListView(
       children: <Widget>[
         ListTile(
-          leading: Icon(
+          leading: const Icon(
             Icons.notifications,
             color: Colors.black,
           ),
           title: Text('Notifications', style: GoogleFonts.lexendDeca()),
-          onTap: () => {Get.to(Notifications())},
+          onTap: () => {Get.to(const Notifications())},
         ),
         ListTile(
-          leading: Icon(Icons.settings, color: Colors.black),
+          leading: const Icon(Icons.settings, color: Colors.black),
           title: Text('Settings', style: GoogleFonts.lexendDeca()),
-          onTap: () => {Get.to(Settings())},
+          onTap: () => {Get.to(const Settings())},
         ),
         ListTile(
-          leading: Icon(Icons.lock, color: Colors.black),
+          leading: const Icon(Icons.lock, color: Colors.black),
           title: Text('Change Password', style: GoogleFonts.lexendDeca()),
-          onTap: () => {Get.to(UpdateUserCredentials())},
+          onTap: () => {Get.to(const UpdateUserCredentials())},
         ),
         Obx(() {
           return _authService.isLoading.value

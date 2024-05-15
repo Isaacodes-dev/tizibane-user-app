@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -38,7 +37,7 @@ class GroupsService extends GetxController {
     String nrc = nrcStorage.read('nrcNumber');
 
     final response = await http.get(
-      Uri.parse(baseUrl + groupsdetails + "/$nrc"),
+      Uri.parse("$baseUrl$groupsdetails/$nrc"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',

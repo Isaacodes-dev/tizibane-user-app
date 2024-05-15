@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
+// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously, invalid_use_of_protected_member
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,19 +6,19 @@ import 'package:share_plus/share_plus.dart';
 import 'package:tizibane/Services/UserService.dart';
 
 class ShareUrlLink extends StatelessWidget {
-  const ShareUrlLink({Key? key});
+  const ShareUrlLink({super.key});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () async {
         // Get the phone number from UserService
-        String? phoneNumber = await _getUserPhoneNumber();
+        String? Nrc = await _getUserNrc();
 
         // Append the phone number to the link
         String link = 'https://tizibane.com/';
-        if (phoneNumber != null) {
-          link += phoneNumber;
+        if (Nrc != null) {
+          link += Nrc;
         }
 
         // Show the popup when button is clicked
@@ -55,9 +55,21 @@ class ShareUrlLink extends StatelessWidget {
     );
   }
 
-  Future<String?> _getUserPhoneNumber() async {
+  Future<String?> _getUserNrc() async {
     UserService _userService = UserService();
     await _userService.getUser();
-    return _userService.userObj.value?[0].phone_number;
+    String unformattedNrc = _userService.userObj.value[0].nrc;
+    return encryptNrc(unformattedNrc);
+  }
+
+  Future<String?> encryptNrc(String ? nrc) async{
+    int ? shift = 137;
+    String formattedNrc = '';
+    for (int i = 0; i < nrc!.length; i++) {
+    int charCode = nrc.codeUnitAt(i);
+    int shiftedCharCode = (charCode + shift) % 256; // ASCII range
+    formattedNrc += String.fromCharCode(shiftedCharCode);
+  }
+    return formattedNrc;
   }
 }

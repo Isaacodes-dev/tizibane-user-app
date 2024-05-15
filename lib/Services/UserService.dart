@@ -1,3 +1,5 @@
+// ignore_for_file: override_on_non_overriding_member
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -26,7 +28,7 @@ class UserService extends GetxController {
     String storedNrc = nrcStorage.read('nrcNumber');
     isLoading.value = true; 
     final response = await http.get(
-      Uri.parse(url + "/$storedNrc"),
+      Uri.parse("$url/$storedNrc"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
@@ -61,7 +63,7 @@ class UserService extends GetxController {
     try {
       String accessToken = box.read('token');
       String storedNrc = nrcStorage.read('nrcNumber');
-      final url = baseUrl + updateUser + '$storedNrc';
+      final url = '$baseUrl$updateUser$storedNrc';
       isLoading.value = true;
        
       final data = {
@@ -84,7 +86,7 @@ class UserService extends GetxController {
           colorText: Colors.white,
         );        
         await getUser();
-        Get.offAll(BottomMenuBarItems(selectedIndex: 0,));
+        Get.offAll(const BottomMenuBarItems(selectedIndex: 0,));
       } else {
         isLoading.value = false;
         print(json.decode(response.body)['message']);

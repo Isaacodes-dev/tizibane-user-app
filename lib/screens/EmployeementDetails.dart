@@ -43,7 +43,7 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
         appBar: AppBar(
           leading: null,
           backgroundColor: Colors.black,
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorColor: Colors.orange,
             labelColor: Colors.orange,
             unselectedLabelColor: Colors.white,
@@ -68,10 +68,10 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
               user_profile_pic: widget.user_profile_pic,
               comapny_website: widget.company_website,
             ),
-            EmployeeHistory()
+            const EmployeeHistory()
           ],
         ),
-        floatingActionButton: ShareUrlLink(),
+        floatingActionButton: const ShareUrlLink(),
       ),
       
     );

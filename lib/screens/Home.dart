@@ -136,9 +136,7 @@ class _HomeState extends State<Home> {
                     Column(
                       children: [
                         Text(
-                          _userService.userObj.value[0].first_name +
-                              ' ' +
-                              _userService.userObj.value[0].last_name,
+                          '${_userService.userObj.value[0].first_name} ${_userService.userObj.value[0].last_name}',
                           style: GoogleFonts.lexendDeca(
                             textStyle: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
@@ -504,11 +502,7 @@ class _HomeState extends State<Home> {
   }
 
   String formatNrc(String userNrc) {
-    String formattedNrc = userNrc.substring(0, 6) +
-        '/' +
-        userNrc.substring(6, 8) +
-        '/' +
-        userNrc.substring(8);
+    String formattedNrc = '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
 
     return formattedNrc;
   }

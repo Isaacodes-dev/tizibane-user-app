@@ -9,7 +9,6 @@ import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
-import 'package:tizibane/screens/Contacts.dart';
 
 class ContactService extends GetxController {
   final isLoading = false.obs;
@@ -53,7 +52,7 @@ class ContactService extends GetxController {
     String accessToken = box.read('token');
 
     final response = await http.get(
-      Uri.parse(baseUrl + getContactDetails + "/$nrc"),
+      Uri.parse("$baseUrl$getContactDetails/$nrc"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
@@ -108,7 +107,7 @@ class ContactService extends GetxController {
     String contactSaver = nrcStorage.read('nrcNumber');
     isLoading.value = true;
     final response = await http.get(
-      Uri.parse(baseUrl + getContactsDetails + "/$contactSaver"),
+      Uri.parse("$baseUrl$getContactsDetails/$contactSaver"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
@@ -157,7 +156,7 @@ class ContactService extends GetxController {
         colorText: Colors.white,
       );
       saveContactToPhonebook();
-      Get.to(BottomMenuBarItems(
+      Get.to(const BottomMenuBarItems(
         selectedIndex: 1,
       ));
     } else if (response.statusCode == 409) {
@@ -187,9 +186,7 @@ class ContactService extends GetxController {
     PermissionStatus permissionStatus = await Permission.contacts.request();
     if (permissionStatus.isGranted) {
       try {
-        String combineNames = contactDetails.value.firstName +
-            ' ' +
-            contactDetails.value.lastName;
+        String combineNames = '${contactDetails.value.firstName} ${contactDetails.value.lastName}';
         Contact contact = Contact(
           givenName: combineNames,
           phones: [

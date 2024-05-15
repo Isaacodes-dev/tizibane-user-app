@@ -1,14 +1,13 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
-import 'package:tizibane/screens/Home.dart';
 import 'package:get/get.dart';
 
 class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
   State<Login> createState() => _LoginState();
 }
@@ -47,8 +46,8 @@ class _LoginState extends State<Login> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 230, 230, 230),
-      body: Container(
+      backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+      body: SizedBox(
         width: width,
         height: height,
         child: SingleChildScrollView(
@@ -60,7 +59,7 @@ class _LoginState extends State<Login> {
                   'assets/images/Tizibane.png',
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +75,7 @@ class _LoginState extends State<Login> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
                     TextField(
@@ -85,34 +84,34 @@ class _LoginState extends State<Login> {
                       obscureText: false,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors
                                   .black), // Set the color of the border when the TextField is focused
                           borderRadius: BorderRadius.circular(40.0),
                         ),
-                        suffixIcon: Icon(
+                        suffixIcon: const Icon(
                           Icons.credit_card,
                           color: Colors.black,
                         ),
                         hintText: 'Nrc',
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           vertical: 10.0,
                           horizontal: 15.0,
                         ),
-                        hintStyle: TextStyle(fontSize: 14),
+                        hintStyle: const TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextField(
                       cursorColor: Colors.black,
                       controller: passwordController,
                       obscureText: _obscureText,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors
                                   .black),
                           borderRadius: BorderRadius.circular(40.0),
@@ -131,11 +130,11 @@ class _LoginState extends State<Login> {
                           },
                         ),
                         hintText: 'Password',
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           vertical: 10.0,
                           horizontal: 15.0,
                         ),
-                        hintStyle: TextStyle(fontSize: 14),
+                        hintStyle: const TextStyle(fontSize: 14),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -165,7 +164,7 @@ class _LoginState extends State<Login> {
                   children: [
                     Obx(() {
                       return _authService.isLoading.value
-                          ? CircularProgressIndicator()
+                          ? const CircularProgressIndicator()
                           : SubmitButton(
                               text: 'Sign In',
                               onTap: () async {
@@ -179,7 +178,7 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               // Center(
               //   child: Row(
               //     mainAxisAlignment: MainAxisAlignment.center,

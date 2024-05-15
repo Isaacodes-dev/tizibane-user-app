@@ -19,11 +19,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final box = GetStorage();
 
     final token = box.read('token');
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (token == null) {
-        Get.offAll(()=> Login());
+        Get.offAll(()=> const Login());
       } else {
-        Get.offAll(()=> BottomMenuBarItems(selectedIndex: 0));
+        Get.offAll(()=> const BottomMenuBarItems(selectedIndex: 0));
       }
     });
   }

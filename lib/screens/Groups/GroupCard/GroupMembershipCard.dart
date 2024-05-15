@@ -20,11 +20,11 @@ class GroupMembershipCard extends StatefulWidget {
 class _GroupMembershipCardState extends State<GroupMembershipCard> {
   @override
   Widget build(BuildContext context) {
-  return Container(
+  return SizedBox(
       width: 480,
       child: Card(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Container(
             child: Column(
               children: [
@@ -40,7 +40,7 @@ class _GroupMembershipCardState extends State<GroupMembershipCard> {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -59,7 +59,7 @@ class _GroupMembershipCardState extends State<GroupMembershipCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -78,7 +78,7 @@ class _GroupMembershipCardState extends State<GroupMembershipCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -126,7 +126,7 @@ class _GroupMembershipCardState extends State<GroupMembershipCard> {
                 //     ),
                 //   ],
                 // ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
               ],

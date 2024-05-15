@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tizibane/screens/Contact/ContactEmployeeHistory.dart';
 import 'package:tizibane/screens/Contact/ViewCurrentEmployeeDetails.dart';
-import 'package:tizibane/screens/ProfileScreen/EmployeeHistory.dart';
-import 'package:tizibane/screens/ViewEmployeCurrentDetails.dart';
 
 class ContactEmploymentDetails extends StatefulWidget {
   final String nrc;
@@ -46,7 +44,7 @@ class _ContactEmploymentDetailsState extends State<ContactEmploymentDetails> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.black,
-            bottom: TabBar(
+            bottom: const TabBar(
               indicatorColor: Colors.orange,
               labelColor: Colors.orange,
               unselectedLabelColor: Colors.white,

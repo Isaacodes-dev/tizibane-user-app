@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/constants/constants.dart';
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -81,14 +80,14 @@ class _ViewCurrentEmployeeDetailsState
                           child: Column(
                             children: [
                               Text(
-                                widget.firstName + ' ' + widget.lastName,
-                                style: TextStyle(
+                                '${widget.firstName} ${widget.lastName}',
+                                style: const TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 3),
+                              const SizedBox(height: 3),
                               Text(widget.positionName,
                                   style: GoogleFonts.lexendDeca()),
-                              SizedBox(height: 3),
+                              const SizedBox(height: 3),
                               Text(widget.companyName,
                                   style: GoogleFonts.lexendDeca()),
                             ],
@@ -124,11 +123,11 @@ class _ViewCurrentEmployeeDetailsState
                                 'Corporate Details',
                                 style: GoogleFonts.lexendDeca(
                                     textStyle:
-                                        TextStyle(fontWeight: FontWeight.bold)),
+                                        const TextStyle(fontWeight: FontWeight.bold)),
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           GestureDetector(
@@ -137,11 +136,11 @@ class _ViewCurrentEmployeeDetailsState
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                              padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade100,
                                 border: Border.all(color: Colors.grey.shade200),
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(20),
                                 ),
                               ),
@@ -155,7 +154,7 @@ class _ViewCurrentEmployeeDetailsState
                                     children: [
                                       Text('Telephone',
                                           style: GoogleFonts.lexendDeca()),
-                                      SizedBox(height: 3),
+                                      const SizedBox(height: 3),
                                       Text(widget.telephone,
                                           style: GoogleFonts.lexendDeca())
                                     ],
@@ -168,11 +167,11 @@ class _ViewCurrentEmployeeDetailsState
                                       height:
                                           MediaQuery.of(context).size.width *
                                               0.07,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.black,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         CupertinoIcons.phone,
                                         color: Colors.white,
                                         size: 18,
@@ -183,18 +182,18 @@ class _ViewCurrentEmployeeDetailsState
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           GestureDetector(
                             onTap: () {
                               _openDialPad(widget.phoneNumber);
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                              padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade100,
                                 border: Border.all(color: Colors.grey.shade200),
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(20),
                                 ),
                               ),
@@ -208,7 +207,7 @@ class _ViewCurrentEmployeeDetailsState
                                     children: [
                                       Text('Cell',
                                           style: GoogleFonts.lexendDeca()),
-                                      SizedBox(height: 3),
+                                      const SizedBox(height: 3),
                                       Text(widget.phoneNumber,
                                           style: GoogleFonts.lexendDeca())
                                     ],
@@ -221,11 +220,11 @@ class _ViewCurrentEmployeeDetailsState
                                       height:
                                           MediaQuery.of(context).size.width *
                                               0.07,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.black,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         CupertinoIcons.phone,
                                         color: Colors.white,
                                         size: 18,
@@ -236,7 +235,7 @@ class _ViewCurrentEmployeeDetailsState
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           GestureDetector(
                             onTap: () {
                               _openDefaultEmailClient(
@@ -244,11 +243,11 @@ class _ViewCurrentEmployeeDetailsState
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                              padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade100,
                                 border: Border.all(color: Colors.grey.shade200),
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(20),
                                 ),
                               ),
@@ -262,7 +261,7 @@ class _ViewCurrentEmployeeDetailsState
                                     children: [
                                       Text('Corporate Email',
                                           style: GoogleFonts.lexendDeca()),
-                                      SizedBox(height: 3),
+                                      const SizedBox(height: 3),
                                       Text(widget.companyAssignedEmail,
                                           style: GoogleFonts.lexendDeca())
                                     ],
@@ -275,11 +274,11 @@ class _ViewCurrentEmployeeDetailsState
                                       height:
                                           MediaQuery.of(context).size.width *
                                               0.07,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.black,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         CupertinoIcons.mail,
                                         color: Colors.white,
                                         size: 18,
@@ -290,7 +289,7 @@ class _ViewCurrentEmployeeDetailsState
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           GestureDetector(
                             onTap: () {
                               _openDefaultEmailClient(
@@ -298,11 +297,11 @@ class _ViewCurrentEmployeeDetailsState
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                              padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade100,
                                 border: Border.all(color: Colors.grey.shade200),
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(20),
                                 ),
                               ),
@@ -316,7 +315,7 @@ class _ViewCurrentEmployeeDetailsState
                                     children: [
                                       Text('Email',
                                           style: GoogleFonts.lexendDeca()),
-                                      SizedBox(height: 3),
+                                      const SizedBox(height: 3),
                                       Text(widget.email,
                                           style: GoogleFonts.lexendDeca())
                                     ],
@@ -329,11 +328,11 @@ class _ViewCurrentEmployeeDetailsState
                                       height:
                                           MediaQuery.of(context).size.width *
                                               0.07,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.black,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         CupertinoIcons.mail,
                                         color: Colors.white,
                                         size: 18,
@@ -344,14 +343,14 @@ class _ViewCurrentEmployeeDetailsState
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
                               border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
@@ -363,7 +362,7 @@ class _ViewCurrentEmployeeDetailsState
                                   children: [
                                     Text('Address',
                                         style: GoogleFonts.lexendDeca()),
-                                    SizedBox(height: 3),
+                                    const SizedBox(height: 3),
                                     Text(widget.comapnyAddress,
                                         style: GoogleFonts.lexendDeca())
                                   ],
@@ -375,11 +374,11 @@ class _ViewCurrentEmployeeDetailsState
                                         0.07,
                                     height: MediaQuery.of(context).size.width *
                                         0.07,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       CupertinoIcons.home,
                                       color: Colors.white,
                                       size: 18,
@@ -389,14 +388,14 @@ class _ViewCurrentEmployeeDetailsState
                               ],
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
                               border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
@@ -408,7 +407,7 @@ class _ViewCurrentEmployeeDetailsState
                                   children: [
                                     Text('Company Website',
                                         style: GoogleFonts.lexendDeca()),
-                                    SizedBox(height: 3),
+                                    const SizedBox(height: 3),
                                     Text(widget.companyWebsite,
                                         style: GoogleFonts.lexendDeca())
                                   ],
@@ -420,11 +419,11 @@ class _ViewCurrentEmployeeDetailsState
                                         0.07,
                                     height: MediaQuery.of(context).size.width *
                                         0.07,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       CupertinoIcons.globe,
                                       color: Colors.white,
                                       size: 18,
@@ -434,7 +433,7 @@ class _ViewCurrentEmployeeDetailsState
                               ],
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                         ],
                       ),
                     ),
