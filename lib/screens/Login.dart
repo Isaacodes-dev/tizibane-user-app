@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:tizibane/screens/Home.dart';
@@ -26,21 +27,54 @@ class _LoginState extends State<Login> {
 
   bool _obscureText = true;
 
+  bool _rememberMe = false;
+
   @override
-  void initState() {
+  void initState(){
     // TODO: implement initState
     super.initState();
+    loadRememberMe();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    
+
     nrcController.dispose();
     passwordController.dispose();
     super.dispose();
-
   }
+
+  Future<void> loadRememberMe() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _rememberMe = prefs.getBool('remember_me') ?? false;
+      if (_rememberMe) {
+        nrcController.text = prefs.getString('nrcValue') ?? '';
+        passwordController.text = prefs.getString('password') ?? '';
+      }
+    });
+  }
+
+  Future<void> saveRememberMe() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('remember_me', _rememberMe);
+    if (_rememberMe) {
+      prefs.setString('nrcValue', nrcController.text);
+      prefs.setString('password', passwordController.text);
+    } else {
+      prefs.remove('nrcValue');
+      prefs.remove('password');
+    }
+  }
+
+  void _onRememberMeChanged(bool? value) {
+    setState(() {
+      _rememberMe = value ?? false;
+    });
+    saveRememberMe();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -85,9 +119,7 @@ class _LoginState extends State<Login> {
                       obscureText: false,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .black), // Set the color of the border when the TextField is focused
+                          borderSide: BorderSide(color: Colors.black),
                           borderRadius: BorderRadius.circular(40.0),
                         ),
                         suffixIcon: Icon(
@@ -112,9 +144,7 @@ class _LoginState extends State<Login> {
                       obscureText: _obscureText,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors
-                                  .black),
+                          borderSide: BorderSide(color: Colors.black),
                           borderRadius: BorderRadius.circular(40.0),
                         ),
                         suffixIcon: IconButton(
@@ -141,21 +171,17 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    // Row(
-                    //   children: [
-                    //     Obx((){
-                    //         return Checkbox(
-                    //             activeColor: Colors.black,
-                    //             checkColor: Colors.white,
-                    //             value: _authService.rememberMe.value,
-                    //             onChanged: (value) {
-                    //               _authService.toggleRememberMe(value!);
-                    //             });
-                    //       }
-                    //     ),
-                    //     Text('Remember Me', style: GoogleFonts.lexendDeca())
-                    //   ],
-                    // ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          activeColor: Colors.black,
+                          checkColor: Colors.white,
+                          value: _rememberMe,
+                          onChanged: _onRememberMeChanged,
+                        ),
+                        Text('Remember Me', style: GoogleFonts.lexendDeca())
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -173,6 +199,7 @@ class _LoginState extends State<Login> {
                                   nrc: nrcController.text.trim(),
                                   password: passwordController.text.trim(),
                                 );
+                                saveRememberMe();
                               },
                             );
                     }),

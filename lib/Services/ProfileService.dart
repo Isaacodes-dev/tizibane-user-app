@@ -35,10 +35,11 @@ class ProfileService extends GetxController {
 
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
-
+      imagePath.value = '';
       if (responseData['imagePath'] != null) {
         imagePath.value = responseData['imagePath'];
       } else {
+        imagePath.value = '';
         throw Exception("Image data is null");
       }
     } else {

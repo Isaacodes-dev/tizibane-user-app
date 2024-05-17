@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:contacts_service/contacts_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -37,75 +35,64 @@ class AuthService extends GetxController {
 
   final nrcStorage = GetStorage();
 
-  final rememberMeValue = GetStorage();
-
-  final RxBool rememberMe = false.obs;
-
   @override
   void onInit() {
     super.onInit();
-    rememberMe.value = rememberMeValue.read('rememberMe') ?? false;
-  }
-
-  void toggleRememberMe(bool value) {
-    rememberMe.value = value;
-    rememberMeValue.write('rememberMe', rememberMe.value);
   }
 
   Future<void> loginUser({
     required String nrc,
     required String password,
   }) async {
-      try {
-        final url = baseUrl + login;
-        isLoading.value = true;
+    try {
+      final url = baseUrl + login;
+      isLoading.value = true;
 
-        final data = {
-          'nrc': nrc,
-          'password': password,
-        };
+      final data = {
+        'nrc': nrc,
+        'password': password,
+      };
 
-        final response = await http.post(Uri.parse(url),
-            headers: {
-              'Accept': 'application/json',
-            },
-            body: data);
+      final response = await http.post(Uri.parse(url),
+          headers: {
+            'Accept': 'application/json',
+          },
+          body: data);
 
-        if (response.statusCode == 200) {
-          isLoading.value = false;
-          token.value = json.decode(response.body)['token'];
-          box.write('token', token.value);
-          nrcStorage.write('nrcNumber', nrc);
-
-          Get.offAll(() => BottomMenuBarItems(
-                selectedIndex: 0,
-              ));
-        } else {
-          isLoading.value = false;
-          if (response.statusCode == 401) {
-            Get.snackbar(
-              'Unauthorized',
-              'Please log in again',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.red,
-              colorText: Colors.white,
-            );
-
-          } else {
-            Get.snackbar(
-              'Error',
-              json.decode(response.body)['message'],
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.red,
-              colorText: Colors.white,
-            );
-          }
-        }
-      } catch (e) {
-        print('Error: $e');
+      if (response.statusCode == 200) {
         isLoading.value = false;
+        token.value = json.decode(response.body)['token'];
+        box.write('token', token.value);
+        nrcStorage.write('nrcNumber', nrc);
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.setString('tokenValue', token.value);
+        Get.offAll(() => BottomMenuBarItems(
+              selectedIndex: 0,
+            ));
+      } else {
+        isLoading.value = false;
+        if (response.statusCode == 401) {
+          Get.snackbar(
+            'Unauthorized',
+            'Please log in again',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        } else {
+          Get.snackbar(
+            'Error',
+            json.decode(response.body)['message'],
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
       }
-    
+    } catch (e) {
+      print('Error: $e');
+      isLoading.value = false;
+    }
   }
 
   Future<void> logOut() async {
@@ -125,7 +112,6 @@ class AuthService extends GetxController {
       );
 
       if (response.statusCode == 200) {
-
         await Future.delayed(Duration(milliseconds: 500));
 
         isLoading.value = false;
@@ -145,6 +131,9 @@ class AuthService extends GetxController {
 
         _employeeHistory.employeeHistoryDetails.value =
             <EmploymentHistory>[].obs;
+
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.remove('tokenValue');
 
         Get.snackbar(
           'Success',
