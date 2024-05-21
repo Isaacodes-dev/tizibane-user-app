@@ -51,15 +51,18 @@ class GroupsService extends GetxController {
       var responseData = jsonDecode(response.body);
 
       if (responseData['groups'] != null) {
+        groupsList.value = [];
         List<dynamic> data = jsonDecode(response.body)['groups'];
         groupsList.value = data.map((e) => Group.fromJson(e)).toList();
         update();
       } else {
         isLoading.value = false;
+        groupsList.value = [];
         throw Exception("Group data is null");
       }
     } else {
       isLoading.value = false;
+      groupsList.value = [];
       throw Exception('Failed to fetch group details: ${response.statusCode}');
     }
   }

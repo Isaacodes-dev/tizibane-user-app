@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/screens/Login.dart';
+
+String? finalToken;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,12 +24,34 @@ class _SplashScreenState extends State<SplashScreen> {
     final box = GetStorage();
 
     final token = box.read('token');
-    Future.delayed(Duration(seconds: 3), () {
-      if (token == null) {
-        Get.offAll(()=> Login());
-      } else {
-        Get.offAll(()=> BottomMenuBarItems(selectedIndex: 0));
-      }
+
+    // Future.delayed(Duration(seconds: 3), () {
+    //   if (token == null) {
+    //     Get.offAll(()=> Login());
+    //   } else {
+    //     Get.offAll(()=> BottomMenuBarItems(selectedIndex: 0));
+    //   }
+    // });
+    getValidationData().whenComplete(() async {
+      Timer(
+        const Duration(seconds: 2),
+        () => Get.offAll(
+          finalToken == null
+              ? Login()
+              : const BottomMenuBarItems(
+                  selectedIndex: 0,
+                ),
+        ),
+      );
+    });
+  }
+
+  Future getValidationData() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    var obtainedToken = preferences.getString('tokenValue');
+
+    setState(() {
+      finalToken = obtainedToken;
     });
   }
 

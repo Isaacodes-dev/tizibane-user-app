@@ -64,7 +64,25 @@ class ContactService extends GetxController {
       var responseData = jsonDecode(response.body);
 
       if (responseData['contact'] != null) {
-        ContactModel contact;
+        ContactModel contact = ContactModel(
+            nrc: '',
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            email: '',
+            roleId: '',
+            createdAt: '',
+            updatedAt: '',
+            profilePicture: '',
+            positionName: '',
+            companyName: '',
+            companyLogo: '',
+            companyAssignedEmail: '',
+            companyEmail: '',
+            companyPhone: '',
+            comapnyWebsite: '',
+            comapnyAddress: '',
+            telephone: '');
 
         if (responseData['contact'] is List) {
           if (responseData['contact'].isNotEmpty) {
@@ -92,20 +110,79 @@ class ContactService extends GetxController {
         } else if (responseData['contact'] is Map) {
           contact = ContactModel.fromJson(responseData['contact']);
         } else {
+          contactDetails.value = ContactModel(
+              nrc: '',
+              firstName: '',
+              lastName: '',
+              phoneNumber: '',
+              email: '',
+              roleId: '',
+              createdAt: '',
+              updatedAt: '',
+              profilePicture: '',
+              positionName: '',
+              companyName: '',
+              companyLogo: '',
+              companyAssignedEmail: '',
+              companyEmail: '',
+              companyPhone: '',
+              comapnyWebsite: '',
+              comapnyAddress: '',
+              telephone: '');
           throw Exception('Unexpected response format');
         }
       } else {
+        contactDetails.value = ContactModel(
+            nrc: '',
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            email: '',
+            roleId: '',
+            createdAt: '',
+            updatedAt: '',
+            profilePicture: '',
+            positionName: '',
+            companyName: '',
+            companyLogo: '',
+            companyAssignedEmail: '',
+            companyEmail: '',
+            companyPhone: '',
+            comapnyWebsite: '',
+            comapnyAddress: '',
+            telephone: '');
         throw Exception("Contact data is null");
       }
     } else {
+      contactDetails.value = ContactModel(
+          nrc: '',
+          firstName: '',
+          lastName: '',
+          phoneNumber: '',
+          email: '',
+          roleId: '',
+          createdAt: '',
+          updatedAt: '',
+          profilePicture: '',
+          positionName: '',
+          companyName: '',
+          companyLogo: '',
+          companyAssignedEmail: '',
+          companyEmail: '',
+          companyPhone: '',
+          comapnyWebsite: '',
+          comapnyAddress: '',
+          telephone: '');
       throw Exception(
           'Failed to fetch contact details: ${response.statusCode}');
     }
   }
 
   Future<void> getContacts() async {
-    String accessToken = box.read('token');
-    String contactSaver = nrcStorage.read('nrcNumber');
+    String? accessToken;
+    accessToken = box.read('token');
+    String? contactSaver;
+    contactSaver = nrcStorage.read('nrcNumber');
     isLoading.value = true;
     final response = await http.get(
       Uri.parse(baseUrl + getContactsDetails + "/$contactSaver"),
@@ -120,6 +197,8 @@ class ContactService extends GetxController {
       contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
       isLoading.value = false;
       update();
+    } else if (response.statusCode == 401) {
+      isLoading.value = false;
     } else if (response.statusCode == 404) {
       isLoading.value = false;
     } else {
@@ -156,7 +235,7 @@ class ContactService extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
-      saveContactToPhonebook();
+      await saveContactToPhonebook();
       Get.to(BottomMenuBarItems(
         selectedIndex: 1,
       ));
