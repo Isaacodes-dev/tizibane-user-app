@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -30,6 +31,7 @@ class _SettingsState extends State<Settings> {
         ],
         
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 

@@ -8,6 +8,7 @@ import 'package:tizibane/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tizibane/screens/EmployeementDetails.dart';
 import 'package:tizibane/screens/Groups/Groups.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -497,6 +498,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
+            floatingActionButton: ShareUrlLink(),
         );
       }
     );

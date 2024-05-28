@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 
 class UpdateUserCredentials extends StatefulWidget {
@@ -89,6 +90,7 @@ class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
           ],
         ),
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 }

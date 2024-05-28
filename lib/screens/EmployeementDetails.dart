@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tizibane/screens/ProfileScreen/EmployeeHistory.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/screens/ViewEmployeCurrentDetails.dart';
 
 class EmployeementDetails extends StatefulWidget {
@@ -70,6 +71,7 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
             EmployeeHistory()
           ],
         ),
+            floatingActionButton: ShareUrlLink(),
       ),
     );
   }

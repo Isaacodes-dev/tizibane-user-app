@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/EmploymentHistoryService.dart';
 import 'package:tizibane/models/EmploymentHistory.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/screens/ProfileScreen/EmployeeHistoryCard/EmployeeHistoryCard.dart';
 
 class EmployeeHistory extends StatefulWidget {
@@ -74,6 +75,7 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
                           ),
                       ),
                 ),
+      floatingActionButton: const ShareUrlLink(),
         );
       }
     );

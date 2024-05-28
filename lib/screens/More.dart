@@ -8,6 +8,7 @@ import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';
 import 'package:get/get.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/screens/UpdateUserCredentials.dart';
 
 class More extends StatefulWidget {
@@ -70,6 +71,7 @@ class _MoreState extends State<More> {
           Expanded(child: getListView())
         ],
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 

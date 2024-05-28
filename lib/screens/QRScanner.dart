@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:tizibane/Services/ContactService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
 
 class QRScanner extends StatefulWidget {
@@ -62,6 +63,7 @@ class _QRScannerState extends State<QRScanner> {
           )
         ],
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 
