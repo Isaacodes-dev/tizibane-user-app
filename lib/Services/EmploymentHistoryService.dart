@@ -30,7 +30,7 @@ class EmployeeHistoryService extends GetxController {
 
     isLoading.value = true;
     final response = await http.get(
-      Uri.parse(baseUrl + getEmploymentHistoryDetails + "/$employeeHistory"),
+      Uri.parse("$baseUrl$getEmploymentHistoryDetails/$employeeHistory"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
@@ -63,7 +63,7 @@ class EmployeeHistoryService extends GetxController {
     isLoading.value = true;
 
     final response = await http.get(
-      Uri.parse(baseUrl + getEmploymentHistoryDetails + "/$contactNrc"),
+      Uri.parse("$baseUrl$getEmploymentHistoryDetails/$contactNrc"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',

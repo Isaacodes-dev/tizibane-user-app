@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/EmploymentHistoryService.dart';
 import 'package:tizibane/models/EmploymentHistory.dart';
@@ -10,7 +9,7 @@ import 'package:tizibane/screens/ProfileScreen/EmployeeHistoryCard/EmployeeHisto
 class EmployeeHistory extends StatefulWidget {
   final int? employeeIndex; // Make the employeeIndex parameter optional
 
-  EmployeeHistory({Key? key, this.employeeIndex}) : super(key: key);
+  const EmployeeHistory({Key? key, this.employeeIndex}) : super(key: key);
 
   @override
   _EmployeeHistoryState createState() => _EmployeeHistoryState();
@@ -23,7 +22,7 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.employeeIndex != null) {
         scrollToCard(widget.employeeIndex!);
       }
@@ -38,17 +37,17 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
     return Obx((){
         return Scaffold(
           body: _employeeHistoryService.isLoading.value
-              ? Column(
+              ? const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Center(
+                    Center(
                       child: CircularProgressIndicator(),
                     ),
                   ],
                 )
-              : Container(
+              : SizedBox(
                   height: 350,
-                  child: _employeeHistoryService.employeeHistoryDetails.length > 0
+                  child: _employeeHistoryService.employeeHistoryDetails.isNotEmpty
                       ? ListView.builder(
                           controller: _scrollController,
                           scrollDirection: Axis.horizontal,
@@ -59,7 +58,7 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 400,
                                   child: EmployeeHistoryCard(startDate: employeeHistory.startDate, endDate: employeeHistory.endDate,positionName: employeeHistory.positionName, companyName: employeeHistory.companyName, companyEmail: employeeHistory.companyEmail, companyPhone: employeeHistory.companyPhone, companyAddress: employeeHistory.companyAddress,companyLogo: employeeHistory.companyLogo,),
                                 ),
@@ -69,7 +68,7 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
                         )
                       : Center(
                         child: Padding(
-                            padding: EdgeInsets.all(30),
+                            padding: const EdgeInsets.all(30),
                             child: Text('No Employee History to display',
                                 style: GoogleFonts.lexendDeca()),
                           ),
@@ -98,11 +97,11 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
 
   void scrollToCard(int index) {
     if (_scrollController.hasClients) {
-      final double cardWidth = 400; // Width of each card
+      const double cardWidth = 400; // Width of each card
       final double offset = index * cardWidth;
       _scrollController.animateTo(
         offset,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     }

@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           backgroundColor: Colors.black,
         ),
-        body: Center(
+        body: const Center(
           child: CircularProgressIndicator(),
         ),
       );
@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           backgroundColor: Colors.black,
         ),
-        body: Center(
+        body: const Center(
           child: Text('User data not available'),
         ),
       );
@@ -129,17 +129,15 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Column(
                           children: [
                             Text(
-                              _userService.userObj.value[0].first_name +
-                                  ' ' +
-                                  _userService.userObj.value[0].last_name,
+                              '${_userService.userObj.value[0].first_name} ${_userService.userObj.value[0].last_name}',
                               style: GoogleFonts.lexendDeca(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
                             ),
@@ -147,7 +145,7 @@ class _HomeState extends State<Home> {
                                     .userObj.value[0].company_name.isNotEmpty &&
                                 _userService
                                     .userObj.value[0].position_name.isNotEmpty)
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                             if (_userService
                                     .userObj.value[0].company_name.isNotEmpty &&
                                 _userService
@@ -187,7 +185,7 @@ class _HomeState extends State<Home> {
                                     .userObj.value[0].company_name.isNotEmpty &&
                                 _userService
                                     .userObj.value[0].position_name.isNotEmpty)
-                              SizedBox(height: 3),
+                              const SizedBox(height: 3),
                             if (_userService
                                     .userObj.value[0].company_name.isNotEmpty &&
                                 _userService
@@ -198,7 +196,7 @@ class _HomeState extends State<Home> {
                               ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
     
@@ -219,17 +217,17 @@ class _HomeState extends State<Home> {
                                 style: GoogleFonts.lexendDeca()),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         if (_userService.userObj.value[0].phone_number.isNotEmpty)
                           Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
                               border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
@@ -240,7 +238,7 @@ class _HomeState extends State<Home> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Phone', style: GoogleFonts.lexendDeca()),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 3,
                                     ),
                                     Text(_userService.userObj.value[0].phone_number,
@@ -253,11 +251,11 @@ class _HomeState extends State<Home> {
                                     width: MediaQuery.of(context).size.width * 0.07,
                                     height:
                                         MediaQuery.of(context).size.width * 0.07,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       CupertinoIcons.phone,
                                       color: Colors.white,
                                       size: 18,
@@ -268,7 +266,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         if (_userService.userObj.value[0].email.isNotEmpty)
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                         if (_userService.userObj.value[0].email.isNotEmpty)
@@ -276,9 +274,9 @@ class _HomeState extends State<Home> {
                             onTap: () {},
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                              padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(20),
                                 ),
                                 color: Colors.grey.shade100,
@@ -295,7 +293,7 @@ class _HomeState extends State<Home> {
                                     children: [
                                       Text('Email',
                                           style: GoogleFonts.lexendDeca()),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 3,
                                       ),
                                       Text(_userService.userObj.value[0].email,
@@ -309,10 +307,10 @@ class _HomeState extends State<Home> {
                                           MediaQuery.of(context).size.width * 0.07,
                                       height:
                                           MediaQuery.of(context).size.width * 0.07,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.black),
-                                      child: Icon(
+                                      child: const Icon(
                                         CupertinoIcons.mail,
                                         color: Colors.white,
                                         size: 16,
@@ -324,7 +322,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         if (_userService.userObj.value[0].nrc.isNotEmpty)
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                         if (_userService.userObj.value[0].nrc.isNotEmpty)
@@ -332,9 +330,9 @@ class _HomeState extends State<Home> {
                             onTap: () {},
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                              padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(20),
                                 ),
                                 color: Colors.grey.shade100,
@@ -350,7 +348,7 @@ class _HomeState extends State<Home> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text('Nrc', style: GoogleFonts.lexendDeca()),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 3,
                                       ),
                                       Text(
@@ -366,11 +364,11 @@ class _HomeState extends State<Home> {
                                           MediaQuery.of(context).size.width * 0.07,
                                       height:
                                           MediaQuery.of(context).size.width * 0.07,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.black,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.credit_card,
                                         color: Colors.white,
                                         size: 16,
@@ -381,7 +379,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Divider(
@@ -392,7 +390,7 @@ class _HomeState extends State<Home> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(Groups());
+                            Get.to(const Groups());
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -405,7 +403,7 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         Divider(
@@ -424,7 +422,7 @@ class _HomeState extends State<Home> {
                             Text('Social', style: GoogleFonts.lexendDeca()),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         // Row(
@@ -485,7 +483,7 @@ class _HomeState extends State<Home> {
                         //     ),
                         //   ],
                         // ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Divider(
@@ -498,18 +496,14 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-            floatingActionButton: ShareUrlLink(),
+            floatingActionButton: const ShareUrlLink(),
         );
       }
     );
   }
 
   String formatNrc(String userNrc) {
-    String formattedNrc = userNrc.substring(0, 6) +
-        '/' +
-        userNrc.substring(6, 8) +
-        '/' +
-        userNrc.substring(8);
+    String formattedNrc = '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
 
     return formattedNrc;
   }

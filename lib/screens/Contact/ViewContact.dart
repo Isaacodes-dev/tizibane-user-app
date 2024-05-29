@@ -21,7 +21,7 @@ class ViewContact extends StatefulWidget {
   final String comapnyAddress;
   final String companyAssignedEmail;
 
-  ViewContact(
+  const ViewContact(
       {super.key,
       required this.contactNrc,
       required this.firstName,
@@ -59,7 +59,7 @@ class _ViewContactState extends State<ViewContact> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.05,
                     ),
-                    Container(
+                    SizedBox(
                       width: 140,
                       child: ClipOval(
                         child: Material(
@@ -74,19 +74,19 @@ class _ViewContactState extends State<ViewContact> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
-                      widget.firstName + ' ' + widget.lastName,
+                      '${widget.firstName} ${widget.lastName}',
                       style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
                     if (widget.positionName.isNotEmpty &&
                         widget.companyName.isNotEmpty)
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                     if (widget.positionName.isNotEmpty &&
@@ -113,16 +113,16 @@ class _ViewContactState extends State<ViewContact> {
                       ),
                     if (widget.positionName.isNotEmpty &&
                         widget.companyName.isNotEmpty)
-                      SizedBox(
+                      const SizedBox(
                         height: 3,
                       ),
                     if (widget.positionName.isNotEmpty &&
                         widget.companyName.isNotEmpty)
                       Text(widget.companyName, style: GoogleFonts.lexendDeca()),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Divider(
@@ -142,16 +142,16 @@ class _ViewContactState extends State<ViewContact> {
                             style: GoogleFonts.lexendDeca()),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade100,
                         border: Border.all(color: Colors.grey.shade200),
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(20),
                         ),
                       ),
@@ -162,7 +162,7 @@ class _ViewContactState extends State<ViewContact> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Phone', style: GoogleFonts.lexendDeca()),
-                              SizedBox(
+                              const SizedBox(
                                 height: 3,
                               ),
                               Text(widget.phoneNumber,
@@ -174,7 +174,7 @@ class _ViewContactState extends State<ViewContact> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.07,
                               height: MediaQuery.of(context).size.width * 0.07,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.black,
                               ),
@@ -182,7 +182,7 @@ class _ViewContactState extends State<ViewContact> {
                                 onTap: () {
                                   _openDialPad(widget.phoneNumber);
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   CupertinoIcons.phone,
                                   color: Colors.white,
                                   size: 18,
@@ -193,14 +193,14 @@ class _ViewContactState extends State<ViewContact> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(20),
                         ),
                         color: Colors.grey.shade100,
@@ -216,7 +216,7 @@ class _ViewContactState extends State<ViewContact> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Email', style: GoogleFonts.lexendDeca()),
-                              SizedBox(
+                              const SizedBox(
                                 height: 3,
                               ),
                               Text(widget.email,
@@ -228,13 +228,13 @@ class _ViewContactState extends State<ViewContact> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.07,
                               height: MediaQuery.of(context).size.width * 0.07,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.circle, color: Colors.black),
                               child: GestureDetector(
                                 onTap: () {
                                   _openDefaultEmailClient(widget.email);
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   CupertinoIcons.mail,
                                   color: Colors.white,
                                   size: 16,
@@ -245,7 +245,7 @@ class _ViewContactState extends State<ViewContact> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Divider(
@@ -264,7 +264,7 @@ class _ViewContactState extends State<ViewContact> {
                         Text('Groups', style: GoogleFonts.lexendDeca()),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Divider(
@@ -344,7 +344,7 @@ class _ViewContactState extends State<ViewContact> {
                     //     ),
                     //   ],
                     // ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Divider(
@@ -361,11 +361,7 @@ class _ViewContactState extends State<ViewContact> {
   }
 
   String formatNrc(String userNrc) {
-    String formattedNrc = userNrc.substring(0, 6) +
-        '/' +
-        userNrc.substring(6, 8) +
-        '/' +
-        userNrc.substring(8);
+    String formattedNrc = '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
 
     return formattedNrc;
   }

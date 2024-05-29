@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/constants/constants.dart';
 
 class EmployeeHistoryCard extends StatefulWidget {
@@ -33,11 +31,11 @@ class EmployeeHistoryCard extends StatefulWidget {
 class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 480,
       child: Card(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Container(
             child: Column(
               children: [
@@ -59,7 +57,7 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -78,7 +76,7 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -97,7 +95,7 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -113,7 +111,7 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -129,7 +127,7 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -145,7 +143,7 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -161,7 +159,7 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
               ],

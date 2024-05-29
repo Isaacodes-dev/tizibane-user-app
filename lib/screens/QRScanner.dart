@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:tizibane/Services/ContactService.dart';
-import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/components/share/ShareUrlLink.dart';
-import 'package:tizibane/screens/Contact/NewContact.dart';
 
 class QRScanner extends StatefulWidget {
   const QRScanner({super.key});
@@ -58,7 +53,7 @@ class _QRScannerState extends State<QRScanner> {
           Expanded(
             flex: 1,
             child: Center(
-              child: (result != null) ? Text('') : Text('Scan a code'),
+              child: (result != null) ? const Text('') : const Text('Scan a code'),
             ),
           )
         ],
@@ -83,7 +78,7 @@ class _QRScannerState extends State<QRScanner> {
         controller.stopCamera();
         controller.dispose();
       } else {
-        Get.offAll(BottomMenuBarItems(selectedIndex: 1));
+        Get.offAll(const BottomMenuBarItems(selectedIndex: 1));
         reset();
       }
     });

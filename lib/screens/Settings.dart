@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tizibane/components/share/ShareUrlLink.dart';
-import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 class Settings extends StatefulWidget {
   const Settings({super.key});
 
@@ -14,7 +13,7 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
@@ -23,9 +22,9 @@ class _SettingsState extends State<Settings> {
           },
         ),
         backgroundColor: Colors.black,
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
-      body: Column(
+      body: const Column(
         children: [
           Text('Page Coming Soon'),
         ],

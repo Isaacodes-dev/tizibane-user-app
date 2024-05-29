@@ -1,5 +1,3 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 class User{
   final String nrc;
   final String first_name;

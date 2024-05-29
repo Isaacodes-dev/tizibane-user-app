@@ -76,12 +76,12 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                           child: Column(
                             children: [
                               Text(
-                                widget.first_name + ' ' + widget.last_name,
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                '${widget.first_name} ${widget.last_name}',
+                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 3),
+                              const SizedBox(height: 3),
                               Text(widget.position_name, style: GoogleFonts.lexendDeca()),
-                              SizedBox(height: 3),
+                              const SizedBox(height: 3),
                               Text(widget.company_name, style: GoogleFonts.lexendDeca()),
                               
                             ],
@@ -115,20 +115,20 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                               ),
                               Text(
                                 'Corporate Details',
-                                style: GoogleFonts.lexendDeca(textStyle: TextStyle(fontWeight: FontWeight.bold)),
+                                style: GoogleFonts.lexendDeca(textStyle: const TextStyle(fontWeight: FontWeight.bold)),
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
                               border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
@@ -139,7 +139,7 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Telephone', style: GoogleFonts.lexendDeca()),
-                                    SizedBox(height: 3),
+                                    const SizedBox(height: 3),
                                     Text(widget.telephone, style: GoogleFonts.lexendDeca())
                                   ],
                                 ),
@@ -148,11 +148,11 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.07,
                                     height: MediaQuery.of(context).size.width * 0.07,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       CupertinoIcons.phone,
                                       color: Colors.white,
                                       size: 18,
@@ -162,14 +162,14 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
                               border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
@@ -180,7 +180,7 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Cell', style: GoogleFonts.lexendDeca()),
-                                    SizedBox(height: 3),
+                                    const SizedBox(height: 3),
                                     Text(widget.cell, style: GoogleFonts.lexendDeca())
                                   ],
                                 ),
@@ -189,11 +189,11 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.07,
                                     height: MediaQuery.of(context).size.width * 0.07,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       CupertinoIcons.phone,
                                       color: Colors.white,
                                       size: 18,
@@ -203,14 +203,14 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
                               border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
@@ -221,7 +221,7 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Corprate Email', style: GoogleFonts.lexendDeca()),
-                                    SizedBox(height: 3),
+                                    const SizedBox(height: 3),
                                     Text(widget.email, style: GoogleFonts.lexendDeca())
                                   ],
                                 ),
@@ -230,11 +230,11 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.07,
                                     height: MediaQuery.of(context).size.width * 0.07,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       CupertinoIcons.mail,
                                       color: Colors.white,
                                       size: 18,
@@ -244,14 +244,14 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
                               border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
@@ -262,7 +262,7 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Address', style: GoogleFonts.lexendDeca()),
-                                    SizedBox(height: 3),
+                                    const SizedBox(height: 3),
                                     Text(widget.company_address, style: GoogleFonts.lexendDeca())
                                   ],
                                 ),
@@ -271,11 +271,11 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.07,
                                     height: MediaQuery.of(context).size.width * 0.07,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       CupertinoIcons.home,
                                       color: Colors.white,
                                       size: 18,
@@ -285,14 +285,14 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                                                     Container(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
                               border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
@@ -303,7 +303,7 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Company Website', style: GoogleFonts.lexendDeca()),
-                                    SizedBox(height: 3),
+                                    const SizedBox(height: 3),
                                     Text(widget.comapny_website, style: GoogleFonts.lexendDeca())
                                   ],
                                 ),
@@ -312,11 +312,11 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.07,
                                     height: MediaQuery.of(context).size.width * 0.07,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       CupertinoIcons.globe,
                                       color: Colors.white,
                                       size: 18,
@@ -326,7 +326,7 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                         ],
                       ),
                     ),

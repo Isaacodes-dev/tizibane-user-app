@@ -1,23 +1,20 @@
-import 'package:contacts_service/contacts_service.dart';
-import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tizibane/Services/Connectivity.dart';
-import 'package:tizibane/Services/ContactService.dart';
-import 'package:tizibane/Services/EmploymentHistoryService.dart';
-import 'package:tizibane/Services/ProfileService.dart';
-import 'package:tizibane/Services/UserService.dart';
-import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
-import 'package:tizibane/models/Contact.dart';
-import 'package:tizibane/models/EmploymentHistory.dart';
-import 'package:tizibane/models/LoginUser.dart';
-import 'package:tizibane/constants/constants.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:tizibane/Services/ContactService.dart';
+import 'package:tizibane/Services/EmploymentHistoryService.dart';
+import 'package:tizibane/Services/UserService.dart';
+import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
+import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/models/Contact.dart';
+import 'package:tizibane/models/EmploymentHistory.dart';
 import 'package:tizibane/models/User.dart';
 import 'package:tizibane/screens/Login.dart';
-import 'package:tizibane/screens/ProfileScreen/EmployeeHistory.dart';
 
 class AuthService extends GetxController {
   final UserService _userService = Get.put(UserService());
@@ -35,17 +32,13 @@ class AuthService extends GetxController {
 
   final nrcStorage = GetStorage();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   Future<void> loginUser({
     required String nrc,
     required String password,
   }) async {
     try {
-      final url = baseUrl + login;
+      const url = baseUrl + login;
       isLoading.value = true;
 
       final data = {
@@ -66,7 +59,7 @@ class AuthService extends GetxController {
         nrcStorage.write('nrcNumber', nrc);
         SharedPreferences preferences = await SharedPreferences.getInstance();
         preferences.setString('tokenValue', token.value);
-        Get.offAll(() => BottomMenuBarItems(
+        Get.offAll(() => const BottomMenuBarItems(
               selectedIndex: 0,
             ));
       } else {
@@ -97,7 +90,7 @@ class AuthService extends GetxController {
 
   Future<void> logOut() async {
     try {
-      final url = baseUrl + logout;
+      const url = baseUrl + logout;
 
       isLoading.value = true;
 
@@ -112,7 +105,7 @@ class AuthService extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 500));
 
         isLoading.value = false;
 
@@ -143,7 +136,7 @@ class AuthService extends GetxController {
           colorText: Colors.white,
         );
 
-        Get.offAll(Login());
+        Get.offAll(const Login());
       } else {
         Get.snackbar(
           'Error',
