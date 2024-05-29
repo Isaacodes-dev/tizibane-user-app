@@ -14,9 +14,11 @@ class JobCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SizedBox(
       height: 260,
-      width: 500,
+      width: width,
       child: Card(
         shape: RoundedRectangleBorder(
           side: BorderSide.merge(
@@ -54,28 +56,31 @@ class JobCard extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          position,
-                          style: GoogleFonts.lexendDeca(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                  Expanded(
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            
+                        children: [
+                          Text(
+                            position,
+                            style: GoogleFonts.lexendDeca(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          company,
-                          style: GoogleFonts.lexendDeca(
-                            fontSize: 12,
+                          SizedBox(
+                            height: 5,
                           ),
-                        ),
-                      ],
+                          Text(
+                            company,
+                            style: GoogleFonts.lexendDeca(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

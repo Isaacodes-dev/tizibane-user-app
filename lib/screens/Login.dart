@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +28,7 @@ class _LoginState extends State<Login> {
   bool _rememberMe = false;
 
   @override
-  void initState(){
+  void initState() {
     // TODO: implement initState
     super.initState();
     loadRememberMe();
@@ -171,6 +169,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 20),
                     Row(
                       children: [
                         Checkbox(
@@ -182,13 +181,7 @@ class _LoginState extends State<Login> {
                         Text('Remember Me', style: GoogleFonts.lexendDeca())
                       ],
                     ),
-                  ],
-                ),
-              ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                    SizedBox(height: 20),
                     Obx(() {
                       return _authService.isLoading.value
                           ? CircularProgressIndicator()
@@ -197,16 +190,18 @@ class _LoginState extends State<Login> {
                               onTap: () async {
                                 await _authService.loginUser(
                                   nrc: nrcController.text.trim(),
-                                  password: passwordController.text.trim(),
+                                  password:
+                                      passwordController.text.trim(),
                                 );
                                 saveRememberMe();
                               },
                             );
                     }),
+                    SizedBox(height: 25),
                   ],
                 ),
               ),
-              SizedBox(height: 25),
+
               // Center(
               //   child: Row(
               //     mainAxisAlignment: MainAxisAlignment.center,

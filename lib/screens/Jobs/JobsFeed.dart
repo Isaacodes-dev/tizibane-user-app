@@ -31,7 +31,7 @@ class _JobsFeedState extends State<JobsFeed> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
               children: [
                 Row(
@@ -117,7 +117,7 @@ class _JobsFeedState extends State<JobsFeed> {
                       onTap: (){
                         Get.to(JobDetails());
                       },
-                      child: JobCard(position: 'Senior Software Developer',company: 'Tizibane Solutions',address: 'Kafubu House, Luanshya',salary: 'K40000',jobType: 'Hybrid',jobTime: 'Fulltime',experience: '2 Year Exp',)),
+                      child: JobCard(position: 'Senior React Software Developer',company: 'Tizibane Solutions',address: 'Kafubu House, Luanshya',salary: 'K40000',jobType: 'Hybrid',jobTime: 'Fulltime',experience: '2 Year Exp',)),
                     JobCard(position: 'Backend Software Developer',company: 'Tizibane Solutions',address: 'Kafubu House, Luanshya',salary: 'K20000',jobType: 'Remote',jobTime: 'Fulltime',experience: '2 Year Exp',),
                     JobCard(position: 'Frontend Software Developer',company: 'Tizibane Solutions',address: 'Kafubu House, Luanshya',salary: 'K20000',jobType: 'Remote',jobTime: 'Fulltime',experience: '2 Year Exp',),
                     
