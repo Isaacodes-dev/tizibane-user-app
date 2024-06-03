@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -156,13 +155,7 @@ class _LoginState extends State<Login> {
                     //     Text('Remember Me', style: GoogleFonts.lexendDeca())
                     //   ],
                     // ),
-                  ],
-                ),
-              ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                    SizedBox(height: 20),
                     Obx(() {
                       return _authService.isLoading.value
                           ? CircularProgressIndicator()
@@ -179,6 +172,7 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
+              
               SizedBox(height: 25),
               // Center(
               //   child: Row(
