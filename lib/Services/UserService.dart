@@ -8,11 +8,7 @@ import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/User.dart';
 
 class UserService extends GetxController {
-  @override
-  void initState() {
-    getUser();
-  }
-  final isLoading = false.obs;
+    final isLoading = false.obs;
   final isLoaded = false.obs;
   var userObj =
       <User>[].obs;
@@ -41,11 +37,13 @@ class UserService extends GetxController {
         isLoaded.value = true;
       } else {
         isLoading.value = false;
+        userObj.value = [];
         throw Exception("User data is null");
         
       }
     } else {
       isLoading.value = false;
+      userObj.value = [];
       throw Exception('Failed to load user data: ${response.statusCode}');
       
     }

@@ -15,7 +15,6 @@ class EmployeeHistoryService extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getEmploymentHistory();
   }
 
   final employeeHistoryDetails = <EmploymentHistory>[].obs;
@@ -23,9 +22,11 @@ class EmployeeHistoryService extends GetxController {
   final contactEmployeeHistoryDetails = <EmploymentHistory>[].obs;
 
   Future<void> getEmploymentHistory() async {
-    String accessToken = box.read('token');
+    String? accessToken;
+    accessToken = box.read('token');
 
-    String employeeHistory = nrcStorage.read('nrcNumber');
+    String? employeeHistory;
+    employeeHistory = nrcStorage.read('nrcNumber');
 
     isLoading.value = true;
     final response = await http.get(

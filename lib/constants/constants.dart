@@ -31,3 +31,11 @@ const String getEmploymentHistoryDetails = 'getemploymenthistory';
 const String getRecentAddedContacts = 'getrecentcontacts';
 
 const String saveContacDetails = 'savecontact';
+
+const String getJobs = 'getJobs';
+
+const String getJobDetails = 'getJobDetails/';
+
+const String postApply = 'postApply';
+
+const String postCv = 'postCV';

@@ -77,10 +77,9 @@ class _QRScannerState extends State<QRScanner> {
           userNrc = result!.code.toString();
           loadUser(userNrc);
           isUserLoaded = true;
-          controller.stopCamera();
         });
+        controller.stopCamera();
         controller.dispose();
-        reset();
       } else {
         Get.offAll(BottomMenuBarItems(selectedIndex: 1));
         reset();
