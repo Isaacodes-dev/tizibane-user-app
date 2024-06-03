@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/Services/Connectivity.dart';
+import 'package:tizibane/screens/Jobs/uploadCv.dart';
 import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';
@@ -24,7 +25,6 @@ final nrcStorage = GetStorage();
 late String nrcNumber;
 
 class _MoreState extends State<More> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -93,6 +93,11 @@ class _MoreState extends State<More> {
           leading: Icon(Icons.lock, color: Colors.black),
           title: Text('Change Password', style: GoogleFonts.lexendDeca()),
           onTap: () => {Get.to(UpdateUserCredentials())},
+        ),
+        ListTile(
+          leading: Icon(Icons.upload_file_rounded, color: Colors.black),
+          title: Text('Upload Cv', style: GoogleFonts.lexendDeca()),
+          onTap: () => {Get.to(UploadCv())},
         ),
         Obx(() {
           return _authService.isLoading.value
