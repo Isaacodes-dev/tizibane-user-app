@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/Services/ProfileService.dart';
+import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Jobs/JobDetails.dart';
 import 'package:tizibane/screens/Jobs/JobWidget/JobCard.dart';
@@ -13,6 +16,19 @@ class JobsFeed extends StatefulWidget {
 }
 
 class _JobsFeedState extends State<JobsFeed> {
+  final JobsService _jobsService = Get.put(JobsService());
+  final UserService _userService = Get.put(UserService());
+  final ProfileService _profileService = Get.put(ProfileService());
+
+  @override
+  void initState() {
+    super.initState();
+       WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _jobsService.getJobsFeed();
+      _jobsService.foundJobs.value = _jobsService.jobsFeedList;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,30 +55,31 @@ class _JobsFeedState extends State<JobsFeed> {
                     CircleAvatar(
                       radius: 32,
                       backgroundColor: Colors.white,
-                      child: CircleAvatar(
+                      child: Obx(() => CircleAvatar(
                         radius: 29,
-                        backgroundImage:
-                            Image.asset('assets/images/user (5).jpg').image,
-                      ),
+                        backgroundImage: Image.network(imageBaseUrl + _profileService.imagePath.value).image,
+                      )),
                     ),
                     SizedBox(
                       width: 20,
                     ),
-                    Text(
-                      'Hi, John Doe',
+                    Obx(() => Text(
+                      'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].first_name + _userService.userObj.value[0].last_name : ''}',
                       style: GoogleFonts.lexendDeca(
                         textStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             color: Colors.white),
                       ),
-                    )
+                    )),
                   ],
                 ),
                 SizedBox(
                   height: 25,
                 ),
                 TextField(
+                  onChanged: (value) => _jobsService.filterJobs(value),
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Search',
                     labelStyle: GoogleFonts.lexendDeca(
@@ -100,6 +117,7 @@ class _JobsFeedState extends State<JobsFeed> {
               ),
               child: SingleChildScrollView(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
                       height: 20,
@@ -113,14 +131,36 @@ class _JobsFeedState extends State<JobsFeed> {
                     SizedBox(
                       height: 20,
                     ),
-                    GestureDetector(
-                      onTap: (){
-                        Get.to(JobDetails());
+                    Obx(
+                      () {
+                        if (_jobsService.isLoading.value) {
+                          return Center(child: CircularProgressIndicator());
+                        } else {
+                          return _jobsService.foundJobs.value.isEmpty ? Text("No Jobs To Display") : ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _jobsService.foundJobs.value.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.to(JobDetails(
+                                    id: _jobsService.foundJobs.value[index].id!.toString(),
+                                  ));
+                                },
+                                child: JobCard(
+                                  position: _jobsService.foundJobs.value[index].position!,
+                                  company: _jobsService.foundJobs.value[index].companyName!,
+                                  address: _jobsService.foundJobs.value[index].companyAddress!,
+                                  closing: _jobsService.foundJobs.value[index].closed!,
+                                  companyLogo: _jobsService.foundJobs.value[index].companyLogoUrl!,
+                                ),
+                              );
+                            },
+                          );
+                        }
                       },
-                      child: JobCard(position: 'Senior React Software Developer',company: 'Tizibane Solutions',address: 'Kafubu House, Luanshya',salary: 'K40000',jobType: 'Hybrid',jobTime: 'Fulltime',experience: '2 Year Exp',)),
-                    JobCard(position: 'Backend Software Developer',company: 'Tizibane Solutions',address: 'Kafubu House, Luanshya',salary: 'K20000',jobType: 'Remote',jobTime: 'Fulltime',experience: '2 Year Exp',),
-                    JobCard(position: 'Frontend Software Developer',company: 'Tizibane Solutions',address: 'Kafubu House, Luanshya',salary: 'K20000',jobType: 'Remote',jobTime: 'Fulltime',experience: '2 Year Exp',),
-                    
+                    ),
+                    SizedBox(height: 5,)
                   ],
                 ),
               ),
@@ -131,4 +171,3 @@ class _JobsFeedState extends State<JobsFeed> {
     );
   }
 }
-

@@ -1,8 +1,8 @@
-const String baseUrl = 'https://tizibane.com/api/';
+const String baseUrl = 'http://192.168.0.109:8000/api/';
 
-const String imageBaseUrl = 'https://tizibane.com/storage/test/';
+const String imageBaseUrl = 'http://192.168.0.109:8000/storage/test/';
 
-const String companyLogoUrl = 'https://tizibane.com/storage/logos/';
+const String companyLogoUrl = 'http://192.168.0.109:8000/storage/logos/';
 
 const String register = 'registeruser';
 
@@ -31,3 +31,11 @@ const String getEmploymentHistoryDetails = 'getemploymenthistory';
 const String getRecentAddedContacts = 'getrecentcontacts';
 
 const String saveContacDetails = 'savecontact';
+
+const String getJobs = 'getJobs';
+
+const String getJobDetails = 'getJobDetails/';
+
+const String postApply = 'postApply';
+
+const String postCv = 'postCV';

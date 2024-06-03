@@ -169,7 +169,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 5),
                     Row(
                       children: [
                         Checkbox(
@@ -181,7 +181,7 @@ class _LoginState extends State<Login> {
                         Text('Remember Me', style: GoogleFonts.lexendDeca())
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 5),
                     Obx(() {
                       return _authService.isLoading.value
                           ? CircularProgressIndicator()

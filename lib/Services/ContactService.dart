@@ -279,10 +279,22 @@ class ContactService extends GetxController {
 
         await ContactsService.addContact(contact);
       } catch (e) {
-        print('Failed to save contact: $e');
+        Get.snackbar(
+        'Error',
+        'Failed to save contact: $e',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
       }
     } else {
-      print('Permission to access contacts is denied');
+      Get.snackbar(
+        'Error',
+        'Permission to access contacts is denied',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 

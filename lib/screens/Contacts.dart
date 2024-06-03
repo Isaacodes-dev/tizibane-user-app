@@ -63,9 +63,9 @@ class _ContactsState extends State<Contacts> {
         String resultSubString = resultString.substring(3);
 
         if (resultSubString.isNotEmpty) {
-          NfcManager.instance.stopSession();
 
           loadUser(resultSubString);
+          NfcManager.instance.stopSession();
         } else {
           print("error");
         }
