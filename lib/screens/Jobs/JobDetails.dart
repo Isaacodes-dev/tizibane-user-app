@@ -136,7 +136,7 @@ class _JobDetailsState extends State<JobDetails> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 10),
+                             SizedBox(height: 10,),
                               Text(
                                 job.description!,
                                 style: GoogleFonts.lexendDeca(
