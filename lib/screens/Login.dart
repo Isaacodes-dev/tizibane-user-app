@@ -31,7 +31,7 @@ class _LoginState extends State<Login> {
   bool _rememberMe = false;
 
   @override
-  void initState(){
+  void initState() {
     // TODO: implement initState
     super.initState();
     loadRememberMe();
