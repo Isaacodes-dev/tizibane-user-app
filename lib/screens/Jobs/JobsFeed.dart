@@ -64,7 +64,7 @@ class _JobsFeedState extends State<JobsFeed> {
                       width: 20,
                     ),
                     Obx(() => Text(
-                      'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].first_name + _userService.userObj.value[0].last_name : ''}',
+                      'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].first_name + '' + _userService.userObj.value[0].last_name : ''}',
                       style: GoogleFonts.lexendDeca(
                         textStyle: TextStyle(
                             fontWeight: FontWeight.bold,
