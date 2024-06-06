@@ -4,7 +4,7 @@ import 'package:tizibane/screens/Contact/ViewCurrentEmployeeDetails.dart';
 
 class ContactEmploymentDetails extends StatefulWidget {
   final String nrc;
-  final String profile_path;
+  final String profilePath;
   final String firstName;
   final String lastName;
   final String phoneNumber;
@@ -14,9 +14,9 @@ class ContactEmploymentDetails extends StatefulWidget {
   final String companyLogo;
   final String telephone;
   final String companyAssignedEmail;
-  final String comapnyAddress;
-  final String comapnyWebsite;
-  const ContactEmploymentDetails({super.key,    required this.profile_path,
+  final String companyAddress;
+  final String companyWebsite;
+  const ContactEmploymentDetails({super.key,    required this.profilePath,
     required this.nrc,
     required this.firstName,
     required this.lastName,
@@ -26,9 +26,9 @@ class ContactEmploymentDetails extends StatefulWidget {
     required this.positionName,
     required this.companyLogo,
     required this.telephone,
-    required this.comapnyWebsite,
+    required this.companyWebsite,
     required this.companyAssignedEmail,
-    required this.comapnyAddress});
+    required this.companyAddress});
 
   @override
   State<ContactEmploymentDetails> createState() =>
@@ -62,13 +62,13 @@ class _ContactEmploymentDetailsState extends State<ContactEmploymentDetails> {
               phoneNumber: widget.phoneNumber,
               telephone: widget.telephone,
               positionName: widget.positionName,
-              comapnyAddress: widget.comapnyAddress,
+              companyAddress: widget.companyAddress,
               email: widget.email,
               companyLogo: widget.companyLogo,
               companyName: widget.companyName,
-              companyWebsite: widget.comapnyWebsite,
+              companyWebsite: widget.companyWebsite,
               companyAssignedEmail: widget.companyAssignedEmail,
-              profile_path: widget.profile_path,
+              profilePath: widget.profilePath,
             ),
             ContactEmployeeHistory(contactNrc: widget.nrc)
           ],

@@ -18,7 +18,7 @@ class ViewContact extends StatefulWidget {
   final String CompanyLogo;
   final String companyWebsite;
   final String telephone;
-  final String comapnyAddress;
+  final String companyAddress;
   final String companyAssignedEmail;
 
   const ViewContact(
@@ -34,7 +34,7 @@ class ViewContact extends StatefulWidget {
       required this.CompanyLogo,
       required this.companyWebsite,
       required this.telephone,
-      required this.comapnyAddress,
+      required this.companyAddress,
       required this.companyAssignedEmail});
 
   @override
@@ -94,7 +94,7 @@ class _ViewContactState extends State<ViewContact> {
                       GestureDetector(
                         onTap: () {
                           Get.to(ViewCurrentEmployeeDetails(
-                            profile_path: widget.profilePicture,
+                            profilePath: widget.profilePicture,
                             firstName: widget.firstName,
                             lastName: widget.lastName,
                             phoneNumber: widget.phoneNumber,
@@ -103,7 +103,7 @@ class _ViewContactState extends State<ViewContact> {
                             companyLogo: widget.CompanyLogo,
                             telephone: widget.telephone,
                             email: widget.email,
-                            comapnyAddress: widget.comapnyAddress,
+                            companyAddress: widget.companyAddress,
                             companyWebsite: widget.companyWebsite,
                             companyAssignedEmail: widget.companyAssignedEmail,
                           ));

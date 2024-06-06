@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class SubmitButton extends StatelessWidget {
+class SaveButton extends StatelessWidget {
   final void Function()? onTap;
   final String text;
-  const SubmitButton({super.key,   
+  const SaveButton({super.key,   
   this.onTap,
   required this.text});
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-        width: width,
+        width: 343,
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(20),

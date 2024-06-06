@@ -99,7 +99,7 @@ class _MainViewContactState extends State<MainViewContact> {
                         onTap: () {
                           Get.to(ContactEmploymentDetails(
                             nrc: widget.contactNrc,
-                            profile_path: widget.profilePicture,
+                            profilePath: widget.profilePicture,
                             firstName: widget.firstName,
                             lastName: widget.lastName,
                             email: widget.email,
@@ -108,8 +108,8 @@ class _MainViewContactState extends State<MainViewContact> {
                             positionName: widget.positionName,
                             companyLogo: widget.companyLogo,
                             telephone: widget.telephone,
-                            comapnyAddress: widget.companyAddress,
-                            comapnyWebsite: widget.comapnyWebsite,
+                            companyAddress: widget.companyAddress,
+                            companyWebsite: widget.comapnyWebsite,
                             companyAssignedEmail: widget.companyAssignedEmail,
                             
                           ));

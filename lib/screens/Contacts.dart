@@ -59,9 +59,9 @@ class _ContactsState extends State<Contacts> {
         String resultSubString = resultString.substring(3);
 
         if (resultSubString.isNotEmpty) {
-          NfcManager.instance.stopSession();
 
           loadUser(resultSubString);
+          NfcManager.instance.stopSession();
         } else {
           print("error");
         }
@@ -185,9 +185,9 @@ class _ContactsState extends State<Contacts> {
                                                   nrc: contact.nrc,
                                                   phoneNumber:
                                                       contact.phoneNumber,
-                                                  comapnyAddress:
+                                                  companyAddress:
                                                       contact.comapnyAddress,
-                                                  comapnyWebsite:
+                                                  companyWebsite:
                                                       contact.comapnyWebsite,
                                                   companyAssignedEmail: contact
                                                       .companyEmail,
@@ -201,7 +201,7 @@ class _ContactsState extends State<Contacts> {
                                                   lastName: contact.lastName,
                                                   positionName:
                                                       contact.positionName,
-                                                  profile_path:
+                                                  profilePath:
                                                       contact.profilePicture,
                                                 )),
                                       );

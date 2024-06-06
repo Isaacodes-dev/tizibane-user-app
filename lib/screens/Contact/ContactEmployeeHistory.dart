@@ -37,6 +37,8 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
 
   @override
   Widget build(BuildContext context) {
+      double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Obx(() {
       return Scaffold(
         body: _employeeHistoryService.isLoading.value
@@ -64,8 +66,13 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+<<<<<<< HEAD
                               SizedBox(
                                 width: 400,
+=======
+                              Container(
+                                width: width,
+>>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
                                 child: ContactEmployeeCard(
                                     startDate: employeeHistory.startDate,
                                     endDate: employeeHistory.endDate,

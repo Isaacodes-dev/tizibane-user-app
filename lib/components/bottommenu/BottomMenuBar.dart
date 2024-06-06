@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tizibane/screens/Contacts.dart';
 import 'package:tizibane/screens/Home.dart';
+import 'package:tizibane/screens/Jobs/JobsFeed.dart';
 import 'package:tizibane/screens/More.dart';
 
 class BottomMenuBarItems extends StatefulWidget {
@@ -30,7 +31,7 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
           setState(() {
             currentIndex = 0;
           });
-          return false; 
+          return false;
         } else {
           return true;
         }
@@ -49,7 +50,9 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
               children: [
                 buildMaterialButton(0, Icons.home_filled, "Home"),
                 buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
-                buildMaterialButton(2, Icons.more_horiz_outlined, "More"),],
+                buildMaterialButton(2, Icons.work, "Jobs"),
+                buildMaterialButton(3, Icons.more_horiz_outlined, "More"),
+              ],
             ),
           ),
         ),
@@ -64,9 +67,11 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
       case 1:
         return const Contacts();
       case 2:
+        return const JobsFeed();
+      case 3:
         return const More();
       default:
-        return const Home(); 
+        return const Home();
     }
   }
 
