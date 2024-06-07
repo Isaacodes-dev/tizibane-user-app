@@ -1,4 +1,5 @@
 class Company{
+  int? companyId;
   String? companyName;
   String? companyPhone;
   String? companyEmail;
@@ -7,7 +8,7 @@ class Company{
   String? companyLogoUrl;
 
   Company(
-      {
+      {this.companyId,
       this.companyName,
       this.companyPhone,
       this.companyEmail,
@@ -19,6 +20,7 @@ class Company{
 
 factory Company.fromJson (Map<String, dynamic> json){
   return Company(
+    companyId: json['company_id'] ?? 0,
     companyName: json['company_name'] ?? '',
     companyPhone: json['company_phone'] ?? '',
     companyEmail: json['company_email'] ?? '',
