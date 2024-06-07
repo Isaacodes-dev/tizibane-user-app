@@ -1,15 +1,16 @@
 import 'dart:convert';
+
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
-import 'package:tizibane/screens/Contacts.dart';
 
 class ContactService extends GetxController {
   final isLoading = false.obs;
@@ -53,7 +54,7 @@ class ContactService extends GetxController {
     String accessToken = box.read('token');
 
     final response = await http.get(
-      Uri.parse(baseUrl + getContactDetails + "/$nrc"),
+      Uri.parse("$baseUrl$getContactDetails/$nrc"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
@@ -185,7 +186,7 @@ class ContactService extends GetxController {
     contactSaver = nrcStorage.read('nrcNumber');
     isLoading.value = true;
     final response = await http.get(
-      Uri.parse(baseUrl + getContactsDetails + "/$contactSaver"),
+      Uri.parse("$baseUrl$getContactsDetails/$contactSaver"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
@@ -236,7 +237,7 @@ class ContactService extends GetxController {
         colorText: Colors.white,
       );
       await saveContactToPhonebook();
-      Get.to(BottomMenuBarItems(
+      Get.to(const BottomMenuBarItems(
         selectedIndex: 1,
       ));
     } else if (response.statusCode == 409) {
@@ -266,9 +267,7 @@ class ContactService extends GetxController {
     PermissionStatus permissionStatus = await Permission.contacts.request();
     if (permissionStatus.isGranted) {
       try {
-        String combineNames = contactDetails.value.firstName +
-            ' ' +
-            contactDetails.value.lastName;
+        String combineNames = '${contactDetails.value.firstName} ${contactDetails.value.lastName}';
         Contact contact = Contact(
           givenName: combineNames,
           phones: [

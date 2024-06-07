@@ -20,7 +20,7 @@ class _GroupsState extends State<Groups> {
   @override
   void initState() {
     // TODO: implement initState
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.employeeIndex != null) {
         scrollToCard(widget.employeeIndex!);
       }
@@ -46,21 +46,21 @@ class _GroupsState extends State<Groups> {
                   ),
                 ],
               )
-            : Container(
+            : SizedBox(
                 height: 350,
-                child: _groupService.groupsList.length > 0
+                child: _groupService.groupsList.isNotEmpty
                     ? ListView.builder(
                         controller: _scrollController,
                         scrollDirection: Axis.horizontal,
                         itemCount: _groupService.groupsList.length,
                         itemBuilder: (context, index) {
-                          Group _group = _groupService.groupsList[index];
+                          Group group = _groupService.groupsList[index];
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 400,
-                                child: GroupMembershipCard(group_name: _group.group_name,group_logo: _group.group_logo,group_phone_number: _group.group_phone_number,group_email: _group.group_email,),
+                                child: GroupMembershipCard(group_name: group.group_name,group_logo: group.group_logo,group_phone_number: group.group_phone_number,group_email: group.group_email,),
                               ),
                             ],
                           );
@@ -68,7 +68,7 @@ class _GroupsState extends State<Groups> {
                       )
                     : Center(
                         child: Padding(
-                          padding: EdgeInsets.all(30),
+                          padding: const EdgeInsets.all(30),
                           child: Text('No Group History to Display',
                               style: GoogleFonts.lexendDeca()),
                         ),
@@ -95,11 +95,11 @@ class _GroupsState extends State<Groups> {
 
   void scrollToCard(int index) {
     if (_scrollController.hasClients) {
-      final double cardWidth = 400; // Width of each card
+      const double cardWidth = 400; // Width of each card
       final double offset = index * cardWidth;
       _scrollController.animateTo(
         offset,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     }

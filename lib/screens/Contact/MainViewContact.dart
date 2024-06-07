@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tizibane/constants/constants.dart';
-import 'package:tizibane/screens/Contact/ContactEmployeeHistory.dart';
 import 'package:tizibane/screens/Contact/ContactEmploymentDetails.dart';
-import 'package:tizibane/screens/Contact/ViewContact.dart';
-import 'package:tizibane/screens/Contact/ViewCurrentEmployeeDetails.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -66,7 +63,7 @@ class _MainViewContactState extends State<MainViewContact> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.05,
                     ),
-                    Container(
+                    SizedBox(
                       width: 140,
                       child: ClipOval(
                         child: Material(
@@ -81,19 +78,19 @@ class _MainViewContactState extends State<MainViewContact> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
-                      widget.firstName + ' ' + widget.lastName,
+                      '${widget.firstName} ${widget.lastName}',
                       style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
                     if (widget.positionName.isNotEmpty &&
                         widget.companyName.isNotEmpty)
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                     if (widget.positionName.isNotEmpty &&
@@ -122,16 +119,16 @@ class _MainViewContactState extends State<MainViewContact> {
                       ),
                     if (widget.positionName.isNotEmpty &&
                         widget.companyName.isNotEmpty)
-                      SizedBox(
+                      const SizedBox(
                         height: 3,
                       ),
                     if (widget.positionName.isNotEmpty &&
                         widget.companyName.isNotEmpty)
                       Text(widget.companyName, style: GoogleFonts.lexendDeca()),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Divider(
@@ -151,16 +148,16 @@ class _MainViewContactState extends State<MainViewContact> {
                             style: GoogleFonts.lexendDeca()),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade100,
                         border: Border.all(color: Colors.grey.shade200),
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(20),
                         ),
                       ),
@@ -171,7 +168,7 @@ class _MainViewContactState extends State<MainViewContact> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Phone', style: GoogleFonts.lexendDeca()),
-                              SizedBox(
+                              const SizedBox(
                                 height: 3,
                               ),
                               Text(widget.phoneNumber,
@@ -183,7 +180,7 @@ class _MainViewContactState extends State<MainViewContact> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.07,
                               height: MediaQuery.of(context).size.width * 0.07,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.black,
                               ),
@@ -191,7 +188,7 @@ class _MainViewContactState extends State<MainViewContact> {
                                 onTap: () {
                                   _openDialPad(widget.phoneNumber);
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   CupertinoIcons.phone,
                                   color: Colors.white,
                                   size: 18,
@@ -202,14 +199,14 @@ class _MainViewContactState extends State<MainViewContact> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      padding: EdgeInsets.fromLTRB(20, 10, 1, 10),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 1, 10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(20),
                         ),
                         color: Colors.grey.shade100,
@@ -225,7 +222,7 @@ class _MainViewContactState extends State<MainViewContact> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Email', style: GoogleFonts.lexendDeca()),
-                              SizedBox(
+                              const SizedBox(
                                 height: 3,
                               ),
                               Text(widget.email,
@@ -237,13 +234,13 @@ class _MainViewContactState extends State<MainViewContact> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.07,
                               height: MediaQuery.of(context).size.width * 0.07,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   shape: BoxShape.circle, color: Colors.black),
                               child: GestureDetector(
                                 onTap: () {
                                   _openDefaultEmailClient(widget.email);
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   CupertinoIcons.mail,
                                   color: Colors.white,
                                   size: 16,
@@ -254,7 +251,7 @@ class _MainViewContactState extends State<MainViewContact> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Divider(
@@ -273,7 +270,7 @@ class _MainViewContactState extends State<MainViewContact> {
                         Text('Groups', style: GoogleFonts.lexendDeca()),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Divider(
@@ -353,7 +350,7 @@ class _MainViewContactState extends State<MainViewContact> {
                     //     ),
                     //   ],
                     // ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Divider(
@@ -370,11 +367,7 @@ class _MainViewContactState extends State<MainViewContact> {
   }
 
   String formatNrc(String userNrc) {
-    String formattedNrc = userNrc.substring(0, 6) +
-        '/' +
-        userNrc.substring(6, 8) +
-        '/' +
-        userNrc.substring(8);
+    String formattedNrc = '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
 
     return formattedNrc;
   }

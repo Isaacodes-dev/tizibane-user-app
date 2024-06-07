@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/ContactService.dart';
 import 'package:nfc_manager/nfc_manager.dart';
@@ -10,16 +10,11 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
 import 'package:tizibane/screens/Contact/ContactEmploymentDetails.dart';
-import 'package:tizibane/screens/Contact/MainViewContact.dart';
-import 'package:tizibane/screens/Contact/NewContact.dart';
-import 'package:tizibane/screens/Contact/ViewContact.dart';
-import 'package:tizibane/screens/Contact/ViewCurrentEmployeeDetails.dart';
 import 'package:tizibane/screens/QRScanner.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 
 class Contacts extends StatefulWidget {
-  //const Contacts({super.key});
+  const Contacts({super.key});
 
   @override
   State<Contacts> createState() => _ContactsState();
@@ -27,14 +22,11 @@ class Contacts extends StatefulWidget {
 
 class _ContactsState extends State<Contacts> {
   ValueNotifier<dynamic> result = ValueNotifier(null);
-//final getContacts = Get.put<ContactService>(ContactService());
-  final ContactService _contactService =
-      Get.put(ContactService());
-
+  final ContactService _contactService = Get.put(ContactService());
   final qrKey = GlobalKey(debugLabel: 'QR');
+  final box = GetStorage();
 
   Barcode? resultQr;
-
   QRViewController? controller;
 
   @override
@@ -47,8 +39,45 @@ class _ContactsState extends State<Contacts> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _loadLocalData();
+    _fetchContactData();
+  }
+
+  Future<void> _loadLocalData() async {
+    if (box.hasData('contacts_data')) {
+      _contactService.foundContacts.value = box.read('contacts_data');
+      setState(() {});
+    }
+  }
+
+  Future<void> _fetchContactData() async {
+    try {
+      await _contactService.getContacts();
+      box.write('contacts_data', _contactService.foundContacts.value);
+      setState(() {});
+      _refreshIfDataChanged();
+    } catch (error) {
+      print('Error fetching contacts data: $error');
+    }
+  }
+
+  Future<void> _refreshIfDataChanged() async {
+    try {
+      await _contactService.getContacts();
+      if (_contactService.foundContacts.value != box.read('contacts_data')) {
+        box.write('contacts_data', _contactService.foundContacts.value);
+        setState(() {});
+      }
+    } catch (error) {
+      print('Error checking for data changes: $error');
+    }
+  }
+
   void scanQR() {
-    Get.to(QRScanner());
+    Get.to(const QRScanner());
   }
 
   void _tagRead() {
@@ -63,7 +92,6 @@ class _ContactsState extends State<Contacts> {
         String resultSubString = resultString.substring(3);
 
         if (resultSubString.isNotEmpty) {
-
           loadUser(resultSubString);
           NfcManager.instance.stopSession();
         } else {
@@ -80,33 +108,25 @@ class _ContactsState extends State<Contacts> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //_contactService.getContacts();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _contactService.getContacts();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
-          child: Image.asset('assets/images/tizibaneicon.png',width: 50,height: 50,),
+          child: Image.asset(
+            'assets/images/tizibaneicon.png',
+            width: 50,
+            height: 50,
+          ),
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(
+              const Text(
                 'Contacts',
                 style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
               ),
@@ -132,26 +152,26 @@ class _ContactsState extends State<Contacts> {
               onChanged: (value) => _contactService.filterContact(value),
               decoration: InputDecoration(
                 labelText: 'Search',
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 15.0),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0)),
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
               ),
             ),
             const SizedBox(height: 15),
             Obx(() {
               return _contactService.isLoading.value
-                  ? Column(
+                  ? const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Center(
+                        Center(
                           child: CircularProgressIndicator(),
                         ),
                       ],
                     )
                   : Expanded(
-                      child: _contactService.foundContacts.value.length > 0
+                      child: _contactService.foundContacts.value.isNotEmpty
                           ? ListView.builder(
                               itemCount:
                                   _contactService.foundContacts.value.length,
@@ -163,17 +183,23 @@ class _ContactsState extends State<Contacts> {
                                   elevation: 3,
                                   child: ListTile(
                                     title: Text(
-                                        contact.firstName.trim() +
-                                            ' ' +
-                                            contact.lastName.trim(),
-                                        style: GoogleFonts.lexendDeca(textStyle: TextStyle(color: Color(0xFF727272),fontWeight: FontWeight.bold))),
+                                        '${contact.firstName.trim()} ${contact.lastName.trim()}',
+                                        style: GoogleFonts.lexendDeca(
+                                            textStyle: const TextStyle(
+                                                color: Color(0xFF727272),
+                                                fontWeight: FontWeight.bold))),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(contact.positionName,
                                             style: GoogleFonts.lexendDeca()),
                                         Text(contact.companyName,
-                                            style: GoogleFonts.lexendDeca(textStyle: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold))),
+                                            style: GoogleFonts.lexendDeca(
+                                                textStyle: const TextStyle(
+                                                    color: Colors.orange,
+                                                    fontWeight:
+                                                        FontWeight.bold))),
                                       ],
                                     ),
                                     leading: CircleAvatar(
@@ -195,14 +221,15 @@ class _ContactsState extends State<Contacts> {
                                                       contact.comapnyAddress,
                                                   companyWebsite:
                                                       contact.comapnyWebsite,
-                                                  companyAssignedEmail: contact
-                                                      .companyEmail,
+                                                  companyAssignedEmail:
+                                                      contact.companyEmail,
                                                   companyLogo:
                                                       contact.companyLogo,
                                                   companyName:
                                                       contact.companyName,
                                                   email: contact.email,
-                                                  telephone: contact.companyPhone,
+                                                  telephone:
+                                                      contact.companyPhone,
                                                   firstName: contact.firstName,
                                                   lastName: contact.lastName,
                                                   positionName:
@@ -217,7 +244,7 @@ class _ContactsState extends State<Contacts> {
                               },
                             )
                           : Padding(
-                              padding: EdgeInsets.all(30),
+                              padding: const EdgeInsets.all(30),
                               child: Text('No Contacts to display',
                                   style: GoogleFonts.lexendDeca()),
                             ),
@@ -226,17 +253,18 @@ class _ContactsState extends State<Contacts> {
           ],
         ),
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 
   Future openDiaglog() => showDialog(
         context: context,
         builder: (context) => SimpleDialog(
-          title: Text('Add Contact'),
+          title: const Text('Add Contact'),
           children: [
             SimpleDialogOption(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: Text(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: const Text(
                 'Scan with NFC',
                 style: TextStyle(fontSize: 16),
               ),
@@ -245,8 +273,8 @@ class _ContactsState extends State<Contacts> {
               },
             ),
             SimpleDialogOption(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: Text(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: const Text(
                 'Scan QR Code',
                 style: TextStyle(fontSize: 16),
               ),

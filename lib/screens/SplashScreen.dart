@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
         const Duration(seconds: 2),
         () => Get.offAll(
           finalToken == null
-              ? Login()
+              ? const Login()
               : const BottomMenuBarItems(
                   selectedIndex: 0,
                 ),

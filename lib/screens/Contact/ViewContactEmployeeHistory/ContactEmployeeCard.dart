@@ -30,11 +30,11 @@ class ContactEmployeeCard extends StatefulWidget {
 class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 480,
       child: Card(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Container(
             child: Column(
               children: [
@@ -42,7 +42,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
                       child: ClipRRect(
@@ -58,7 +58,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -77,7 +77,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -96,7 +96,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -112,7 +112,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -128,7 +128,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -144,7 +144,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -160,7 +160,7 @@ class _ContactEmployeeCardState extends State<ContactEmployeeCard> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
               ],

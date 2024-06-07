@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 
 class UpdateUserCredentials extends StatefulWidget {
@@ -21,7 +22,7 @@ class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
@@ -41,7 +42,7 @@ class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
                   'Change Password',
                   style: GoogleFonts.lexendDeca(
                       textStyle:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 ),
               ],
             ),
@@ -51,8 +52,8 @@ class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
               obscureText: true,
               decoration: InputDecoration(
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                hintStyle: TextStyle(fontSize: 14),
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                hintStyle: const TextStyle(fontSize: 14),
                 hintText: 'Current Password',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0)),
@@ -64,9 +65,9 @@ class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
               obscureText: true,
               decoration: InputDecoration(
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                 hintText: 'New Password',
-                hintStyle: TextStyle(fontSize: 14),
+                hintStyle: const TextStyle(fontSize: 14),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0)),
               ),
@@ -77,9 +78,9 @@ class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
               obscureText: true,
               decoration: InputDecoration(
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                 hintText: 'New Password',
-                hintStyle: TextStyle(fontSize: 14),
+                hintStyle: const TextStyle(fontSize: 14),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0)),
               ),
@@ -89,6 +90,7 @@ class _UpdateUserCredentialsState extends State<UpdateUserCredentials> {
           ],
         ),
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 }
