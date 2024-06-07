@@ -9,6 +9,8 @@ class JobDetails{
   String? responsibilitiesAndDuties;
   String? qualificationsAndExperience;
   String? otherComment;
+  String? positionId;
+  int? companyId;
   String? createdAt;
   String? updatedAt;
   Company? company;
@@ -23,6 +25,8 @@ class JobDetails{
       this.responsibilitiesAndDuties,
       this.qualificationsAndExperience,
       this.otherComment,
+      this.positionId,
+      this.companyId,
       this.createdAt,
       this.updatedAt,
       this.company,
@@ -37,6 +41,8 @@ class JobDetails{
     responsibilitiesAndDuties : json['responsibilities_and_duties'],
     qualificationsAndExperience : json['qualifications_and_experience'],
     otherComment : json['other_comment'],
+    positionId : json['position_id'].toString(),
+    companyId : json['company_id'],
     createdAt : json['created_at'],
     updatedAt : json['updated_at'],
     company :
