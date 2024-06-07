@@ -10,7 +10,7 @@ class UpdateSocials extends StatefulWidget {
 class _UpdateSocialsState extends State<UpdateSocials> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       
     );
   }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -26,7 +25,7 @@ class ProfileService extends GetxController {
     String storedNrc = nrcStorage.read('nrcNumber');
 
     final response = await http.get(
-      Uri.parse(baseUrl + getImage + "/$storedNrc"),
+      Uri.parse("$baseUrl$getImage/$storedNrc"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',

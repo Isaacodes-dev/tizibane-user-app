@@ -42,7 +42,7 @@ class _NewContactState extends State<NewContact> {
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
@@ -51,7 +51,7 @@ class _NewContactState extends State<NewContact> {
           },
         ),
         backgroundColor: Colors.black,
-        title: Text('Add Contact'),
+        title: const Text('Add Contact'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -372,11 +372,8 @@ class _NewContactState extends State<NewContact> {
   }
 
   String formatNrc(String userNrc) {
-    String formattedNrc = userNrc.substring(0, 6) +
-        '/' +
-        userNrc.substring(6, 8) +
-        '/' +
-        userNrc.substring(8);
+    String formattedNrc =
+        '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
 
     return formattedNrc;
   }

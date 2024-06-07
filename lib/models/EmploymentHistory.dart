@@ -1,34 +1,48 @@
 class EmploymentHistory {
-  final String startDate;
-  final String endDate;
-  final String positionName;
   final String companyName;
-  final String companyPhone;
   final String companyEmail;
+  final String companyPhone;
   final String companyAddress;
   final String companyLogo;
+  final String position;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String description;
 
   EmploymentHistory({
+    required this.companyName,
+    required this.companyEmail,
+    required this.companyPhone,
+    required this.companyAddress,
+    required this.companyLogo,
+    required this.position,
     required this.startDate,
     required this.endDate,
-    required this.positionName,
-    required this.companyName,
-    required this.companyPhone,
-    required this.companyEmail,
-    required this.companyAddress,
-    required this.companyLogo
+    required this.description,
   });
 
   factory EmploymentHistory.fromJson(Map<String, dynamic> json) {
     return EmploymentHistory(
-      startDate: json['start_date']?? '',
-      endDate: json['end_date'] ?? '',
-      positionName: json['position_name'] ?? '',
-      companyName: json['company_name'] ?? '',
-      companyPhone: json['company_phone'] ?? '',
-      companyEmail: json['company_email'] ?? '',
-      companyAddress: json['company_address'] ?? '',
-      companyLogo: json['company_logo_url'] ?? '',
+      companyName: json['companyName'],
+      companyEmail: json['companyEmail'],
+      companyPhone: json['companyPhone'],
+      companyAddress: json['companyAddress'],
+      companyLogo: json['companyLogo'],
+      position: json['position'],
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
+      description: json['description'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'companyName': companyName,
+      'companyEmail': companyEmail,
+      'position': position,
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
+      'description': description,
+    };
   }
 }

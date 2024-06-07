@@ -40,9 +40,9 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
         body: getCurrentScreen(),
         bottomNavigationBar: BottomAppBar(
           color: Colors.black,
-          shape: CircularNotchedRectangle(),
+          shape: const CircularNotchedRectangle(),
           notchMargin: 10,
-          child: Container(
+          child: SizedBox(
             height: 60,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +65,7 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
       case 0:
         return const Home();
       case 1:
-        return Contacts();
+        return const Contacts();
       case 2:
         return const JobsFeed();
       case 3:
