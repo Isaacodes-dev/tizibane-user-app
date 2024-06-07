@@ -113,7 +113,7 @@ class JobsService extends GetxController {
       isLoading.value = true;
 
       final data = {
-        'application_letter': jsonEncode(jobApplicationLetter),
+        'application_letter': jobApplicationLetter,
         'nrc': nrc,
         'job_listing_id': jobListingId,
       };
