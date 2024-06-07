@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 import 'dart:convert';
 
-=======
-
-
-import 'package:contacts_service/contacts_service.dart';
-import 'package:http/http.dart' as http;
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';

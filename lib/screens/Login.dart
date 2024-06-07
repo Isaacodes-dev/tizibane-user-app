@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-// import 'dart:ffi';
-
-=======
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -207,12 +202,7 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-<<<<<<< HEAD
-              const SizedBox(height: 25),
-=======
-              
-
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
+          
               // Center(
               //   child: Row(
               //     mainAxisAlignment: MainAxisAlignment.center,

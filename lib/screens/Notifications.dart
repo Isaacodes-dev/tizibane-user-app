@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:tizibane/components/share/ShareUrlLink.dart';
-=======
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
 
 class Notifications extends StatefulWidget {
   const Notifications({Key? key}) : super(key: key);
@@ -16,22 +13,6 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-<<<<<<< HEAD
-        leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.black,
-        title: const Text('Notifications'),
-      ),
-      body: const Column(
-        children: [Text('Page Coming Soon')],
-=======
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -123,7 +104,6 @@ class _NotificationsState extends State<Notifications> {
             ),
           ],
         ),
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
       ),
       floatingActionButton: const ShareUrlLink(),
     );
