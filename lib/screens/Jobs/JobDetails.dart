@@ -228,8 +228,7 @@ class _JobDetailsState extends State<JobDetails> {
                                         SizedBox(width: 10),
                                         Expanded(
                                           child: Text(
-                                            job.qualificationsAndExperience!
-                                                .split('\n')[index],
+                                            job.qualificationsAndExperience!.split('\n')[index],
                                             style: GoogleFonts.lexendDeca(
                                               textStyle: TextStyle(
                                                   fontSize: 14,
