@@ -37,7 +37,7 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
 
   @override
   Widget build(BuildContext context) {
-      double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Obx(() {
       return Scaffold(
@@ -53,7 +53,7 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
             : SizedBox(
                 height: 350,
                 child: _employeeHistoryService
-                            .contactEmployeeHistoryDetails.isNotEmpty
+                        .contactEmployeeHistoryDetails.isNotEmpty
                     ? ListView.builder(
                         controller: _scrollController,
                         scrollDirection: Axis.horizontal,
@@ -66,16 +66,18 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: 400,
+                              Container(
+                                width: width,
                                 child: ContactEmployeeCard(
-                                    startDate: employeeHistory.startDate,
-                                    endDate: employeeHistory.endDate,
-                                    positionName: employeeHistory.positionName,
+                                    startDate:
+                                        employeeHistory.startDate.toString(),
+                                    endDate: employeeHistory.endDate.toString(),
+                                    positionName: employeeHistory.position,
                                     companyName: employeeHistory.companyName,
                                     companyEmail: employeeHistory.companyEmail,
                                     companyPhone: employeeHistory.companyPhone,
-                                    companyAddress: employeeHistory.companyAddress,
+                                    companyAddress:
+                                        employeeHistory.companyAddress,
                                     companyLogo: employeeHistory.companyLogo),
                               ),
                             ],

@@ -191,8 +191,7 @@ class _LoginState extends State<Login> {
                               onTap: () async {
                                 await _authService.loginUser(
                                   nrc: nrcController.text.trim(),
-                                  password:
-                                      passwordController.text.trim(),
+                                  password: passwordController.text.trim(),
                                 );
                                 saveRememberMe();
                               },
@@ -202,7 +201,7 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-          
+              
               // Center(
               //   child: Row(
               //     mainAxisAlignment: MainAxisAlignment.center,

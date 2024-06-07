@@ -32,7 +32,6 @@ class AuthService extends GetxController {
 
   final nrcStorage = GetStorage();
 
-
   Future<void> loginUser({
     required String nrc,
     required String password,

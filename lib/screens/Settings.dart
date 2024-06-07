@@ -23,13 +23,11 @@ class _SettingState extends State<Settings> {
           },
           icon: const Icon(Icons.arrow_back),
         ),
-        
-      ),
+             ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -89,7 +87,6 @@ class _SettingState extends State<Settings> {
                 icon: const Icon(Icons.arrow_forward_ios),
               ),
             ),
-          
           ],
         ),
       ),

@@ -18,7 +18,8 @@ class EmployeeHistory extends StatefulWidget {
 class _EmployeeHistoryState extends State<EmployeeHistory> {
   final ScrollController _scrollController = ScrollController();
   double _previousOffset = 0.0;
-  final _employeeHistoryService = Get.put(EmployeeHistoryService(), permanent: true);
+  final _employeeHistoryService =
+      Get.put(EmployeeHistoryService(), permanent: true);
   @override
   void initState() {
     super.initState();
@@ -33,51 +34,62 @@ class _EmployeeHistoryState extends State<EmployeeHistory> {
 
   @override
   Widget build(BuildContext context) {
-    
-    return Obx((){
-        return Scaffold(
-          body: _employeeHistoryService.isLoading.value
-              ? const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ],
-                )
-              : SizedBox(
-                  height: 350,
-                  child: _employeeHistoryService.employeeHistoryDetails.isNotEmpty
-                      ? ListView.builder(
-                          controller: _scrollController,
-                          scrollDirection: Axis.horizontal,
-                          itemCount:
-                              _employeeHistoryService.employeeHistoryDetails.length,
-                          itemBuilder: (context, index) {
-                            EmploymentHistory employeeHistory = _employeeHistoryService.employeeHistoryDetails[index];
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 400,
-                                  child: EmployeeHistoryCard(startDate: employeeHistory.startDate, endDate: employeeHistory.endDate,positionName: employeeHistory.positionName, companyName: employeeHistory.companyName, companyEmail: employeeHistory.companyEmail, companyPhone: employeeHistory.companyPhone, companyAddress: employeeHistory.companyAddress,companyLogo: employeeHistory.companyLogo,),
+    return Obx(() {
+      return Scaffold(
+        body: _employeeHistoryService.isLoading.value
+            ? const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              )
+            : SizedBox(
+                height: 350,
+                child: _employeeHistoryService.employeeHistoryDetails.isNotEmpty
+                    ? ListView.builder(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _employeeHistoryService
+                            .employeeHistoryDetails.length,
+                        itemBuilder: (context, index) {
+                          EmploymentHistory employeeHistory =
+                              _employeeHistoryService
+                                  .employeeHistoryDetails[index];
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 400,
+                                child: EmployeeHistoryCard(
+                                  startDate:
+                                      employeeHistory.startDate.toString(),
+                                  endDate: employeeHistory.endDate.toString(),
+                                  positionName: employeeHistory.position,
+                                  companyName: employeeHistory.companyName,
+                                  companyEmail: employeeHistory.companyEmail,
+                                  companyPhone: employeeHistory.companyPhone,
+                                  companyAddress:
+                                      employeeHistory.companyAddress,
+                                  companyLogo: employeeHistory.companyLogo,
                                 ),
-                              ],
-                            );
-                          },
-                        )
-                      : Center(
+                              ),
+                            ],
+                          );
+                        },
+                      )
+                    : Center(
                         child: Padding(
-                            padding: const EdgeInsets.all(30),
-                            child: Text('No Employee History to display',
-                                style: GoogleFonts.lexendDeca()),
-                          ),
+                          padding: const EdgeInsets.all(30),
+                          child: Text('No Employee History to display',
+                              style: GoogleFonts.lexendDeca()),
+                        ),
                       ),
-                ),
-      floatingActionButton: const ShareUrlLink(),
-        );
-      }
-    );
+              ),
+        floatingActionButton: const ShareUrlLink(),
+      );
+    });
   }
 
   @override

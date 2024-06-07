@@ -151,57 +151,8 @@ class _NewContactState extends State<NewContact> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
-                    SizedBox(
-                      width: 140,
-                      child: ClipOval(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                              child: Image.network(
-                            imageBaseUrl + widget.profilePicture,
-                            fit: BoxFit.cover,
-                            width: 150,
-                            height: 150,
-                          )),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '${widget.firstName} ${widget.lastName}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        letterSpacing: 1.15,
-                      ),
-                    ),
-                    if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
-                    Text(widget.positionName, style: GoogleFonts.lexendDeca()),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    if(widget.positionName.isNotEmpty && widget.companyName.isNotEmpty)
-                    Text(widget.companyName, style: GoogleFonts.lexendDeca()),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Divider(
-                      thickness: 1.15,
-                      indent: MediaQuery.of(context).size.width * 0.1,
-                      endIndent: MediaQuery.of(context).size.width * 0.1,
-                      color: Colors.grey.shade400,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Phone', style: GoogleFonts.lexendDeca()),
                         SizedBox(
@@ -421,7 +372,8 @@ class _NewContactState extends State<NewContact> {
   }
 
   String formatNrc(String userNrc) {
-    String formattedNrc = '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
+    String formattedNrc =
+        '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
 
     return formattedNrc;
   }

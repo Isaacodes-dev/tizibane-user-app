@@ -3,12 +3,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tizibane/Services/AuthService.dart';
-<<<<<<< HEAD
-=======
 import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/screens/Jobs/uploadCv.dart';
 import 'package:tizibane/screens/Login.dart';
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Settings.dart';
 import 'package:get/get.dart';

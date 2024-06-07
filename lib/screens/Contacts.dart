@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/ContactService.dart';
 import 'package:nfc_manager/nfc_manager.dart';
@@ -15,22 +16,17 @@ import 'package:tizibane/components/share/ShareUrlLink.dart';
 class Contacts extends StatefulWidget {
   const Contacts({super.key});
 
-  //const Contacts({super.key});
-
   @override
   State<Contacts> createState() => _ContactsState();
 }
 
 class _ContactsState extends State<Contacts> {
   ValueNotifier<dynamic> result = ValueNotifier(null);
-//final getContacts = Get.put<ContactService>(ContactService());
-  final ContactService _contactService =
-      Get.put(ContactService());
-
+  final ContactService _contactService = Get.put(ContactService());
   final qrKey = GlobalKey(debugLabel: 'QR');
+  final box = GetStorage();
 
   Barcode? resultQr;
-
   QRViewController? controller;
 
   @override
@@ -40,6 +36,43 @@ class _ContactsState extends State<Contacts> {
       controller?.pauseCamera();
     } else if (Platform.isIOS) {
       controller!.resumeCamera();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocalData();
+    _fetchContactData();
+  }
+
+  Future<void> _loadLocalData() async {
+    if (box.hasData('contacts_data')) {
+      _contactService.foundContacts.value = box.read('contacts_data');
+      setState(() {});
+    }
+  }
+
+  Future<void> _fetchContactData() async {
+    try {
+      await _contactService.getContacts();
+      box.write('contacts_data', _contactService.foundContacts.value);
+      setState(() {});
+      _refreshIfDataChanged();
+    } catch (error) {
+      print('Error fetching contacts data: $error');
+    }
+  }
+
+  Future<void> _refreshIfDataChanged() async {
+    try {
+      await _contactService.getContacts();
+      if (_contactService.foundContacts.value != box.read('contacts_data')) {
+        box.write('contacts_data', _contactService.foundContacts.value);
+        setState(() {});
+      }
+    } catch (error) {
+      print('Error checking for data changes: $error');
     }
   }
 
@@ -59,7 +92,6 @@ class _ContactsState extends State<Contacts> {
         String resultSubString = resultString.substring(3);
 
         if (resultSubString.isNotEmpty) {
-
           loadUser(resultSubString);
           NfcManager.instance.stopSession();
         } else {
@@ -76,25 +108,17 @@ class _ContactsState extends State<Contacts> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //_contactService.getContacts();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _contactService.getContacts();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
-          child: Image.asset('assets/images/tizibaneicon.png',width: 50,height: 50,),
+          child: Image.asset(
+            'assets/images/tizibaneicon.png',
+            width: 50,
+            height: 50,
+          ),
         ),
       ),
       body: Container(
@@ -128,8 +152,8 @@ class _ContactsState extends State<Contacts> {
               onChanged: (value) => _contactService.filterContact(value),
               decoration: InputDecoration(
                 labelText: 'Search',
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 15.0),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 prefixIcon: const Icon(Icons.search),
@@ -160,14 +184,22 @@ class _ContactsState extends State<Contacts> {
                                   child: ListTile(
                                     title: Text(
                                         '${contact.firstName.trim()} ${contact.lastName.trim()}',
-                                        style: GoogleFonts.lexendDeca(textStyle: const TextStyle(color: Color(0xFF727272),fontWeight: FontWeight.bold))),
+                                        style: GoogleFonts.lexendDeca(
+                                            textStyle: const TextStyle(
+                                                color: Color(0xFF727272),
+                                                fontWeight: FontWeight.bold))),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(contact.positionName,
                                             style: GoogleFonts.lexendDeca()),
                                         Text(contact.companyName,
-                                            style: GoogleFonts.lexendDeca(textStyle: const TextStyle(color: Colors.orange,fontWeight: FontWeight.bold))),
+                                            style: GoogleFonts.lexendDeca(
+                                                textStyle: const TextStyle(
+                                                    color: Colors.orange,
+                                                    fontWeight:
+                                                        FontWeight.bold))),
                                       ],
                                     ),
                                     leading: CircleAvatar(
@@ -189,14 +221,15 @@ class _ContactsState extends State<Contacts> {
                                                       contact.comapnyAddress,
                                                   companyWebsite:
                                                       contact.comapnyWebsite,
-                                                  companyAssignedEmail: contact
-                                                      .companyEmail,
+                                                  companyAssignedEmail:
+                                                      contact.companyEmail,
                                                   companyLogo:
                                                       contact.companyLogo,
                                                   companyName:
                                                       contact.companyName,
                                                   email: contact.email,
-                                                  telephone: contact.companyPhone,
+                                                  telephone:
+                                                      contact.companyPhone,
                                                   firstName: contact.firstName,
                                                   lastName: contact.lastName,
                                                   positionName:
@@ -220,7 +253,7 @@ class _ContactsState extends State<Contacts> {
           ],
         ),
       ),
-            floatingActionButton: const ShareUrlLink(),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 

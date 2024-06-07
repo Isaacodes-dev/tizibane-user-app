@@ -20,7 +20,6 @@ class _NotificationsState extends State<Notifications> {
             // Handle back button press
           },
         ),
-        
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -33,12 +32,12 @@ class _NotificationsState extends State<Notifications> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                'Notifications',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                    'Notifications',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 24),
                   const Text(
                     'Recent',
@@ -86,19 +85,18 @@ class _NotificationsState extends State<Notifications> {
                     icon: Icons.circle_notifications,
                     title: 'New Add',
                     subtitle: 'Engineer Mwansa from ZESCO',
-
                   ),
                   //const SizedBox(height: 48),
                   //const Align(
-                    //alignment: Alignment.center,
-                    //child: Text(
-                      //'Privacy & Policy',
-                      //style: TextStyle(
-                        //color: Colors.grey,
-                        //fontSize: 14,
-                     // ),
-                   // ),
-                 // ),
+                  //alignment: Alignment.center,
+                  //child: Text(
+                  //'Privacy & Policy',
+                  //style: TextStyle(
+                  //color: Colors.grey,
+                  //fontSize: 14,
+                  // ),
+                  // ),
+                  // ),
                 ],
               ),
             ),
