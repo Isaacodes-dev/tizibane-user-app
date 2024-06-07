@@ -168,7 +168,7 @@ class JobsService extends GetxController {
                 const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
-                   Get.to(() => BottomMenuBarItems(selectedIndex: 2));
+                    Get.to(() => BottomMenuBarItems(selectedIndex: 2));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -217,19 +217,20 @@ class JobsService extends GetxController {
       String nrc = nrcStorage.read('nrcNumber');
       isLoading.value = true;
       final url = baseUrl + postCv;
+
       final request = http.MultipartRequest('POST', Uri.parse(url));
 
       // Add curriculum vitae file
       request.files.add(
         await http.MultipartFile.fromPath(
-          'curriculum_vitae_file',
+          'curriculumn_vitae_url',
           curriculumVitaeUrl!.path,
         ),
       );
 
       // Add NRC
       request.fields['nrc'] = nrc;
-      request.fields['curriculum_vitae_url'] =
+      request.fields['curriculumn_vitae_url'] =
           p.basename(curriculumVitaeUrl!.path);
 
       // Set headers
@@ -245,7 +246,17 @@ class JobsService extends GetxController {
       final response = await http.Response.fromStream(streamedResponse);
 
       // Check response status code
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
+        isLoading.value = false;
+        Get.snackbar(
+          'Success',
+          json.decode(response.body)['message'],
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      }
+      else if (response.statusCode == 201) {
         isLoading.value = false;
         Get.snackbar(
           'Success',
@@ -269,7 +280,8 @@ class JobsService extends GetxController {
       isLoading.value = false;
     }
   }
-    void filterJobs(String positionTitle) {
+
+  void filterJobs(String positionTitle) {
     List<JobsFeed> results = [];
 
     if (positionTitle.trim().isEmpty) {
@@ -277,8 +289,7 @@ class JobsService extends GetxController {
     } else {
       results = jobsFeedList.where((element) {
         final trimmedContact = positionTitle.toLowerCase().trim();
-        final position =
-            '${element.position?.toLowerCase()}';
+        final position = '${element.position?.toLowerCase()}';
         return position.contains(trimmedContact);
       }).toList();
     }
