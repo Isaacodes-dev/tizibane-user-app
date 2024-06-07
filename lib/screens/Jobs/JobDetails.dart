@@ -51,7 +51,12 @@ class _JobDetailsState extends State<JobDetails> {
           final job = _jobsService.jobDetails.value!;
           final logoUrl = job.company?.companyLogoUrl ?? '';
           List<String> responsibilities =
-              job.responsibilitiesAndDuties!.split('\n');
+              job.responsibilitiesAndDuties?.split('\n') ?? [];
+          List<String> qualifications =
+              job.qualificationsAndExperience?.split('\n') ?? [];
+          List<String> additionalRequirements =
+              job.otherComment?.split('\n') ?? [];
+          
           return Stack(
             children: [
               Column(
@@ -136,14 +141,14 @@ class _JobDetailsState extends State<JobDetails> {
                                   ),
                                 ),
                               ),
-                             SizedBox(height: 10,),
+                              SizedBox(height: 10),
                               Text(
-                                job.description!,
+                                job.description ?? '',
                                 style: GoogleFonts.lexendDeca(
                                   textStyle: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w300,
-                                    height: 1.5
+                                    height: 1.5,
                                   ),
                                 ),
                               ),
@@ -182,10 +187,10 @@ class _JobDetailsState extends State<JobDetails> {
                                             responsibilities[index],
                                             style: GoogleFonts.lexendDeca(
                                               textStyle: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w300,
-                                                  height: 1.5
-                                                  ),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w300,
+                                                height: 1.5,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -208,9 +213,7 @@ class _JobDetailsState extends State<JobDetails> {
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: job.qualificationsAndExperience!
-                                    .split('\n')
-                                    .length,
+                                itemCount: qualifications.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -228,13 +231,13 @@ class _JobDetailsState extends State<JobDetails> {
                                         SizedBox(width: 10),
                                         Expanded(
                                           child: Text(
-                                            job.qualificationsAndExperience!.split('\n')[index],
+                                            qualifications[index],
                                             style: GoogleFonts.lexendDeca(
                                               textStyle: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w300,
-                                                  height: 1.5
-                                                  ),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w300,
+                                                height: 1.5,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -257,9 +260,7 @@ class _JobDetailsState extends State<JobDetails> {
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: job.qualificationsAndExperience!
-                                    .split('\n')
-                                    .length,
+                                itemCount: additionalRequirements.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -277,14 +278,13 @@ class _JobDetailsState extends State<JobDetails> {
                                         SizedBox(width: 10),
                                         Expanded(
                                           child: Text(
-                                            job.otherComment!
-                                                .split('\n')[index],
+                                            additionalRequirements[index],
                                             style: GoogleFonts.lexendDeca(
                                               textStyle: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w300,
-                                                  height: 1.5
-                                                  ),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w300,
+                                                height: 1.5,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -296,7 +296,12 @@ class _JobDetailsState extends State<JobDetails> {
                               SizedBox(height: 10),
                               SubmitButton(
                                 text: 'Apply',
-                                onTap: () => Get.to(JobApplication(position: job.position?.positionName ?? '',company: job.company?.companyName ?? '',companyLogo: job.company?.companyLogoUrl ?? '',jobId: widget.id,)),
+                                onTap: () => Get.to(JobApplication(
+                                  position: job.position?.positionName ?? '',
+                                  company: job.company?.companyName ?? '',
+                                  companyLogo: job.company?.companyLogoUrl ?? '',
+                                  jobId: widget.id,
+                                )),
                               ),
                               SizedBox(height: 20),
                             ],
@@ -306,7 +311,7 @@ class _JobDetailsState extends State<JobDetails> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           );
         }

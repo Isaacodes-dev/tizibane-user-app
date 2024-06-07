@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
 import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
 
 class JobApplication extends StatefulWidget {
@@ -30,7 +31,7 @@ final TextEditingController _applicationLetterController =
     TextEditingController();
 final _formKey = GlobalKey<FormState>();
 final JobsService _jobsService = Get.put(JobsService());
-
+final UserService _userService = Get.put(UserService());
 class _JobApplicationState extends State<JobApplication> {
   File? _file;
   Future<void> _pickFile() async {
@@ -52,11 +53,11 @@ class _JobApplicationState extends State<JobApplication> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _applicationLetterController.text = 'Dear [Recipient Name],\n\n'
-        'I am writing to apply for the position of [Position] at [Company]. '
+    _applicationLetterController.text = 'Dear Sir/Madam,\n\n'
+        'I am writing to apply for the position of ${widget.position} at ${widget.company}. '
         'With [number] years of experience in [field/industry], '
         'I am confident in my ability to contribute to your team.\n\n'
-        'Sincerely,\n[Your Name]';
+        'Sincerely,\n${_userService.userObj.value[0].first_name} ${_userService.userObj.value[0].last_name}';
   }
 
   Widget build(BuildContext context) {
