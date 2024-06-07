@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:tizibane/components/share/ShareUrlLink.dart';
-=======
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
 
 class Notifications extends StatefulWidget {
   const Notifications({Key? key}) : super(key: key);
@@ -16,22 +13,6 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-<<<<<<< HEAD
-        leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.black,
-        title: const Text('Notifications'),
-      ),
-      body: const Column(
-        children: [Text('Page Coming Soon')],
-=======
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -39,7 +20,6 @@ class _NotificationsState extends State<Notifications> {
             // Handle back button press
           },
         ),
-        
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -52,12 +32,12 @@ class _NotificationsState extends State<Notifications> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                'Notifications',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                    'Notifications',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 24),
                   const Text(
                     'Recent',
@@ -105,25 +85,23 @@ class _NotificationsState extends State<Notifications> {
                     icon: Icons.circle_notifications,
                     title: 'New Add',
                     subtitle: 'Engineer Mwansa from ZESCO',
-
                   ),
                   //const SizedBox(height: 48),
                   //const Align(
-                    //alignment: Alignment.center,
-                    //child: Text(
-                      //'Privacy & Policy',
-                      //style: TextStyle(
-                        //color: Colors.grey,
-                        //fontSize: 14,
-                     // ),
-                   // ),
-                 // ),
+                  //alignment: Alignment.center,
+                  //child: Text(
+                  //'Privacy & Policy',
+                  //style: TextStyle(
+                  //color: Colors.grey,
+                  //fontSize: 14,
+                  // ),
+                  // ),
+                  // ),
                 ],
               ),
             ),
           ],
         ),
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
       ),
       floatingActionButton: const ShareUrlLink(),
     );

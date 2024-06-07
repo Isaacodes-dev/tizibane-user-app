@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:tizibane/components/share/ShareUrlLink.dart';
-=======
 
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
 
@@ -19,41 +16,18 @@ class _SettingState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-<<<<<<< HEAD
-        leading: GestureDetector(
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onTap: () {
-=======
         backgroundColor: Colors.black,
         leading: IconButton(
           onPressed: () {
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back),
         ),
-<<<<<<< HEAD
-        backgroundColor: Colors.black,
-        title: const Text('Settings'),
-      ),
-      body: const Column(
-        children: [
-          Text('Page Coming Soon'),
-        ],
-        
-      ),
-      floatingActionButton: const ShareUrlLink(),
-=======
-        
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -113,11 +87,9 @@ class _SettingState extends State<Settings> {
                 icon: const Icon(Icons.arrow_forward_ios),
               ),
             ),
-          
           ],
         ),
       ),
->>>>>>> 77d214542d1a27d1bf6f4f7ac20b4c9a045d85e6
     );
   }
 }
