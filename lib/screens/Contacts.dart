@@ -43,7 +43,11 @@ class _ContactsState extends State<Contacts> {
   void initState() {
     super.initState();
     _loadLocalData();
-    _fetchContactData();
+    
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _fetchContactData();
+      
+    });
   }
 
   Future<void> _loadLocalData() async {

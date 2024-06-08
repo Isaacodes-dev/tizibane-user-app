@@ -47,7 +47,7 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
   final EmployeeHistoryService _employeeHistoryService =
       Get.put(EmployeeHistoryService());
   final box = GetStorage();
-
+  final nrcStorage = GetStorage();
   @override
   void initState() {
     super.initState();
@@ -73,8 +73,10 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
   }
 
   Future<void> _fetchEmployeeData() async {
+    String nrc = nrcStorage.read('nrcNumber');
     try {
-      await _employeeService.getEmployeeDetails(widget.email);
+      print('am here: '+nrc);
+      await _employeeService.getEmployeeDetails(nrc);
       box.write(
           'employee_data', _employeeService.employeeDetails.value!.toJson());
       setState(() {});
