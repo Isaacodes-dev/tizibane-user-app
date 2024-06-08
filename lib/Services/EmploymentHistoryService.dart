@@ -22,11 +22,10 @@ class EmployeeHistoryService extends GetxController {
   final contactEmployeeHistoryDetails = <EmploymentHistory>[].obs;
 
   Future<void> getEmploymentHistory() async {
-    String? accessToken;
-    accessToken = box.read('token');
+    
+    String accessToken = box.read('token');
 
-    String? employeeHistory;
-    employeeHistory = nrcStorage.read('nrcNumber');
+    String employeeHistory = nrcStorage.read('nrcNumber');
 
     isLoading.value = true;
     final response = await http.get(
@@ -36,7 +35,7 @@ class EmployeeHistoryService extends GetxController {
         'Authorization': 'Bearer $accessToken',
       },
     );
-    
+    print(response.statusCode);
     if (response.statusCode == 200) {
       isLoading.value = false;
       List<dynamic> data = jsonDecode(response.body)['employmentHistory'];
