@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Jobs/JobApplication.dart';
@@ -16,13 +17,17 @@ class JobDetails extends StatefulWidget {
 }
 
 class _JobDetailsState extends State<JobDetails> {
+
   final JobsService _jobsService = Get.put(JobsService());
+
+  final StatusService _statusService = Get.put(StatusService());
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _jobsService.getJobDetail(widget.id);
+      _statusService.getJobStatus(widget.id);
     });
   }
 
@@ -294,6 +299,7 @@ class _JobDetailsState extends State<JobDetails> {
                                 },
                               ),
                               SizedBox(height: 10),
+                              _statusService.status.value == '' ?
                               SubmitButton(
                                 text: 'Apply',
                                 onTap: () => Get.to(JobApplication(
@@ -302,6 +308,8 @@ class _JobDetailsState extends State<JobDetails> {
                                   companyLogo: job.company?.companyLogoUrl ?? '',
                                   jobId: widget.id,
                                 )),
+                              ) : SubmitButton(
+                                text: 'Already Applied',
                               ),
                               SizedBox(height: 20),
                             ],

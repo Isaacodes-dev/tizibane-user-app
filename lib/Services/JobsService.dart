@@ -37,6 +37,7 @@ class JobsService extends GetxController {
     String? accessToken;
     accessToken = box.read('token');
     isLoading.value = true;
+    List<dynamic> data = [];
     final response = await http.put(
       Uri.parse(baseUrl + getJobs),
       headers: {
@@ -45,7 +46,7 @@ class JobsService extends GetxController {
       },
     );
     if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body)['data'];
+      data = jsonDecode(response.body)['data'];
       jobsFeedList.value = data.map((e) => JobsFeed.fromJson(e)).toList();
       isLoading.value = false;
       update();
@@ -124,7 +125,7 @@ class JobsService extends GetxController {
           'Accept': 'application/json',
           'Authorization': 'Bearer $accessToken',
         },
-        body: data, // Encode the entire body as JSON
+        body: data,
       );
 
       isLoading.value = false;
@@ -197,7 +198,6 @@ class JobsService extends GetxController {
         );
       }
     } catch (e) {
-      print('Error: $e');
       isLoading.value = false;
       Get.snackbar(
         'Error',
@@ -213,14 +213,17 @@ class JobsService extends GetxController {
     required File? curriculumVitaeUrl,
   }) async {
     try {
+      
       String accessToken = box.read('token');
+      
       String nrc = nrcStorage.read('nrcNumber');
+      
       isLoading.value = true;
-      final url = baseUrl + postCv;
+      
+      const url = baseUrl + postCv;
 
       final request = http.MultipartRequest('POST', Uri.parse(url));
 
-      // Add curriculum vitae file
       request.files.add(
         await http.MultipartFile.fromPath(
           'curriculumn_vitae_url',
@@ -228,24 +231,19 @@ class JobsService extends GetxController {
         ),
       );
 
-      // Add NRC
       request.fields['nrc'] = nrc;
       request.fields['curriculumn_vitae_url'] =
           p.basename(curriculumVitaeUrl!.path);
 
-      // Set headers
       request.headers.addAll({
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
       });
 
-      // Send request
       final streamedResponse = await request.send();
 
-      // Get response
       final response = await http.Response.fromStream(streamedResponse);
 
-      // Check response status code
       if (response.statusCode == 200) {
         isLoading.value = false;
         Get.snackbar(
@@ -276,12 +274,12 @@ class JobsService extends GetxController {
         );
       }
     } catch (e) {
-      print('Error: $e');
       isLoading.value = false;
     }
   }
 
   void filterJobs(String positionTitle) {
+    
     List<JobsFeed> results = [];
 
     if (positionTitle.trim().isEmpty) {

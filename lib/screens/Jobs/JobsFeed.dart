@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/JobsService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
+import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Jobs/JobDetails.dart';
@@ -19,6 +20,7 @@ class _JobsFeedState extends State<JobsFeed> {
   final JobsService _jobsService = Get.put(JobsService());
   final UserService _userService = Get.put(UserService());
   final ProfileService _profileService = Get.put(ProfileService());
+  final StatusService _statusService = Get.put(StatusService());
 
   @override
   void initState() {

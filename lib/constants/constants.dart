@@ -26,6 +26,8 @@ const String getContactDetails = 'getcontact';
 
 const String getContactsDetails = 'getcontacts';
 
+const String deleteContact = 'deleteContact';
+
 const String getEmploymentHistoryDetails = 'getemploymenthistory';
 
 const String getRecentAddedContacts = 'getrecentcontacts';
@@ -39,3 +41,5 @@ const String getJobDetails = 'getJobDetails/';
 const String postApply = 'postApply';
 
 const String postCv = 'postCV';
+
+const String applicationStatus = 'applicationStatus';

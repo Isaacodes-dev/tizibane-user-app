@@ -45,7 +45,7 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                     Container(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(
-                            10), // Adjust the value as needed
+                            50), // Adjust the value as needed
                         child: Image.network(
                           companyLogoUrl + widget.companyLogo,
                           height: 100,

@@ -52,19 +52,6 @@ class ContactService extends GetxController {
 
   Future<void> getContact(String nrc) async {
     String accessToken = box.read('token');
-
-    final response = await http.get(
-      Uri.parse("$baseUrl$getContactDetails/$nrc"),
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      var responseData = jsonDecode(response.body);
-
-      if (responseData['contact'] != null) {
         ContactModel contact = ContactModel(
             nrc: '',
             firstName: '',
@@ -84,6 +71,18 @@ class ContactService extends GetxController {
             comapnyWebsite: '',
             comapnyAddress: '',
             telephone: '');
+    final response = await http.get(
+      Uri.parse("$baseUrl$getContactDetails/$nrc"),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+
+      if (responseData['contact'] != null) {
 
         if (responseData['contact'] is List) {
           if (responseData['contact'].isNotEmpty) {
@@ -185,6 +184,7 @@ class ContactService extends GetxController {
     String? contactSaver;
     contactSaver = nrcStorage.read('nrcNumber');
     isLoading.value = true;
+    List<dynamic> data = []; 
     final response = await http.get(
       Uri.parse("$baseUrl$getContactsDetails/$contactSaver"),
       headers: {
@@ -194,8 +194,9 @@ class ContactService extends GetxController {
     );
 
     if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body)['contacts'];
+      data = jsonDecode(response.body)['contacts'];
       contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
+      foundContacts.value = contactsList; 
       isLoading.value = false;
       update();
     } else if (response.statusCode == 401) {
@@ -217,7 +218,7 @@ class ContactService extends GetxController {
 
   Future<void> saveContact(Map<String, dynamic> contactBody) async {
     isLoading.value = true;
-    String contactSaverNrc = nrcStorage.read('nrcNumber');
+
     String accessToken = box.read('token');
     final response = await http.post(
       Uri.parse(baseUrl + saveContacDetails),
@@ -249,6 +250,50 @@ class ContactService extends GetxController {
         backgroundColor: Colors.blueAccent,
         colorText: Colors.white,
       );
+    } else {
+      isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        jsonDecode(response.body)['message'],
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+    Future<void> deleteContactFromApp(String contactNrc) async {
+    
+    isLoading.value = true;
+    
+    String accessToken = box.read('token');
+
+    String contactSaverNrc = nrcStorage.read('nrcNumber');
+    
+    var contactBody = {
+      contactNrc: contactNrc,
+      contactSaverNrc: contactSaverNrc,
+    };
+    
+    final response = await http.delete(
+      Uri.parse('$baseUrl$deleteContact/$contactSaverNrc/$contactNrc'),
+      body: contactBody,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    
+    if (response.statusCode == 200) {
+      isLoading.value = false;
+      Get.snackbar(
+        'Success',
+        'Contact Deleted Successfully',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      await getContacts();
     } else {
       isLoading.value = false;
       Get.snackbar(

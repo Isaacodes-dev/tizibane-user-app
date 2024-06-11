@@ -2,26 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/constants/constants.dart';
 
-class JobCard extends StatelessWidget {
+class JobCard extends StatefulWidget {
   final String position;
   final String company;
   final String address;
   final String companyLogo;
   final String closing;
+  final String? status;
   const JobCard(
       {super.key,
       required this.position,
       required this.company,
       required this.address,
       required this.companyLogo,
-      required this.closing});
+      required this.closing,
+      this.status
+      });
+
+  @override
+  State<JobCard> createState() => _JobCardState();
+}
+
+class _JobCardState extends State<JobCard> {
+@override
+void initState() {
+  super.initState();
+  
+}
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: 180,
+      height: 205,
       width: width,
       child: Card(
         shape: RoundedRectangleBorder(
@@ -46,7 +60,7 @@ class JobCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(60),
                     child: Image.network(
-                      companyLogoUrl+companyLogo,
+                      companyLogoUrl + widget.companyLogo,
                       height: 65,
                       width: 65,
                       fit: BoxFit.contain,
@@ -61,7 +75,7 @@ class JobCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            position,
+                            widget.position,
                             style: GoogleFonts.lexendDeca(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -71,7 +85,7 @@ class JobCard extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            company,
+                            widget.company,
                             style: GoogleFonts.lexendDeca(
                               fontSize: 12,
                             ),
@@ -95,7 +109,7 @@ class JobCard extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    address,
+                    widget.address,
                     style: TextStyle(fontSize: 12),
                   ),
                 ],
@@ -113,7 +127,25 @@ class JobCard extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    "Closing date: 22-07-2024",
+                    "Closing date: ${widget.closing}",
+                    style: TextStyle(fontSize: 12),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    size: 18,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Not Applied",
                     style: TextStyle(fontSize: 12),
                   )
                 ],

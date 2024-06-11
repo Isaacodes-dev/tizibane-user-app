@@ -35,7 +35,6 @@ class EmployeeHistoryService extends GetxController {
         'Authorization': 'Bearer $accessToken',
       },
     );
-    print(response.statusCode);
     if (response.statusCode == 200) {
       isLoading.value = false;
       List<dynamic> data = jsonDecode(response.body)['employmentHistory'];

@@ -1,36 +1,28 @@
 import 'dart:convert';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:tizibane/constants/constants.dart';
 
-class ProfileService extends GetxController {
-  
+class StatusService extends GetxController {
   RxBool isLoading = false.obs;
 
   RxBool isVisible = false.obs;
-  
-  final url = baseUrl + uploadProfilePic;
-
-  var imagePath = ''.obs;
 
   final box = GetStorage();
-  final nrcStorage = GetStorage();
-  late Uint8List imageData;
 
-  Future<void> getImagePath() async {
-    
+  final nrcStorage = GetStorage();
+
+  var status = ''.obs;
+
+  Future<void> getJobStatus(String jobListingId) async {
     String accessToken = box.read('token');
-    
+
     String storedNrc = nrcStorage.read('nrcNumber');
-    
-    imagePath.value = '';
-    
+    status.value = '';
     final response = await http.get(
-      
-      Uri.parse("$baseUrl$getImage/$storedNrc"),
+      Uri.parse("$baseUrl$applicationStatus/$jobListingId/$storedNrc"),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
@@ -38,25 +30,18 @@ class ProfileService extends GetxController {
     );
 
     if (response.statusCode == 200) {
-      
       var responseData = jsonDecode(response.body);
-      
-      if (responseData['imagePath'] != null) {
-      
-        imagePath.value = responseData['imagePath'];
-      
+      if (responseData['status'] != null) {
+        status.value = responseData['status'];
       } else {
-      
-        imagePath.value = '';
-      
-        throw Exception("Image data is null");
-      
+        status.value = '';
+        throw Exception("Status data is null");
       }
+    } else if (response.statusCode == 404) {
+      status.value = '';
     } else {
-      
-      throw Exception('Failed to load image data: ${response.statusCode}');
-   
+      status.value = '';
+      throw Exception('Failed to get Job status: ${response.statusCode}');
     }
   }
-
 }
