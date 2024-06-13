@@ -146,10 +146,12 @@ class _JobsFeedState extends State<JobsFeed> {
                               return GestureDetector(
                                 onTap: () {
                                   Get.to(JobDetails(
-                                    id: _jobsService.foundJobs.value[index].id!.toString(),
+                                    id: _jobsService.foundJobs.value[index].id.toString(),
+                                    statusValue: _statusService.status.value,
                                   ));
                                 },
                                 child: JobCard(
+                                  jobListingId: _jobsService.foundJobs.value[index].id.toString(),
                                   position: _jobsService.foundJobs.value[index].position!,
                                   company: _jobsService.foundJobs.value[index].companyName!,
                                   address: _jobsService.foundJobs.value[index].companyAddress!,

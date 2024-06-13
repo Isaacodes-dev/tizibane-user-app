@@ -17,6 +17,7 @@ class StatusService extends GetxController {
   var status = ''.obs;
 
   Future<void> getJobStatus(String jobListingId) async {
+    isLoading.value = true;
     String accessToken = box.read('token');
 
     String storedNrc = nrcStorage.read('nrcNumber');
@@ -30,17 +31,22 @@ class StatusService extends GetxController {
     );
 
     if (response.statusCode == 200) {
+      isLoading.value = false;
       var responseData = jsonDecode(response.body);
       if (responseData['status'] != null) {
         status.value = responseData['status'];
+        isLoading.value = false;
       } else {
         status.value = '';
+        isLoading.value = false;
         throw Exception("Status data is null");
       }
     } else if (response.statusCode == 404) {
       status.value = '';
+      isLoading.value = false;
     } else {
       status.value = '';
+      isLoading.value = false;
       throw Exception('Failed to get Job status: ${response.statusCode}');
     }
   }

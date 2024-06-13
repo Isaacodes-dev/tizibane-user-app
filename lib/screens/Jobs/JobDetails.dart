@@ -9,8 +9,9 @@ import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Jobs/JobApplication.dart';
 
 class JobDetails extends StatefulWidget {
+  final String statusValue;
   final String id;
-  const JobDetails({super.key, required this.id});
+  const JobDetails({super.key, required this.id,required this.statusValue});
 
   @override
   State<JobDetails> createState() => _JobDetailsState();
@@ -25,9 +26,8 @@ class _JobDetailsState extends State<JobDetails> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _jobsService.getJobDetail(widget.id);
-      _statusService.getJobStatus(widget.id);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    _jobsService.getJobDetail(widget.id);
     });
   }
 
@@ -299,7 +299,7 @@ class _JobDetailsState extends State<JobDetails> {
                                 },
                               ),
                               SizedBox(height: 10),
-                              _statusService.status.value == '' ?
+                              widget.statusValue == '' ?
                               SubmitButton(
                                 text: 'Apply',
                                 onTap: () => Get.to(JobApplication(
