@@ -21,10 +21,15 @@ class ProfileService extends GetxController {
   late Uint8List imageData;
 
   Future<void> getImagePath() async {
+    
     String accessToken = box.read('token');
+    
     String storedNrc = nrcStorage.read('nrcNumber');
-
+    
+    imagePath.value = '';
+    
     final response = await http.get(
+      
       Uri.parse("$baseUrl$getImage/$storedNrc"),
       headers: {
         'Accept': 'application/json',
@@ -33,16 +38,24 @@ class ProfileService extends GetxController {
     );
 
     if (response.statusCode == 200) {
+      
       var responseData = jsonDecode(response.body);
-      imagePath.value = '';
+      
       if (responseData['imagePath'] != null) {
+      
         imagePath.value = responseData['imagePath'];
+      
       } else {
+      
         imagePath.value = '';
+      
         throw Exception("Image data is null");
+      
       }
     } else {
+      
       throw Exception('Failed to load image data: ${response.statusCode}');
+   
     }
   }
 

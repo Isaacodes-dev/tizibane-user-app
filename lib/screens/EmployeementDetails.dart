@@ -75,7 +75,6 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
   Future<void> _fetchEmployeeData() async {
     String nrc = nrcStorage.read('nrcNumber');
     try {
-      print('am here: '+nrc);
       await _employeeService.getEmployeeDetails(nrc);
       box.write(
           'employee_data', _employeeService.employeeDetails.value!.toJson());

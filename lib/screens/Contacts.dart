@@ -42,11 +42,9 @@ class _ContactsState extends State<Contacts> {
   @override
   void initState() {
     super.initState();
-    _loadLocalData();
-    
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _fetchContactData();
-      
+    _loadLocalData();
+    _fetchContactData();
     });
   }
 
@@ -85,6 +83,7 @@ class _ContactsState extends State<Contacts> {
   }
 
   void _tagRead() {
+    result.value = '';
     try {
       NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
         var payload =
@@ -99,11 +98,12 @@ class _ContactsState extends State<Contacts> {
           loadUser(resultSubString);
           NfcManager.instance.stopSession();
         } else {
-          print("error");
+          NfcManager.instance
+              .stopSession(errorMessage: "Error reading NFC tag");
         }
       });
     } catch (ex) {
-      print("Error");
+      print("Error starting NFC session: $ex");
     }
   }
 
@@ -191,19 +191,22 @@ class _ContactsState extends State<Contacts> {
                                         style: GoogleFonts.lexendDeca(
                                             textStyle: const TextStyle(
                                                 color: Color(0xFF727272),
-                                                fontWeight: FontWeight.bold))),
+                                                fontWeight:
+                                                    FontWeight.bold))),
                                     subtitle: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(contact.positionName,
                                             style: GoogleFonts.lexendDeca()),
-                                        Text(contact.companyName,
-                                            style: GoogleFonts.lexendDeca(
-                                                textStyle: const TextStyle(
-                                                    color: Colors.orange,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
+                                        Text(
+                                          contact.companyName,
+                                          style: GoogleFonts.lexendDeca(
+                                            textStyle: const TextStyle(
+                                                color: Colors.orange,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     leading: CircleAvatar(
@@ -212,6 +215,9 @@ class _ContactsState extends State<Contacts> {
                                         imageBaseUrl + contact.profilePicture,
                                       ),
                                     ),
+                                    onLongPress: (){
+                                      openDeleteDiaglog(contact.nrc);
+                                    },
                                     onTap: () {
                                       Navigator.push(
                                         context,
@@ -234,7 +240,8 @@ class _ContactsState extends State<Contacts> {
                                                   email: contact.email,
                                                   telephone:
                                                       contact.companyPhone,
-                                                  firstName: contact.firstName,
+                                                  firstName:
+                                                      contact.firstName,
                                                   lastName: contact.lastName,
                                                   positionName:
                                                       contact.positionName,
@@ -285,6 +292,58 @@ class _ContactsState extends State<Contacts> {
               onPressed: () {
                 scanQR();
               },
+            ),
+          ],
+        ),
+      );
+  Future openDeleteDiaglog(String contactNrc) => showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+          title: Center(child: const Text('Delete Contact')),
+          children: [
+            SimpleDialogOption(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                    _contactService.deleteContactFromApp(contactNrc);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: Text(
+                    "Yes",
+                    style: GoogleFonts.lexendDeca(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: Text(
+                    "No",
+                    style: GoogleFonts.lexendDeca(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
             ),
           ],
         ),

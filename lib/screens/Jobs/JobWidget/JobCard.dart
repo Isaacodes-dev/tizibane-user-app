@@ -1,27 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/constants/constants.dart';
 
-class JobCard extends StatelessWidget {
+class JobCard extends StatefulWidget {
+  final String jobListingId;
   final String position;
   final String company;
   final String address;
   final String companyLogo;
   final String closing;
+  final String? status;
   const JobCard(
       {super.key,
+      required this.jobListingId,
       required this.position,
       required this.company,
       required this.address,
       required this.companyLogo,
-      required this.closing});
+      required this.closing,
+      this.status});
+
+  @override
+  State<JobCard> createState() => _JobCardState();
+}
+
+class _JobCardState extends State<JobCard> {
+  final StatusService _statusService = Get.put(StatusService());
+  final RxString jobStatus = ''.obs;
+  @override
+  void initState() {
+    super.initState();
+    fetchJobStatus();
+  }
+
+  void fetchJobStatus() async {
+    try {
+      await _statusService.getJobStatus(widget.jobListingId);
+      jobStatus.value = _statusService.status.value;
+    } catch (e) {
+      jobStatus.value = 'Error fetching status';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: 180,
+      height: 205,
       width: width,
       child: Card(
         shape: RoundedRectangleBorder(
@@ -46,7 +74,7 @@ class JobCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(60),
                     child: Image.network(
-                      companyLogoUrl+companyLogo,
+                      companyLogoUrl + widget.companyLogo,
                       height: 65,
                       width: 65,
                       fit: BoxFit.contain,
@@ -61,7 +89,7 @@ class JobCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            position,
+                            widget.position,
                             style: GoogleFonts.lexendDeca(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -71,7 +99,7 @@ class JobCard extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            company,
+                            widget.company,
                             style: GoogleFonts.lexendDeca(
                               fontSize: 12,
                             ),
@@ -95,7 +123,7 @@ class JobCard extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    address,
+                    widget.address,
                     style: TextStyle(fontSize: 12),
                   ),
                 ],
@@ -113,11 +141,42 @@ class JobCard extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    "Closing date: 22-07-2024",
+                    "Closing date: ${widget.closing}",
                     style: TextStyle(fontSize: 12),
                   )
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
+              Obx(() {
+                return _statusService.isLoading.value
+                    ? SizedBox(
+                        width: 12,
+                        height: 12,
+                        child: const CircularProgressIndicator(
+                          color: Colors.black,
+                          strokeWidth: 2.0,
+                        ),
+                      )
+                    : Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            jobStatus.value.isEmpty
+                                ? "Not Applied"
+                                : jobStatus.value,
+                            style: TextStyle(fontSize: 12),
+                          )
+                        ],
+                      );
+              }),
               SizedBox(
                 height: 10,
               ),

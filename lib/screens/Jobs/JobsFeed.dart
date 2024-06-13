@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Services/JobsService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
+import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Jobs/JobDetails.dart';
@@ -19,6 +20,7 @@ class _JobsFeedState extends State<JobsFeed> {
   final JobsService _jobsService = Get.put(JobsService());
   final UserService _userService = Get.put(UserService());
   final ProfileService _profileService = Get.put(ProfileService());
+  final StatusService _statusService = Get.put(StatusService());
 
   @override
   void initState() {
@@ -144,10 +146,12 @@ class _JobsFeedState extends State<JobsFeed> {
                               return GestureDetector(
                                 onTap: () {
                                   Get.to(JobDetails(
-                                    id: _jobsService.foundJobs.value[index].id!.toString(),
+                                    id: _jobsService.foundJobs.value[index].id.toString(),
+                                    statusValue: _statusService.status.value,
                                   ));
                                 },
                                 child: JobCard(
+                                  jobListingId: _jobsService.foundJobs.value[index].id.toString(),
                                   position: _jobsService.foundJobs.value[index].position!,
                                   company: _jobsService.foundJobs.value[index].companyName!,
                                   address: _jobsService.foundJobs.value[index].companyAddress!,

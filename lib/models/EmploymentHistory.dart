@@ -7,7 +7,7 @@ class EmploymentHistory {
   final String position;
   final String startDate;
   final String endDate;
-  final String description;
+  final String companyWebsite;
 
   EmploymentHistory({
     required this.companyName,
@@ -18,20 +18,20 @@ class EmploymentHistory {
     required this.position,
     required this.startDate,
     required this.endDate,
-    required this.description,
+    required this.companyWebsite,
   });
 
   factory EmploymentHistory.fromJson(Map<String, dynamic> json) {
     return EmploymentHistory(
-      companyName: json['companyName'] ?? '',
-      companyEmail: json['companyEmail'] ?? '',
-      companyPhone: json['companyPhone'] ?? '',
-      companyAddress: json['companyAddress'] ?? '',
+      companyName: json['company_name'] ?? '',
+      companyEmail: json['company_email'] ?? '',
+      companyPhone: json['company_phone'] ?? '',
+      companyAddress: json['company_address'] ?? '',
       companyLogo: json['company_logo_url'] ?? '',
+      companyWebsite: json['company_website'] ?? '',
       position: json['position_name'] ?? '',
       startDate: json['start_date'] ??'',
       endDate: json['end_date'] ??'',
-      description: json['description'] ??'',
     );
   }
 
@@ -42,7 +42,6 @@ class EmploymentHistory {
       'position': position,
       'startDate': startDate,
       'endDate': endDate,
-      'description': description,
     };
   }
 }
