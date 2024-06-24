@@ -62,26 +62,6 @@ class ContactService extends GetxController {
           'Authorization': 'Bearer $accessToken',
         },
       );
-      contactDetails.value = ContactModel(
-                        nrc: '',
-          firstName: '',
-          lastName: '',
-          phoneNumber: '',
-          email: '',
-          roleId: '',
-          createdAt: '',
-          updatedAt: '',
-          profilePicture: '',
-          positionName: '',
-          companyName: '',
-          companyLogo: '',
-          companyAssignedEmail: '',
-          companyEmail: '',
-          companyPhone: '',
-          comapnyWebsite: '',
-          comapnyAddress: '',
-          telephone: ''
-            );
 
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
@@ -139,7 +119,6 @@ class ContactService extends GetxController {
       String accessToken = await getStoredToken();
       String contactSaver = await getStoredNrc();
       isLoading.value = true;
-      List<dynamic> data = [];
       final response = await http.get(
         Uri.parse("$baseUrl$getContactsDetails/$contactSaver"),
         headers: {
@@ -149,7 +128,7 @@ class ContactService extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        data = jsonDecode(response.body)['contacts'];
+        List<dynamic> data = jsonDecode(response.body)['contacts'];
         contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
         foundContacts.value = contactsList;
         await saveContactsToLocal(contactsList.map((contact) => contact.toJson()).toList());
