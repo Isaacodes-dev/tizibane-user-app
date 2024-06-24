@@ -98,6 +98,7 @@ class _MoreState extends State<More> {
             color: Colors.black,
           ),
           title: Text('Notifications', style: GoogleFonts.lexendDeca()),
+          
           onTap: () => {Get.to(const Notifications())},
         ),
         ListTile(
