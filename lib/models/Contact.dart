@@ -40,7 +40,7 @@ class ContactModel {
     required this.comapnyAddress,
     required this.comapnyWebsite,
     required this.companyAssignedEmail,
-    required this.telephone
+    required this.telephone,
   });
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
@@ -50,8 +50,8 @@ class ContactModel {
       lastName: json['last_name'] ?? '',
       phoneNumber: json['phone_number'] ?? '',
       email: json['user_email'] ?? '',
-      companyId: json['company_id'].toString(),
-      positionId: json['position_id'].toString(),
+      companyId: json['company_id']?.toString(),
+      positionId: json['position_id']?.toString(),
       roleId: json['role_id'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
@@ -66,5 +66,30 @@ class ContactModel {
       companyAssignedEmail: json['company_assigned_email'] ?? '',
       telephone: json['telephone'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'nrc': nrc,
+      'first_name': firstName,
+      'last_name': lastName,
+      'phone_number': phoneNumber,
+      'user_email': email,
+      'company_id': companyId,
+      'position_id': positionId,
+      'role_id': roleId,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'profile_picture': profilePicture,
+      'position_name': positionName,
+      'company_name': companyName,
+      'company_logo_url': companyLogo,
+      'company_email': companyEmail,
+      'company_phone': companyPhone,
+      'company_address': comapnyAddress,
+      'company_website': comapnyWebsite,
+      'company_assigned_email': companyAssignedEmail,
+      'telephone': telephone,
+    };
   }
 }

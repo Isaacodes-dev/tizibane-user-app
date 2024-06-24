@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
 import 'package:tizibane/Services/ContactService.dart';
 import 'package:tizibane/components/ContactSaveButton.dart';
@@ -34,11 +35,30 @@ class NewContact extends StatefulWidget {
 }
 
 class _NewContactState extends State<NewContact> {
-  String contactSaverNrc = nrcStorage.read('nrcNumber');
+  String? contactSaverNrc = '';
 
   final ContactService _contactService = Get.put(ContactService());
+  
+//   Future<void> loadUserData() async {
+//   SharedPreferences preferences = await SharedPreferences.getInstance();
+//    contactSaverNrc = preferences.getString('nrcNumber');
+
+// }
+
+Future<String> getString() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  contactSaverNrc = preferences.getString('nrcNumber');
+  print(contactSaverNrc);
+  return contactSaverNrc ?? ''; // Return an empty string if the value is null
+}
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getString();
+  }
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(

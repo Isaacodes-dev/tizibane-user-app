@@ -1,11 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:tizibane/models/User.dart';
 import 'package:tizibane/screens/EmployeementDetails.dart';
 import 'package:tizibane/screens/Groups/Groups.dart';
 import 'package:tizibane/components/share/ShareUrlLink.dart';
@@ -20,39 +23,30 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final UserService _userService = Get.put(UserService());
   final ProfileService _profileService = Get.put(ProfileService());
-  bool isLoading = true;
   final box = GetStorage();
-
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    _profileService.getImagePath();
-    _profileService.isVisible.value = false;
-    _loadLocalData();
-    _fetchUserData();
+    _initializeAsync();
   }
 
-  Future<void> _loadLocalData() async {
-    if (box.hasData('user_data')) {
-      _userService.userObj.value = box.read('user_data');
-      setState(() {
-        isLoading = false;
-      });
-    }
+  void _initializeAsync() {
+    _checkConnectivityAndFetchData();
   }
 
-  Future<void> _fetchUserData() async {
-    try {
-      await _userService.getUser();
-      box.write('user_data', _userService.userObj.value);
-      setState(() {
-        isLoading = false;
+  Future<void> _checkConnectivityAndFetchData() async {
+    bool isConnected = await _connectivityService.checkConnectivity();
+    if (isConnected) {
+      _userService.getUser();
+      _profileService.getImagePath().catchError((error) {
+        print('Error fetching image path: $error');
       });
-      _refreshIfDataChanged();
-    } catch (error) {
-      print('Error fetching user data: $error');
-      setState(() {
-        isLoading = false;
+      _profileService.isVisible.value = false;
+    } else {
+      _userService.loadLocalData();
+            _profileService.getImagePath().catchError((error) {
+        print('Error fetching image path: $error');
       });
     }
   }
@@ -61,7 +55,8 @@ class _HomeState extends State<Home> {
     try {
       await _userService.getUser();
       if (_userService.userObj.value != box.read('user_data')) {
-        box.write('user_data', _userService.userObj.value);
+        box.write('user_data',
+            _userService.userObj.value.map((e) => e.toJson()).toList());
         setState(() {});
       }
     } catch (error) {
@@ -71,32 +66,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
-    final user = _userService.userObj.value.isNotEmpty
-        ? _userService.userObj.value[0]
-        : null;
-
-    if (user == null) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-        ),
-        body: const Center(
-          child: Text('User data not available'),
-        ),
-      );
-    }
-
     return Obx(() {
       return Scaffold(
         appBar: AppBar(
@@ -145,8 +114,13 @@ class _HomeState extends State<Home> {
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              child: Image.network(
-                                imageBaseUrl + _profileService.imagePath.value,
+                              child: CachedNetworkImage(
+                                imageUrl: imageBaseUrl +
+                                    _profileService.imagePath.value,
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
                                 fit: BoxFit.cover,
                                 width: 150,
                                 height: 150,

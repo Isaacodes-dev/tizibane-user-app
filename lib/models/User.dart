@@ -61,7 +61,7 @@ factory User.fromJson(Map<String, dynamic> json) {
       'first_name': first_name,
       'last_name': last_name,
       'phone_number': phone_number,
-      'email': email,
+      'user_email': email,
       'password': password,
       'profilePicture': profilePicture,
       'position_name': position_name,

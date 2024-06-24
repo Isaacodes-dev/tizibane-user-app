@@ -51,39 +51,39 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
   @override
   void initState() {
     super.initState();
-    _loadLocalData();
-    _fetchEmployeeData();
+    // _loadLocalData();
+    // _fetchEmployeeData();
     _fetchEmployeeHistory();
   }
 
-  Future<void> _loadLocalData() async {
-    if (box.hasData('employee_data')) {
-      final localData = box.read('employee_data');
-      _employeeService.employeeDetails.value = Employee.fromJson(localData);
-      setState(() {});
-    }
-    if (box.hasData('employee_history_data')) {
-      final localHistoryData = box.read('employee_history_data');
-      _employeeHistoryService.employeeHistoryDetails.value =
-          (localHistoryData as List)
-              .map((e) => EmploymentHistory.fromJson(e))
-              .toList();
-      setState(() {});
-    }
-  }
+  // Future<void> _loadLocalData() async {
+  //   if (box.hasData('employee_data')) {
+  //     final localData = box.read('employee_data');
+  //     _employeeService.employeeDetails.value = Employee.fromJson(localData);
+  //     setState(() {});
+  //   }
+  //   if (box.hasData('employee_history_data')) {
+  //     final localHistoryData = box.read('employee_history_data');
+  //     _employeeHistoryService.employeeHistoryDetails.value =
+  //         (localHistoryData as List)
+  //             .map((e) => EmploymentHistory.fromJson(e))
+  //             .toList();
+  //     setState(() {});
+  //   }
+  // }
 
-  Future<void> _fetchEmployeeData() async {
-    String nrc = nrcStorage.read('nrcNumber');
-    try {
-      await _employeeService.getEmployeeDetails(nrc);
-      box.write(
-          'employee_data', _employeeService.employeeDetails.value!.toJson());
-      setState(() {});
-      _refreshIfDataChanged();
-    } catch (error) {
-      print('Error fetching employee data: $error');
-    }
-  }
+  // Future<void> _fetchEmployeeData() async {
+  //   String nrc = nrcStorage.read('nrcNumber');
+  //   try {
+  //     await _employeeService.getEmployeeDetails(nrc);
+  //     box.write(
+  //         'employee_data', _employeeService.employeeDetails.value!.toJson());
+  //     setState(() {});
+  //     _refreshIfDataChanged();
+  //   } catch (error) {
+  //     print('Error fetching employee data: $error');
+  //   }
+  // }
 
   Future<void> _fetchEmployeeHistory() async {
     try {
@@ -100,18 +100,18 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
     }
   }
 
-  Future<void> _refreshIfDataChanged() async {
-    try {
-      await _employeeService.getEmployeeDetails(widget.email);
-      final newEmployeeData = _employeeService.employeeDetails.value!.toJson();
-      if (newEmployeeData != box.read('employee_data')) {
-        box.write('employee_data', newEmployeeData);
-        setState(() {});
-      }
-    } catch (error) {
-      print('Error checking for data changes: $error');
-    }
-  }
+  // Future<void> _refreshIfDataChanged() async {
+  //   try {
+  //     await _employeeService.getEmployeeDetails(widget.email);
+  //     final newEmployeeData = _employeeService.employeeDetails.value!.toJson();
+  //     if (newEmployeeData != box.read('employee_data')) {
+  //       box.write('employee_data', newEmployeeData);
+  //       setState(() {});
+  //     }
+  //   } catch (error) {
+  //     print('Error checking for data changes: $error');
+  //   }
+  // }
 
   Future<void> _refreshHistoryIfDataChanged() async {
     try {

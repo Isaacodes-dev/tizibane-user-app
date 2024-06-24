@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,7 +19,6 @@ class JobDetails extends StatefulWidget {
 
 class _JobDetailsState extends State<JobDetails> {
   final JobsService _jobsService = Get.put(JobsService());
-
   final StatusService _statusService = Get.put(StatusService());
 
   @override
@@ -56,11 +54,10 @@ class _JobDetailsState extends State<JobDetails> {
           final job = _jobsService.jobDetails.value!;
           final logoUrl = job.company?.companyLogoUrl ?? '';
           List<String> responsibilities =
-              job.responsibilitiesAndDuties?.split('\n') ?? [];
+              _splitAndTrim(job.responsibilitiesAndDuties);
           List<String> qualifications =
-              job.qualificationsAndExperience?.split('\n') ?? [];
-          List<String> additionalRequirements =
-              job.otherComment?.split('\n') ?? [];
+              _splitAndTrim(job.qualificationsAndExperience);
+          List<String> additionalRequirements = _splitAndTrim(job.otherComment);
 
           return Stack(
             children: [
@@ -168,42 +165,7 @@ class _JobDetailsState extends State<JobDetails> {
                                 ),
                               ),
                               SizedBox(height: 10),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: responsibilities.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '\u2022',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Expanded(
-                                          child: Text(
-                                            responsibilities[index],
-                                            style: GoogleFonts.lexendDeca(
-                                              textStyle: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300,
-                                                height: 1.5,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
+                              _buildListView(responsibilities),
                               SizedBox(height: 10),
                               Text(
                                 "Qualifications",
@@ -215,42 +177,7 @@ class _JobDetailsState extends State<JobDetails> {
                                 ),
                               ),
                               SizedBox(height: 10),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: qualifications.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '\u2022',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Expanded(
-                                          child: Text(
-                                            qualifications[index],
-                                            style: GoogleFonts.lexendDeca(
-                                              textStyle: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300,
-                                                height: 1.5,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
+                              _buildListView(qualifications),
                               SizedBox(height: 10),
                               Text(
                                 "Additional Requirements",
@@ -262,42 +189,7 @@ class _JobDetailsState extends State<JobDetails> {
                                 ),
                               ),
                               SizedBox(height: 10),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: additionalRequirements.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '\u2022',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Expanded(
-                                          child: Text(
-                                            additionalRequirements[index],
-                                            style: GoogleFonts.lexendDeca(
-                                              textStyle: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w300,
-                                                height: 1.5,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
+                              _buildListView(additionalRequirements),
                               SizedBox(height: 10),
                               widget.statusValue == ''
                                   ? SubmitButton(
@@ -328,6 +220,50 @@ class _JobDetailsState extends State<JobDetails> {
         }
       }),
       floatingActionButton: const ShareUrlLink(),
+    );
+  }
+
+  List<String> _splitAndTrim(String? text) {
+    if (text == null) return [];
+    return text
+        .split('\n')
+        .map((item) => item.trim())
+        .where((item) => item.isNotEmpty)
+        .toList();
+  }
+
+  Widget _buildListView(List<String> items) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '\u2022',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  items[index],
+                  style: GoogleFonts.lexendDeca(
+                    textStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
