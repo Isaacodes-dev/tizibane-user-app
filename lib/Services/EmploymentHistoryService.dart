@@ -24,9 +24,9 @@ class EmployeeHistoryService extends GetxController {
 
   Future<void> getEmploymentHistory() async {
     
-    String accessToken = box.read('token');
+    String accessToken = await getStoredToken();
 
-    String employeeHistory = nrcStorage.read('nrcNumber');
+    String employeeHistory = await getStoredNrc();
 
     isLoading.value = true;
     final response = await http.get(

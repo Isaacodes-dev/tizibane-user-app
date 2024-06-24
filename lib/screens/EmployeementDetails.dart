@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 
 import 'package:tizibane/Services/EmployeeService.dart';
 import 'package:tizibane/Services/EmploymentHistoryService.dart';
@@ -44,6 +46,7 @@ class EmployeementDetails extends StatefulWidget {
 
 class _EmployeementDetailsState extends State<EmployeementDetails> {
   final EmployeeService _employeeService = Get.put(EmployeeService());
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());
   final EmployeeHistoryService _employeeHistoryService =
       Get.put(EmployeeHistoryService());
   final box = GetStorage();
@@ -51,81 +54,27 @@ class _EmployeementDetailsState extends State<EmployeementDetails> {
   @override
   void initState() {
     super.initState();
-    // _loadLocalData();
-    // _fetchEmployeeData();
-    _fetchEmployeeHistory();
+    _initializeAsync();
   }
 
-  // Future<void> _loadLocalData() async {
-  //   if (box.hasData('employee_data')) {
-  //     final localData = box.read('employee_data');
-  //     _employeeService.employeeDetails.value = Employee.fromJson(localData);
-  //     setState(() {});
-  //   }
-  //   if (box.hasData('employee_history_data')) {
-  //     final localHistoryData = box.read('employee_history_data');
-  //     _employeeHistoryService.employeeHistoryDetails.value =
-  //         (localHistoryData as List)
-  //             .map((e) => EmploymentHistory.fromJson(e))
-  //             .toList();
-  //     setState(() {});
-  //   }
-  // }
+  void _initializeAsync() {
+    _checkConnectivityAndFetchData();
+  }
 
-  // Future<void> _fetchEmployeeData() async {
-  //   String nrc = nrcStorage.read('nrcNumber');
-  //   try {
-  //     await _employeeService.getEmployeeDetails(nrc);
-  //     box.write(
-  //         'employee_data', _employeeService.employeeDetails.value!.toJson());
-  //     setState(() {});
-  //     _refreshIfDataChanged();
-  //   } catch (error) {
-  //     print('Error fetching employee data: $error');
-  //   }
-  // }
-
-  Future<void> _fetchEmployeeHistory() async {
-    try {
-      await _employeeHistoryService.getEmploymentHistory();
-      box.write(
-          'employee_history_data',
-          _employeeHistoryService.employeeHistoryDetails
-              .map((e) => e.toJson())
-              .toList());
-      setState(() {});
-      _refreshHistoryIfDataChanged();
-    } catch (error) {
-      print('Error fetching employee history: $error');
+  Future<void> _checkConnectivityAndFetchData() async {
+    bool isConnected = await _connectivityService.checkConnectivity();
+    if (isConnected) {
+      String employeeId = await getStoredNrc();
+      print(employeeId);
+      _employeeService.getEmployeeDetails(employeeId);
+    } else {
+      _employeeService.loadLocalEmployee();
     }
   }
 
-  // Future<void> _refreshIfDataChanged() async {
-  //   try {
-  //     await _employeeService.getEmployeeDetails(widget.email);
-  //     final newEmployeeData = _employeeService.employeeDetails.value!.toJson();
-  //     if (newEmployeeData != box.read('employee_data')) {
-  //       box.write('employee_data', newEmployeeData);
-  //       setState(() {});
-  //     }
-  //   } catch (error) {
-  //     print('Error checking for data changes: $error');
-  //   }
-  // }
-
-  Future<void> _refreshHistoryIfDataChanged() async {
-    try {
-      await _employeeHistoryService.getEmploymentHistory();
-      final newHistoryData = _employeeHistoryService.employeeHistoryDetails
-          .map((e) => e.toJson())
-          .toList();
-      if (newHistoryData != box.read('employee_history_data')) {
-        box.write('employee_history_data', newHistoryData);
-        setState(() {});
-      }
-    } catch (error) {
-      print('Error checking for history data changes: $error');
-    }
+  Future<String> getStoredNrc() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nrcNumber') ?? '';
   }
 
   @override
