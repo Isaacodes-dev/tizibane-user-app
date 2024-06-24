@@ -20,8 +20,8 @@ class EmployeeService extends GetxController {
   }
 
   Future<void> getEmployeeDetails(String employeeId) async {
-    String? accessToken = await getStoredToken();
-
+    String accessToken = await getStoredToken();
+    print(employeeId);
     isLoading.value = true;
     final response = await http.get(
       Uri.parse("$baseUrl/getEmployeeDetails/$employeeId"),
@@ -37,13 +37,13 @@ class EmployeeService extends GetxController {
       employeeDetails.add(Employee.fromJson(data['employee']));
     } else {
       isLoading.value = false;
-      Get.snackbar(
-        'Error',
-        'Failed to Load Employee Details',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      // Get.snackbar(
+      //   'Error',
+      //   'Failed to Load Employee Details',
+      //   snackPosition: SnackPosition.TOP,
+      //   backgroundColor: Colors.red,
+      //   colorText: Colors.white,
+      // );
       print('${response.statusCode} :${response.reasonPhrase}');
     }
   }
