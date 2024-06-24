@@ -40,6 +40,7 @@ class EmployeeHistoryService extends GetxController {
       isLoading.value = false;
       List<dynamic> data = jsonDecode(response.body)['employmentHistory'];
       employeeHistoryDetails.value = data.map((e) => EmploymentHistory.fromJson(e)).toList();
+      await saveEmployeeHistoryToLocal(employeeHistoryDetails.map((e) => e.toJson()).toList());
       update();
     }else if (response.statusCode == 404) {
       isLoading.value = false;
@@ -54,6 +55,27 @@ class EmployeeHistoryService extends GetxController {
       );
       print('${response.statusCode} :${response.reasonPhrase}');
     }
+  }
+
+  Future<void> loadLocalEmployeeHistory() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.containsKey('employeeHistory')) {
+    List<String> employeeHistoryStrings = prefs.getStringList('employeeHistory') ?? [];
+    
+    List<EmploymentHistory> employeeHistory = employeeHistoryStrings.map((e) {
+      var json = jsonDecode(e);
+      return EmploymentHistory.fromJson(json);
+    }).toList();
+    employeeHistoryDetails.value = employeeHistory;
+  } else {
+    print('No employee history found in SharedPreferences');
+  }
+}
+
+  Future<void> saveEmployeeHistoryToLocal(List<Map<String, dynamic>> employeeHistory) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> employeeHistoryStrings = employeeHistory.map((e) => jsonEncode(e)).toList();
+    await prefs.setStringList('employeeHistory', employeeHistoryStrings);
   }
 
   Future<void> getContactEmploymentHistory(String contactNrc) async {
@@ -72,6 +94,7 @@ class EmployeeHistoryService extends GetxController {
       isLoading.value = false;
       List<dynamic> data = jsonDecode(response.body)['employmentHistory'];
       contactEmployeeHistoryDetails.value = data.map((e) => EmploymentHistory.fromJson(e)).toList();
+      await saveContactEmployeeHistoryToLocal(contactEmployeeHistoryDetails.map((e) => e.toJson()).toList());
       update();
     }else if (response.statusCode == 404) {
       isLoading.value = false;
@@ -87,6 +110,27 @@ class EmployeeHistoryService extends GetxController {
       print('${response.statusCode} :${response.reasonPhrase}');
     }
   }
+    Future<void> loadLocalContactEmployeeHistory() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.containsKey('employeeContactHistory')) {
+    List<String> employeeContactHistoryStrings = prefs.getStringList('employeeContactHistory') ?? [];
+    
+    List<EmploymentHistory> employeeContactHistory = employeeContactHistoryStrings.map((e) {
+      var json = jsonDecode(e);
+      return EmploymentHistory.fromJson(json);
+    }).toList();
+    contactEmployeeHistoryDetails.value = employeeContactHistory;
+  } else {
+    print('No employee history found in SharedPreferences');
+  }
+}
+
+  Future<void> saveContactEmployeeHistoryToLocal(List<Map<String, dynamic>> employeeContactHistory) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> employeeContactHistoryStrings = employeeContactHistory.map((e) => jsonEncode(e)).toList();
+    await prefs.setStringList('employeeContactHistory', employeeContactHistoryStrings);
+  }
+
       Future<String> getStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') ?? '';

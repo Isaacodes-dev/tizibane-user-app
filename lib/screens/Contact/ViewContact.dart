@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -65,8 +66,8 @@ class _ViewContactState extends State<ViewContact> {
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                              child: Image.network(
-                            imageBaseUrl + widget.profilePicture,
+                              child: CachedNetworkImage(
+                            imageUrl: imageBaseUrl + widget.profilePicture,
                             fit: BoxFit.cover,
                             width: 150,
                             height: 150,

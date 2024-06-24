@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/EmploymentHistoryService.dart';
 import 'package:tizibane/models/EmploymentHistory.dart';
 import 'package:tizibane/screens/Contact/ViewContactEmployeeHistory/ContactEmployeeCard.dart';
@@ -21,7 +22,7 @@ final _employeeHistoryService =
 class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
   final ScrollController _scrollController = ScrollController();
   double _previousOffset = 0.0;
-
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());
   @override
   void initState() {
     super.initState();
@@ -30,9 +31,21 @@ class _ContactEmployeeHistoryState extends State<ContactEmployeeHistory> {
         scrollToCard(widget.employeeIndex!);
       }
     });
-
+    _initializeAsync();
     _scrollController.addListener(_onScroll);
-    _employeeHistoryService.getContactEmploymentHistory(widget.contactNrc);
+  }
+
+  void _initializeAsync() {
+    _checkConnectivityAndFetchData();
+  }
+
+  Future<void> _checkConnectivityAndFetchData() async {
+    bool isConnected = await _connectivityService.checkConnectivity();
+    if (isConnected) {
+      _employeeHistoryService.getContactEmploymentHistory(widget.contactNrc);
+    } else {
+      _employeeHistoryService.loadLocalContactEmployeeHistory();
+    }
   }
 
   @override
