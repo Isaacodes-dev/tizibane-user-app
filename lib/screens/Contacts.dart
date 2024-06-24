@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/ContactService.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -25,7 +27,7 @@ class _ContactsState extends State<Contacts> {
   final ContactService _contactService = Get.put(ContactService());
   final qrKey = GlobalKey(debugLabel: 'QR');
   final box = GetStorage();
-
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());
   Barcode? resultQr;
   QRViewController? controller;
 
@@ -42,27 +44,42 @@ class _ContactsState extends State<Contacts> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-    _loadLocalData();
-    _fetchContactData();
+      _initializeAsync();
     });
   }
 
-  Future<void> _loadLocalData() async {
-    if (box.hasData('contacts_data')) {
-      _contactService.foundContacts.value = box.read('contacts_data');
-      setState(() {});
-    }
+  // Future<void> _loadLocalData() async {
+  //   if (box.hasData('contacts_data')) {
+  //     _contactService.foundContacts.value = box.read('contacts_data');
+
+  //     setState(() {});
+  //   }
+  // }
+
+  // Future<void> _fetchContactData() async {
+  //   try {
+  //     await _contactService.getContacts();
+
+  //     setState(() {});
+
+  //     _refreshIfDataChanged();
+  //   } catch (error) {
+  //     print('Error fetching contacts data: $error');
+  //   }
+  // }
+
+  void _initializeAsync() {
+    _checkConnectivityAndFetchData();
   }
 
-  Future<void> _fetchContactData() async {
-    try {
-      await _contactService.getContacts();
-      box.write('contacts_data', _contactService.foundContacts.value);
-      setState(() {});
-      _refreshIfDataChanged();
-    } catch (error) {
-      print('Error fetching contacts data: $error');
+  Future<void> _checkConnectivityAndFetchData() async {
+    bool isConnected = await _connectivityService.checkConnectivity();
+    if (isConnected) {
+      _contactService.getContacts();
+    } else {
+      _contactService.loadLocalContacts();
     }
   }
 
@@ -88,14 +105,18 @@ class _ContactsState extends State<Contacts> {
       NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
         var payload =
             tag.data["ndef"]["cachedMessage"]["records"][0]["payload"];
+
         var stringPayload = String.fromCharCodes(payload);
+
         result.value = stringPayload;
+
         String resultString = result.value.toString();
 
         String resultSubString = resultString.substring(3);
 
         if (resultSubString.isNotEmpty) {
           loadUser(resultSubString);
+
           NfcManager.instance.stopSession();
         } else {
           NfcManager.instance
@@ -191,8 +212,7 @@ class _ContactsState extends State<Contacts> {
                                         style: GoogleFonts.lexendDeca(
                                             textStyle: const TextStyle(
                                                 color: Color(0xFF727272),
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     subtitle: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -211,11 +231,26 @@ class _ContactsState extends State<Contacts> {
                                     ),
                                     leading: CircleAvatar(
                                       radius: 35,
-                                      foregroundImage: NetworkImage(
-                                        imageBaseUrl + contact.profilePicture,
+                                      backgroundColor: Colors.grey[
+                                          200], // Optional: add a background color
+                                      child: ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: imageBaseUrl +
+                                              contact.profilePicture,
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                          fit: BoxFit
+                                              .cover, 
+                                          width:
+                                              60, 
+                                          height:
+                                              60, 
+                                        ),
                                       ),
                                     ),
-                                    onLongPress: (){
+                                    onLongPress: () {
                                       openDeleteDiaglog(contact.nrc);
                                     },
                                     onTap: () {
@@ -240,8 +275,7 @@ class _ContactsState extends State<Contacts> {
                                                   email: contact.email,
                                                   telephone:
                                                       contact.companyPhone,
-                                                  firstName:
-                                                      contact.firstName,
+                                                  firstName: contact.firstName,
                                                   lastName: contact.lastName,
                                                   positionName:
                                                       contact.positionName,
@@ -304,46 +338,46 @@ class _ContactsState extends State<Contacts> {
             SimpleDialogOption(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Get.back();
-                    _contactService.deleteContactFromApp(contactNrc);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.back();
+                      _contactService.deleteContactFromApp(contactNrc);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    child: Text(
+                      "Yes",
+                      style: GoogleFonts.lexendDeca(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  child: Text(
-                    "Yes",
-                    style: GoogleFonts.lexendDeca(
-                      color: Colors.white,
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    child: Text(
+                      "No",
+                      style: GoogleFonts.lexendDeca(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  child: Text(
-                    "No",
-                    style: GoogleFonts.lexendDeca(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                ],
+              ),
             ),
           ],
         ),

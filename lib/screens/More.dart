@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/Services/Connectivity.dart';
+import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/screens/Jobs/uploadCv.dart';
 import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
@@ -21,17 +23,31 @@ class More extends StatefulWidget {
 
 final AuthService _authService = Get.put(AuthService());
 
-final nrcStorage = GetStorage();
+final UserService _userService = Get.put(UserService());
 
-late String nrcNumber;
+
 
 class _MoreState extends State<More> {
+  String nrcNumber = '';
   @override
-  void initState() {
+  void initState(){
     // TODO: implement initState
     super.initState();
-    nrcNumber = nrcStorage.read('nrcNumber');
+    loadUserData();
   }
+
+  Future<void> loadUserData() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String? token = preferences.getString('token');
+  nrcNumber = preferences.getString('nrcNumber') ?? '';
+
+  if (token != null && nrcNumber != null) {
+    print('Token: $token');
+    print('NRC Number: $nrcNumber');
+  } else {
+    print('No user data found');
+  }
+}
 
   @override
   Widget build(BuildContext context) {

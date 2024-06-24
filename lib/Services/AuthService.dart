@@ -32,7 +32,7 @@ class AuthService extends GetxController {
 
   final nrcStorage = GetStorage();
 
-  Future<void> loginUser({
+ Future<void> loginUser({
     required String nrc,
     required String password,
   }) async {
@@ -54,10 +54,12 @@ class AuthService extends GetxController {
       if (response.statusCode == 200) {
         isLoading.value = false;
         token.value = json.decode(response.body)['token'];
-        box.write('token', token.value);
-        nrcStorage.write('nrcNumber', nrc);
+
+        // Save token and nrc to SharedPreferences
         SharedPreferences preferences = await SharedPreferences.getInstance();
-        preferences.setString('tokenValue', token.value);
+        await preferences.setString('token', token.value);
+        await preferences.setString('nrcNumber', nrc);
+
         Get.offAll(() => const BottomMenuBarItems(
               selectedIndex: 0,
             ));
@@ -93,7 +95,7 @@ class AuthService extends GetxController {
 
       isLoading.value = true;
 
-      String? accessToken = box.read('token');
+      String? accessToken = await getStoredToken();
 
       final response = await http.post(
         Uri.parse(url),
@@ -125,7 +127,9 @@ class AuthService extends GetxController {
             <EmploymentHistory>[].obs;
 
         SharedPreferences preferences = await SharedPreferences.getInstance();
-        preferences.remove('tokenValue');
+        preferences.remove('token');
+        preferences.remove('contacts');
+        preferences.remove('user');
 
         Get.snackbar(
           'Success',
@@ -151,4 +155,14 @@ class AuthService extends GetxController {
       isLoading.value = false;
     }
   }
+    Future<String> getStoredToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
+
+  Future<String> getStoredNrc() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nrcNumber') ?? '';
+  }
+
 }

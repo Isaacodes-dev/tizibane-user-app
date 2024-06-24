@@ -3,52 +3,99 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/User.dart';
 
 class UserService extends GetxController {
-    final isLoading = false.obs;
+  final isLoading = false.obs;
   final isLoaded = false.obs;
   var userObj =
       <User>[].obs;
-          
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());        
   final box = GetStorage();
   final nrcStorage = GetStorage();
   final url = baseUrl + tizibaneUser;
 
   Future<void> getUser() async {
-    String accessToken = box.read('token');
-    String storedNrc = nrcStorage.read('nrcNumber');
-    isLoading.value = true; 
-    final response = await http.get(
-      Uri.parse("$url/$storedNrc"),
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
-    if (response.statusCode == 200) {
-      var responseData = jsonDecode(response.body);
-      if (responseData['user'] != null) {
-         List<dynamic> data = jsonDecode(response.body)['user'];
-        userObj.value = data.map((e) => User.fromJson(e)).toList();
-        isLoading.value = false;
-        isLoaded.value = true;
+    bool isConnected = await _connectivityService.checkConnectivity();
+    if (isConnected) {
+      String accessToken = await getStoredToken();
+      String storedNrc = await getStoredNrc();
+
+      isLoading.value = true;
+      final response = await http.get(
+        Uri.parse("$url/$storedNrc"),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        if (responseData['user'] != null) {
+          List<dynamic> data = responseData['user'];
+          userObj.value = data.map((e) => User.fromJson(e)).toList();
+
+          // Save the user object to local storage
+          await saveToLocal(userObj.map((user) => user.toJson()).toList());
+
+          isLoading.value = false;
+          isLoaded.value = true;
+        } else {
+          isLoading.value = false;
+          userObj.value = [];
+          throw Exception("User data is null");
+        }
       } else {
         isLoading.value = false;
         userObj.value = [];
-        throw Exception("User data is null");
-        
+        throw Exception('Failed to load user data: ${response.statusCode}');
       }
     } else {
-      isLoading.value = false;
-      userObj.value = [];
-      throw Exception('Failed to load user data: ${response.statusCode}');
-      
+      loadLocalData();
     }
-    update();
   }
+
+  Future<void> saveToLocal(List<Map<String, dynamic>> userData) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user', jsonEncode(userData));
+  }
+
+  Future<void> loadLocalData() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('user')) {
+      String? userDataString = prefs.getString('user');
+      if (userDataString != null) {
+        List<dynamic> userData = jsonDecode(userDataString);
+        userObj.value = userData.map((e) => User.fromJson(e)).toList();
+      }
+      else{
+        print('No Local Storage');
+      }
+    }
+  }
+
+  Future<String> getStoredToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
+
+  Future<String> getStoredNrc() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nrcNumber') ?? '';
+  }
+
+
+  // Future<User> getLocalStorage() async
+  // {
+  //   final userDetails = box.read('userProfile');
+  //   final user = userDetails != null ? User.fromJson(userDetails) : '';
+  //   return Future.value(user);
+  // }
 
   Future<void> updateUserDetails({
     required String first_name,

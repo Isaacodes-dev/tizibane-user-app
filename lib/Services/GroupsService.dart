@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Group.dart';
 
@@ -32,9 +33,9 @@ class GroupsService extends GetxController {
   Future<void> getGroups() async {
     isLoading.value = true;
 
-    String accessToken = box.read('token');
+    String accessToken = await getStoredToken();
 
-    String nrc = nrcStorage.read('nrcNumber');
+    String nrc = await getStoredNrc();
 
     final response = await http.get(
       Uri.parse("$baseUrl$groupsdetails/$nrc"),
@@ -64,5 +65,14 @@ class GroupsService extends GetxController {
       groupsList.value = [];
       throw Exception('Failed to fetch group details: ${response.statusCode}');
     }
+  }
+      Future<String> getStoredToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
+
+  Future<String> getStoredNrc() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nrcNumber') ?? '';
   }
 }

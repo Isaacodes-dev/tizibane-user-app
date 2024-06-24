@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Company.dart';
@@ -34,8 +35,7 @@ class JobsService extends GetxController {
   Rx<List<JobsFeed>> foundJobs = Rx<List<JobsFeed>>([]);
 
   Future<void> getJobsFeed() async {
-    String? accessToken;
-    accessToken = box.read('token');
+    String accessToken = await getStoredToken();
     isLoading.value = true;
     List<dynamic> data = [];
     final response = await http.put(
@@ -69,8 +69,7 @@ class JobsService extends GetxController {
 
   Future<void> getJobDetail(String id) async {
     update();
-    String? accessToken;
-    accessToken = box.read('token');
+   String accessToken = await getStoredToken();
     isLoading.value = true;
     final response = await http.put(
       Uri.parse(baseUrl + getJobDetails + id),
@@ -108,14 +107,14 @@ class JobsService extends GetxController {
     required String jobListingId,
   }) async {
     try {
-      String accessToken = box.read('token');
-      String nrc = nrcStorage.read('nrcNumber');
+      String accessToken = await getStoredToken();
+      String storedNrc = await getStoredNrc();
       final url = baseUrl + postApply;
       isLoading.value = true;
 
       final data = {
         'application_letter': jobApplicationLetter,
-        'nrc': nrc,
+        'nrc': storedNrc,
         'job_listing_id': jobListingId,
       };
 
@@ -214,9 +213,8 @@ class JobsService extends GetxController {
   }) async {
     try {
       
-      String accessToken = box.read('token');
-      
-      String nrc = nrcStorage.read('nrcNumber');
+      String accessToken = await getStoredToken();
+      String storedNrc = await getStoredNrc();
       
       isLoading.value = true;
       
@@ -231,7 +229,7 @@ class JobsService extends GetxController {
         ),
       );
 
-      request.fields['nrc'] = nrc;
+      request.fields['nrc'] = storedNrc;
       request.fields['curriculumn_vitae_url'] =
           p.basename(curriculumVitaeUrl!.path);
 
@@ -293,5 +291,14 @@ class JobsService extends GetxController {
     }
 
     foundJobs.value = results;
+  }
+      Future<String> getStoredToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
+
+  Future<String> getStoredNrc() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nrcNumber') ?? '';
   }
 }

@@ -27,4 +27,15 @@ class JobsFeed {
       );
   }
 
+  Map<String, dynamic> toJson(){
+    return {
+      'id' : id,
+      'closed' : closed,
+      'company_name' : companyName,
+      'company_logo_url': companyLogoUrl,
+      'company_address': companyAddress,
+      'position' : position
+    };
+  }
+
 }

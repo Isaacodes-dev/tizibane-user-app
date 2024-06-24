@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Employee.dart';
 
@@ -10,7 +11,8 @@ class EmployeeService extends GetxController {
   final isLoading = false.obs;
   final box = GetStorage();
 
-  final employeeDetails = Rxn<Employee>();
+  // Change employeeDetails to store a list of employees
+  final employeeDetails = <Employee>[].obs;
 
   @override
   void onInit() {
@@ -18,7 +20,7 @@ class EmployeeService extends GetxController {
   }
 
   Future<void> getEmployeeDetails(String employeeId) async {
-    String? accessToken = box.read('token');
+    String? accessToken = await getStoredToken();
 
     isLoading.value = true;
     final response = await http.get(
@@ -32,7 +34,7 @@ class EmployeeService extends GetxController {
     if (response.statusCode == 200) {
       isLoading.value = false;
       Map<String, dynamic> data = jsonDecode(response.body);
-      employeeDetails.value = Employee.fromJson(data['employee']);
+      employeeDetails.add(Employee.fromJson(data['employee']));
     } else {
       isLoading.value = false;
       Get.snackbar(
@@ -46,39 +48,34 @@ class EmployeeService extends GetxController {
     }
   }
 
-  Future<void> updateEmployeeDetails(Employee employee) async {
-    String? accessToken = box.read('token');
+  Future<void> loadLocalEmployee() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('employee')) {
+      List<String> employeeStrings = prefs.getStringList('employee') ?? [];
 
-    isLoading.value = true;
-    final response = await http.put(
-      Uri.parse("$baseUrl/updateEmployeeDetails"),
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(employee.toJson()),
-    );
-
-    if (response.statusCode == 200) {
-      isLoading.value = false;
-      Get.snackbar(
-        'Success',
-        'Employee Details Updated Successfully',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+      List<Employee> employees = employeeStrings.map((e) {
+        var json = jsonDecode(e);
+        return Employee.fromJson(json);
+      }).toList();
+      employeeDetails.addAll(employees);
     } else {
-      isLoading.value = false;
-      Get.snackbar(
-        'Error',
-        'Failed to Update Employee Details',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      print('${response.statusCode} :${response.reasonPhrase}');
+      print('No employee found in SharedPreferences');
     }
+  }
+
+  Future<void> saveEmployeesToLocal(List<Employee> employees) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> employeeStrings = employees.map((e) => jsonEncode(e.toJson())).toList();
+    await prefs.setStringList('employee', employeeStrings);
+  }
+
+  Future<String> getStoredToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
+
+  Future<String> getStoredNrc() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nrcNumber') ?? '';
   }
 }
