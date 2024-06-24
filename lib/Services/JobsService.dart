@@ -82,7 +82,6 @@ class JobsService extends GetxController {
       final data = jsonDecode(response.body)['data'];
 
       jobDetails.value = JobDetails.fromJson(data);
-
       isLoading.value = false;
     } else if (response.statusCode == 401) {
       isLoading.value = false;

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -54,8 +55,8 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Image.network(
-                          companyLogoUrl + widget.company_logo_url,
+                        CachedNetworkImage(
+                          imageUrl: companyLogoUrl + widget.company_logo_url,
                           fit: BoxFit.cover,
                         ),
                         Container(
@@ -349,8 +350,8 @@ class _ViewEmployeeCurrentDetailsState extends State<ViewEmployeeDetails> {
                         ),
                       ),
                       child: ClipOval(
-                        child: Image.network(
-                          imageBaseUrl + widget.user_profile_pic, // User image path
+                        child: CachedNetworkImage(
+                         imageUrl: imageBaseUrl + widget.user_profile_pic, // User image path
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,

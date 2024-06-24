@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/constants/constants.dart';
@@ -46,8 +47,8 @@ class _EmployeeHistoryCardState extends State<EmployeeHistoryCard> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(
                             50), // Adjust the value as needed
-                        child: Image.network(
-                          companyLogoUrl + widget.companyLogo,
+                        child: CachedNetworkImage(
+                        imageUrl:  companyLogoUrl + widget.companyLogo,
                           height: 100,
                           width: 100,
                           fit: BoxFit

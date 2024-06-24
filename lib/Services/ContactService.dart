@@ -51,7 +51,6 @@ class ContactService extends GetxController {
   }
 
   Future<void> getContact(String nrc) async {
-    print(nrc);
     String accessToken = await getStoredToken();
     bool isConnected = await _connectivityService.checkConnectivity();
     if (isConnected) {
