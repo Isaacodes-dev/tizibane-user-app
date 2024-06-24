@@ -9,6 +9,7 @@ import 'package:tizibane/Components/SubmitButton.dart';
 import 'package:tizibane/Services/JobsService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 
 class JobApplication extends StatefulWidget {
   final String position;
@@ -32,6 +33,7 @@ final TextEditingController _applicationLetterController =
 final _formKey = GlobalKey<FormState>();
 final JobsService _jobsService = Get.put(JobsService());
 final UserService _userService = Get.put(UserService());
+
 class _JobApplicationState extends State<JobApplication> {
   File? _file;
   Future<void> _pickFile() async {
@@ -176,7 +178,6 @@ class _JobApplicationState extends State<JobApplication> {
                     SizedBox(
                       height: 20,
                     ),
-
                     Obx(() {
                       return _jobsService.isLoading.value
                           ? CircularProgressIndicator()
@@ -197,6 +198,7 @@ class _JobApplicationState extends State<JobApplication> {
           ),
         ],
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 }

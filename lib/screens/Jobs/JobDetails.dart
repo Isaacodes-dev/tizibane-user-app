@@ -7,18 +7,18 @@ import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Jobs/JobApplication.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 
 class JobDetails extends StatefulWidget {
   final String statusValue;
   final String id;
-  const JobDetails({super.key, required this.id,required this.statusValue});
+  const JobDetails({super.key, required this.id, required this.statusValue});
 
   @override
   State<JobDetails> createState() => _JobDetailsState();
 }
 
 class _JobDetailsState extends State<JobDetails> {
-
   final JobsService _jobsService = Get.put(JobsService());
 
   final StatusService _statusService = Get.put(StatusService());
@@ -27,7 +27,7 @@ class _JobDetailsState extends State<JobDetails> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-    _jobsService.getJobDetail(widget.id);
+      _jobsService.getJobDetail(widget.id);
     });
   }
 
@@ -61,7 +61,7 @@ class _JobDetailsState extends State<JobDetails> {
               job.qualificationsAndExperience?.split('\n') ?? [];
           List<String> additionalRequirements =
               job.otherComment?.split('\n') ?? [];
-          
+
           return Stack(
             children: [
               Column(
@@ -299,18 +299,21 @@ class _JobDetailsState extends State<JobDetails> {
                                 },
                               ),
                               SizedBox(height: 10),
-                              widget.statusValue == '' ?
-                              SubmitButton(
-                                text: 'Apply',
-                                onTap: () => Get.to(JobApplication(
-                                  position: job.position?.positionName ?? '',
-                                  company: job.company?.companyName ?? '',
-                                  companyLogo: job.company?.companyLogoUrl ?? '',
-                                  jobId: widget.id,
-                                )),
-                              ) : SubmitButton(
-                                text: 'Already Applied',
-                              ),
+                              widget.statusValue == ''
+                                  ? SubmitButton(
+                                      text: 'Apply',
+                                      onTap: () => Get.to(JobApplication(
+                                        position:
+                                            job.position?.positionName ?? '',
+                                        company: job.company?.companyName ?? '',
+                                        companyLogo:
+                                            job.company?.companyLogoUrl ?? '',
+                                        jobId: widget.id,
+                                      )),
+                                    )
+                                  : SubmitButton(
+                                      text: 'Already Applied',
+                                    ),
                               SizedBox(height: 20),
                             ],
                           ),
@@ -324,6 +327,7 @@ class _JobDetailsState extends State<JobDetails> {
           );
         }
       }),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Jobs/JobDetails.dart';
 import 'package:tizibane/screens/Jobs/JobWidget/JobCard.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 
 class JobsFeed extends StatefulWidget {
   const JobsFeed({super.key});
@@ -25,7 +26,7 @@ class _JobsFeedState extends State<JobsFeed> {
   @override
   void initState() {
     super.initState();
-       WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _jobsService.getJobsFeed();
       _jobsService.foundJobs.value = _jobsService.jobsFeedList;
     });
@@ -58,22 +59,24 @@ class _JobsFeedState extends State<JobsFeed> {
                       radius: 32,
                       backgroundColor: Colors.white,
                       child: Obx(() => CircleAvatar(
-                        radius: 29,
-                        backgroundImage: Image.network(imageBaseUrl + _profileService.imagePath.value).image,
-                      )),
+                            radius: 29,
+                            backgroundImage: Image.network(imageBaseUrl +
+                                    _profileService.imagePath.value)
+                                .image,
+                          )),
                     ),
                     SizedBox(
                       width: 20,
                     ),
                     Obx(() => Text(
-                      'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].first_name + ' ' + _userService.userObj.value[0].last_name : ''}',
-                      style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.white),
-                      ),
-                    )),
+                          'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].first_name + ' ' + _userService.userObj.value[0].last_name : ''}',
+                          style: GoogleFonts.lexendDeca(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white),
+                          ),
+                        )),
                   ],
                 ),
                 SizedBox(
@@ -138,33 +141,48 @@ class _JobsFeedState extends State<JobsFeed> {
                         if (_jobsService.isLoading.value) {
                           return Center(child: CircularProgressIndicator());
                         } else {
-                          return _jobsService.foundJobs.value.isEmpty ? Text("No Jobs To Display") : ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: _jobsService.foundJobs.value.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Get.to(JobDetails(
-                                    id: _jobsService.foundJobs.value[index].id.toString(),
-                                    statusValue: _statusService.status.value,
-                                  ));
-                                },
-                                child: JobCard(
-                                  jobListingId: _jobsService.foundJobs.value[index].id.toString(),
-                                  position: _jobsService.foundJobs.value[index].position!,
-                                  company: _jobsService.foundJobs.value[index].companyName!,
-                                  address: _jobsService.foundJobs.value[index].companyAddress!,
-                                  closing: _jobsService.foundJobs.value[index].closed!,
-                                  companyLogo: _jobsService.foundJobs.value[index].companyLogoUrl!,
-                                ),
-                              );
-                            },
-                          );
+                          return _jobsService.foundJobs.value.isEmpty
+                              ? Text("No Jobs To Display")
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                      _jobsService.foundJobs.value.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Get.to(JobDetails(
+                                          id: _jobsService
+                                              .foundJobs.value[index].id
+                                              .toString(),
+                                          statusValue:
+                                              _statusService.status.value,
+                                        ));
+                                      },
+                                      child: JobCard(
+                                        jobListingId: _jobsService
+                                            .foundJobs.value[index].id
+                                            .toString(),
+                                        position: _jobsService
+                                            .foundJobs.value[index].position!,
+                                        company: _jobsService.foundJobs
+                                            .value[index].companyName!,
+                                        address: _jobsService.foundJobs
+                                            .value[index].companyAddress!,
+                                        closing: _jobsService
+                                            .foundJobs.value[index].closed!,
+                                        companyLogo: _jobsService.foundJobs
+                                            .value[index].companyLogoUrl!,
+                                      ),
+                                    );
+                                  },
+                                );
                         }
                       },
                     ),
-                    SizedBox(height: 5,)
+                    SizedBox(
+                      height: 5,
+                    )
                   ],
                 ),
               ),
@@ -172,6 +190,7 @@ class _JobsFeedState extends State<JobsFeed> {
           ),
         ],
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 }

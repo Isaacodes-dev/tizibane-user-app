@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
 import 'package:path/path.dart' as p;
 import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/components/share/ShareUrlLink.dart';
 
 class UploadCv extends StatefulWidget {
   const UploadCv({super.key});
@@ -75,7 +76,10 @@ class _UploadCvState extends State<UploadCv> {
                   children: [
                     ClipRRect(
                         borderRadius: BorderRadius.circular(60),
-                        child: Icon(Icons.upload_file,color: Colors.white,)),
+                        child: Icon(
+                          Icons.upload_file,
+                          color: Colors.white,
+                        )),
                     SizedBox(
                       width: 10,
                     ),
@@ -193,6 +197,7 @@ class _UploadCvState extends State<UploadCv> {
           ),
         ],
       ),
+      floatingActionButton: const ShareUrlLink(),
     );
   }
 }
