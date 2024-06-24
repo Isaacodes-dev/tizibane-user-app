@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> getValidationData() async {
     try {
       final SharedPreferences preferences = await SharedPreferences.getInstance();
-      final obtainedToken = preferences.getString('tokenValue');
+      final obtainedToken = preferences.getString('token');
       setState(() {
         finalToken = obtainedToken;
       });

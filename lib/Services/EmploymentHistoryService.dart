@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/EmploymentHistory.dart';
 
@@ -56,7 +57,7 @@ class EmployeeHistoryService extends GetxController {
   }
 
   Future<void> getContactEmploymentHistory(String contactNrc) async {
-    String accessToken = box.read('token');
+    String accessToken = await getStoredToken();
 
     isLoading.value = true;
 
@@ -85,5 +86,14 @@ class EmployeeHistoryService extends GetxController {
       );
       print('${response.statusCode} :${response.reasonPhrase}');
     }
+  }
+      Future<String> getStoredToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
+
+  Future<String> getStoredNrc() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nrcNumber') ?? '';
   }
 }

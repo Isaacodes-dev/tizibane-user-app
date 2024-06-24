@@ -1,12 +1,12 @@
 import 'dart:convert';
-
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
@@ -16,146 +16,54 @@ class ContactService extends GetxController {
   final isLoading = false.obs;
   final box = GetStorage();
   final nrcStorage = GetStorage();
+  ConnectivityService _connectivityService = Get.put(ConnectivityService()); 
+
   var contactDetails = ContactModel(
-          nrc: '',
-          firstName: '',
-          lastName: '',
-          phoneNumber: '',
-          email: '',
-          roleId: '',
-          createdAt: '',
-          updatedAt: '',
-          profilePicture: '',
-          positionName: '',
-          companyName: '',
-          companyLogo: '',
-          companyAssignedEmail: '',
-          companyEmail: '',
-          companyPhone: '',
-          comapnyWebsite: '',
-          comapnyAddress: '',
-          telephone: '')
-      .obs;
+    nrc: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    roleId: '',
+    createdAt: '',
+    updatedAt: '',
+    profilePicture: '',
+    positionName: '',
+    companyName: '',
+    companyLogo: '',
+    companyAssignedEmail: '',
+    companyEmail: '',
+    companyPhone: '',
+    comapnyWebsite: '',
+    comapnyAddress: '',
+    telephone: ''
+  ).obs;
 
-  var contactsList = <ContactModel>[].obs;
-
-  Rx<List<ContactModel>> foundContacts = Rx<List<ContactModel>>([]);
+  RxList<ContactModel> contactsList = <ContactModel>[].obs;
+  RxList<ContactModel> foundContacts = <ContactModel>[].obs;
 
   final contactStorage = GetStorage();
 
   @override
   void onInit() {
     super.onInit();
-    getContacts();
     foundContacts.value = contactsList;
   }
 
   Future<void> getContact(String nrc) async {
-    String accessToken = box.read('token');
-        ContactModel contact = ContactModel(
-            nrc: '',
-            firstName: '',
-            lastName: '',
-            phoneNumber: '',
-            email: '',
-            roleId: '',
-            createdAt: '',
-            updatedAt: '',
-            profilePicture: '',
-            positionName: '',
-            companyName: '',
-            companyLogo: '',
-            companyAssignedEmail: '',
-            companyEmail: '',
-            companyPhone: '',
-            comapnyWebsite: '',
-            comapnyAddress: '',
-            telephone: '');
-    final response = await http.get(
-      Uri.parse("$baseUrl$getContactDetails/$nrc"),
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      var responseData = jsonDecode(response.body);
-
-      if (responseData['contact'] != null) {
-
-        if (responseData['contact'] is List) {
-          if (responseData['contact'].isNotEmpty) {
-            contact = ContactModel.fromJson(responseData['contact'][0]);
-            contactDetails.value = contact;
-            Get.to(() => NewContact(
-                  contactNrc: contactDetails.value.nrc,
-                  firstName: contactDetails.value.firstName,
-                  lastName: contactDetails.value.lastName,
-                  email: contactDetails.value.email,
-                  phoneNumber: contactDetails.value.phoneNumber,
-                  profilePicture: contactDetails.value.profilePicture,
-                  positionName: contactDetails.value.positionName,
-                  companyName: contactDetails.value.companyName,
-                ));
-          } else {
-            Get.snackbar(
-              'Info',
-              'Contact Does not Exit',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.blueAccent,
-              colorText: Colors.white,
-            );
-          }
-        } else if (responseData['contact'] is Map) {
-          contact = ContactModel.fromJson(responseData['contact']);
-        } else {
-          contactDetails.value = ContactModel(
-              nrc: '',
-              firstName: '',
-              lastName: '',
-              phoneNumber: '',
-              email: '',
-              roleId: '',
-              createdAt: '',
-              updatedAt: '',
-              profilePicture: '',
-              positionName: '',
-              companyName: '',
-              companyLogo: '',
-              companyAssignedEmail: '',
-              companyEmail: '',
-              companyPhone: '',
-              comapnyWebsite: '',
-              comapnyAddress: '',
-              telephone: '');
-          throw Exception('Unexpected response format');
-        }
-      } else {
-        contactDetails.value = ContactModel(
-            nrc: '',
-            firstName: '',
-            lastName: '',
-            phoneNumber: '',
-            email: '',
-            roleId: '',
-            createdAt: '',
-            updatedAt: '',
-            profilePicture: '',
-            positionName: '',
-            companyName: '',
-            companyLogo: '',
-            companyAssignedEmail: '',
-            companyEmail: '',
-            companyPhone: '',
-            comapnyWebsite: '',
-            comapnyAddress: '',
-            telephone: '');
-        throw Exception("Contact data is null");
-      }
-    } else {
+    print(nrc);
+    String accessToken = await getStoredToken();
+    bool isConnected = await _connectivityService.checkConnectivity();
+    if (isConnected) {
+      final response = await http.get(
+        Uri.parse("$baseUrl$getContactDetails/$nrc"),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
       contactDetails.value = ContactModel(
-          nrc: '',
+                        nrc: '',
           firstName: '',
           lastName: '',
           phoneNumber: '',
@@ -172,54 +80,124 @@ class ContactService extends GetxController {
           companyPhone: '',
           comapnyWebsite: '',
           comapnyAddress: '',
-          telephone: '');
-      throw Exception(
-          'Failed to fetch contact details: ${response.statusCode}');
+          telephone: ''
+            );
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+
+        if (responseData['contact'] != null) {
+          if (responseData['contact'] is List && responseData['contact'].isNotEmpty) {
+            contactDetails.value = ContactModel.fromJson(responseData['contact'][0]);
+          } else if (responseData['contact'] is Map) {
+            contactDetails.value = ContactModel.fromJson(responseData['contact']);
+          } else {
+            contactDetails.value = ContactModel(
+                        nrc: '',
+          firstName: '',
+          lastName: '',
+          phoneNumber: '',
+          email: '',
+          roleId: '',
+          createdAt: '',
+          updatedAt: '',
+          profilePicture: '',
+          positionName: '',
+          companyName: '',
+          companyLogo: '',
+          companyAssignedEmail: '',
+          companyEmail: '',
+          companyPhone: '',
+          comapnyWebsite: '',
+          comapnyAddress: '',
+          telephone: ''
+            );
+            throw Exception('Unexpected response format');
+          }
+          Get.to(() => NewContact(
+            contactNrc: contactDetails.value.nrc,
+            firstName: contactDetails.value.firstName,
+            lastName: contactDetails.value.lastName,
+            email: contactDetails.value.email,
+            phoneNumber: contactDetails.value.phoneNumber,
+            profilePicture: contactDetails.value.profilePicture,
+            positionName: contactDetails.value.positionName,
+            companyName: contactDetails.value.companyName,
+          ));
+        } else {
+          throw Exception("Contact data is null");
+        }
+      } else {
+        throw Exception('Failed to fetch contact details: ${response.statusCode}');
+      }
     }
   }
 
   Future<void> getContacts() async {
-    String? accessToken;
-    accessToken = box.read('token');
-    String? contactSaver;
-    contactSaver = nrcStorage.read('nrcNumber');
-    isLoading.value = true;
-    List<dynamic> data = []; 
-    final response = await http.get(
-      Uri.parse("$baseUrl$getContactsDetails/$contactSaver"),
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      data = jsonDecode(response.body)['contacts'];
-      contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
-      foundContacts.value = contactsList; 
-      isLoading.value = false;
-      update();
-    } else if (response.statusCode == 401) {
-      isLoading.value = false;
-    } else if (response.statusCode == 404) {
-      isLoading.value = false;
-    } else {
-      isLoading.value = false;
-      Get.snackbar(
-        'Error',
-        'Failed to Load Contacts',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+    bool isConnected = await _connectivityService.checkConnectivity();
+    if (isConnected) {
+      String accessToken = await getStoredToken();
+      String contactSaver = await getStoredNrc();
+      isLoading.value = true;
+      List<dynamic> data = [];
+      final response = await http.get(
+        Uri.parse("$baseUrl$getContactsDetails/$contactSaver"),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
       );
-      print('${response.statusCode} :${response.reasonPhrase}');
+
+      if (response.statusCode == 200) {
+        data = jsonDecode(response.body)['contacts'];
+        contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
+        foundContacts.value = contactsList;
+        await saveContactsToLocal(contactsList.map((contact) => contact.toJson()).toList());
+        isLoading.value = false;
+        update();
+      }
+      else if(response.statusCode == 404){
+        isLoading.value = false;
+      } 
+      else {
+        isLoading.value = false;
+        Get.snackbar(
+          'Error',
+          'Failed to Load Contacts',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
     }
+  }
+
+Future<void> loadLocalContacts() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.containsKey('contacts')) {
+    List<String> contactStrings = prefs.getStringList('contacts') ?? [];
+    
+    List<ContactModel> contacts = contactStrings.map((e) {
+      var json = jsonDecode(e);
+      print('Decoded JSON: $json');
+      return ContactModel.fromJson(json);
+    }).toList();
+    foundContacts.value = contacts;
+  } else {
+    print('No contacts found in SharedPreferences');
+  }
+}
+
+  Future<void> saveContactsToLocal(List<Map<String, dynamic>> contacts) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> contactStrings = contacts.map((e) => jsonEncode(e)).toList();
+    await prefs.setStringList('contacts', contactStrings);
   }
 
   Future<void> saveContact(Map<String, dynamic> contactBody) async {
     isLoading.value = true;
 
-    String accessToken = box.read('token');
+    String accessToken = await getStoredToken();
     final response = await http.post(
       Uri.parse(baseUrl + saveContacDetails),
       body: contactBody,
@@ -238,9 +216,7 @@ class ContactService extends GetxController {
         colorText: Colors.white,
       );
       await saveContactToPhonebook();
-      Get.to(const BottomMenuBarItems(
-        selectedIndex: 1,
-      ));
+      Get.to(const BottomMenuBarItems(selectedIndex: 1));
     } else if (response.statusCode == 409) {
       isLoading.value = false;
       Get.snackbar(
@@ -262,28 +238,20 @@ class ContactService extends GetxController {
     }
   }
 
-    Future<void> deleteContactFromApp(String contactNrc) async {
-    
+  Future<void> deleteContactFromApp(String contactNrc) async {
     isLoading.value = true;
-    
-    String accessToken = box.read('token');
 
-    String contactSaverNrc = nrcStorage.read('nrcNumber');
-    
-    var contactBody = {
-      contactNrc: contactNrc,
-      contactSaverNrc: contactSaverNrc,
-    };
-    
+    String accessToken = await getStoredToken();
+    String contactSaverNrc = await getStoredNrc();
+
     final response = await http.delete(
       Uri.parse('$baseUrl$deleteContact/$contactSaverNrc/$contactNrc'),
-      body: contactBody,
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $accessToken',
       },
     );
-    
+
     if (response.statusCode == 200) {
       isLoading.value = false;
       Get.snackbar(
@@ -315,21 +283,19 @@ class ContactService extends GetxController {
         String combineNames = '${contactDetails.value.firstName} ${contactDetails.value.lastName}';
         Contact contact = Contact(
           givenName: combineNames,
-          phones: [
-            Item(label: 'mobile', value: contactDetails.value.phoneNumber)
-          ],
+          phones: [Item(label: 'mobile', value: contactDetails.value.phoneNumber)],
           emails: [Item(label: 'work', value: contactDetails.value.email)],
         );
 
         await ContactsService.addContact(contact);
       } catch (e) {
         Get.snackbar(
-        'Error',
-        'Failed to save contact: $e',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+          'Error',
+          'Failed to save contact: $e',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } else {
       Get.snackbar(
@@ -350,12 +316,21 @@ class ContactService extends GetxController {
     } else {
       results = contactsList.where((element) {
         final trimmedContact = contact.toLowerCase().trim();
-        final fullName =
-            '${element.firstName.toLowerCase()} ${element.lastName.toLowerCase()}';
+        final fullName = '${element.firstName.toLowerCase()} ${element.lastName.toLowerCase()}';
         return fullName.contains(trimmedContact);
       }).toList();
     }
 
     foundContacts.value = results;
+  }
+
+  Future<String> getStoredToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
+
+  Future<String> getStoredNrc() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nrcNumber') ?? '';
   }
 }
