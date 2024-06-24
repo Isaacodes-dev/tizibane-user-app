@@ -22,9 +22,10 @@ class _QRScannerState extends State<QRScanner> {
 
   QRViewController? controller;
 
-  String? userNrc;
+  String userNrc = '';
 
   loadUser(userNrc) async {
+    print(userNrc);
     await _contactService.getContact(userNrc);
   }
 
@@ -71,6 +72,7 @@ class _QRScannerState extends State<QRScanner> {
       if (!isUserLoaded) {
         setState(() {
           result = scanData;
+          print(result!.code.toString());
           userNrc = result!.code.toString();
           loadUser(userNrc);
           isUserLoaded = true;

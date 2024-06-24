@@ -25,29 +25,27 @@ final AuthService _authService = Get.put(AuthService());
 
 final UserService _userService = Get.put(UserService());
 
-
-
 class _MoreState extends State<More> {
-  String nrcNumber = '';
+  var nrcNumber = ''.obs; // Use RxString for reactive state management
+
   @override
-  void initState(){
-    // TODO: implement initState
+  void initState() {
     super.initState();
     loadUserData();
   }
 
   Future<void> loadUserData() async {
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  String? token = preferences.getString('token');
-  nrcNumber = preferences.getString('nrcNumber') ?? '';
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? token = preferences.getString('token');
+    nrcNumber.value = preferences.getString('nrcNumber') ?? '';
 
-  if (token != null && nrcNumber != null) {
-    print('Token: $token');
-    print('NRC Number: $nrcNumber');
-  } else {
-    print('No user data found');
+    if (token != null && nrcNumber.value.isNotEmpty) {
+      print('Token: $token');
+      print('NRC Number: ${nrcNumber.value}');
+    } else {
+      print('No user data found');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -74,11 +72,11 @@ class _MoreState extends State<More> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: SizedBox(
                     width: 140,
-                    child: QrImageView(
-                      data: nrcNumber,
-                      size: 200,
-                      foregroundColor: Colors.white,
-                    ),
+                    child: Obx(() => QrImageView(
+                          data: nrcNumber.value,
+                          size: 200,
+                          foregroundColor: Colors.white,
+                        )),
                   ),
                 ),
               ],
@@ -100,6 +98,7 @@ class _MoreState extends State<More> {
             color: Colors.black,
           ),
           title: Text('Notifications', style: GoogleFonts.lexendDeca()),
+          
           onTap: () => {Get.to(const Notifications())},
         ),
         ListTile(
