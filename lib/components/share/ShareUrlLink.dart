@@ -1,10 +1,10 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously, invalid_use_of_protected_member, non_constant_identifier_names
 
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:get/get.dart';
+import 'package:tizibane/Services/UserService.dart';
 
 class ShareUrlLink extends StatelessWidget {
   const ShareUrlLink({super.key});
@@ -13,19 +13,27 @@ class ShareUrlLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () async {
-        // Prepare vCard data
-        String vCardData = '''
-        BEGIN:VCARD
-        VERSION:3.0
-        FN:John Doe
-        TEL:+1234567890
-        ORG:Example Company
-        EMAIL:john.doe@example.com
-        END:VCARD
-        ''';
+        // Get user details from UserService
+        UserService userService = Get.put(UserService());
+        await userService.getUser();
 
-        // Write the vCard data to a file and share it
-        await _shareVCard(context, vCardData);
+        if (userService.userObj.isNotEmpty) {
+          var user = userService.userObj[0];
+
+          // Prepare contact information as plain text
+          String contactInfo = '''
+          Name: ${user.first_name} ${user.last_name}
+          Phone: ${user.phone_number}
+          Company: ${user.company_name}
+          Email: ${user.email}
+          PS: Contact shared from Tizibane App
+          ''';
+
+          // Share the contact information
+          await _shareContactInfo(contactInfo);
+        } else {
+          _showErrorDialog(context, 'Failed to retrieve user details.');
+        }
       },
       backgroundColor: Colors.black, // Customize button color
       elevation: 4.0,
@@ -39,22 +47,12 @@ class ShareUrlLink extends StatelessWidget {
     );
   }
 
-  Future<void> _shareVCard(BuildContext context, String vCardData) async {
+  Future<void> _shareContactInfo(String contactInfo) async {
     try {
-      // Get the directory to save the file.
-      final directory = await getApplicationDocumentsDirectory();
-
-      // Define the file path.
-      final filePath = '${directory.path}/contact.vcf';
-
-      // Write the vCard data to the file.
-      final file = File(filePath);
-      await file.writeAsString(vCardData);
-
-      // Share the file.
-      await Share.shareFiles([filePath], text: 'Here is a contact file.');
+      // Share the contact information as plain text
+      await Share.share(contactInfo, subject: 'Contact Information');
     } catch (e) {
-      _showErrorDialog(context, 'Failed to share the vCard.');
+      print('Failed to share contact information: $e');
     }
   }
 
