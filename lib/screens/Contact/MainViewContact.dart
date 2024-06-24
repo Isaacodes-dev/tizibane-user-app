@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Contact/ContactEmploymentDetails.dart';
@@ -69,8 +70,8 @@ class _MainViewContactState extends State<MainViewContact> {
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                              child: Image.network(
-                            imageBaseUrl + widget.profilePicture,
+                              child: CachedNetworkImage(
+                            imageUrl: imageBaseUrl + widget.profilePicture,
                             fit: BoxFit.cover,
                             width: 150,
                             height: 150,
