@@ -6,6 +6,8 @@
 		<true />
 		<key>NSCameraUsageDescription</key>
 		<string>This app needs camera access to scan QR codes</string>
+		<key>NSNFCReaderUsageDescription</key>
+		<string>We need to use NFC to share data between devices</string>
 		<key>NFCReaderUsageDescription</key>
 		<string>This app needs nfc to scan nfc cards</string>
 		<key>CFBundleDevelopmentRegion</key>
