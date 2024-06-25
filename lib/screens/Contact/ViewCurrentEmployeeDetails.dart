@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,7 +44,13 @@ class ViewCurrentEmployeeDetails extends StatefulWidget {
 
 class _ViewCurrentEmployeeDetailsState
     extends State<ViewCurrentEmployeeDetails> {
+      
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.companyLogo.isEmpty
@@ -64,8 +73,8 @@ class _ViewCurrentEmployeeDetailsState
                         child: Stack(
                           fit: StackFit.expand,
                           children: [
-                            Image.network(
-                              companyLogoUrl + widget.companyLogo,
+                            CachedNetworkImage(
+                              imageUrl: companyLogoUrl + widget.companyLogo,
                               fit: BoxFit.cover,
                             ),
                             Container(
@@ -92,8 +101,8 @@ class _ViewCurrentEmployeeDetailsState
                             ),
                           ),
                           child: ClipOval(
-                            child: Image.network(
-                              imageBaseUrl + widget.profilePath,
+                            child: CachedNetworkImage(
+                              imageUrl: imageBaseUrl + widget.profilePath,
                               fit: BoxFit.cover,
                             ),
                           ),

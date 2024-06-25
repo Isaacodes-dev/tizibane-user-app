@@ -37,11 +37,13 @@ class EmploymentHistory {
 
   Map<String, dynamic> toJson() {
     return {
-      'companyName': companyName,
-      'companyEmail': companyEmail,
-      'position': position,
-      'startDate': startDate,
-      'endDate': endDate,
+      'company_name': companyName,
+      'company_email': companyEmail,
+      'company_phone': companyPhone,
+      'position_name': position,
+      'company_logo_url': companyLogo,
+      'start_date': startDate,
+      'end_date': endDate,
     };
   }
 }
