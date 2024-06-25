@@ -11,16 +11,16 @@ class JobCard extends StatefulWidget {
   final String address;
   final String companyLogo;
   final String closing;
-  final String? status;
-  const JobCard(
-      {super.key,
-      required this.jobListingId,
-      required this.position,
-      required this.company,
-      required this.address,
-      required this.companyLogo,
-      required this.closing,
-      this.status});
+
+  const JobCard({
+    Key? key,
+    required this.jobListingId,
+    required this.position,
+    required this.company,
+    required this.address,
+    required this.companyLogo,
+    required this.closing,
+  }) : super(key: key);
 
   @override
   State<JobCard> createState() => _JobCardState();
@@ -28,36 +28,25 @@ class JobCard extends StatefulWidget {
 
 class _JobCardState extends State<JobCard> {
   final StatusService _statusService = Get.put(StatusService());
-  final RxString jobStatus = ''.obs;
+
   @override
   void initState() {
     super.initState();
-    fetchJobStatus();
-  }
-
-  void fetchJobStatus() async {
-    try {
-      await _statusService.getJobStatus(widget.jobListingId);
-      jobStatus.value = _statusService.status.value;
-    } catch (e) {
-      jobStatus.value = 'Error fetching status';
-    }
+    _statusService.getJobStatus(widget.jobListingId);
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+
     return SizedBox(
       height: 205,
       width: width,
       child: Card(
         shape: RoundedRectangleBorder(
-          side: BorderSide.merge(
-            BorderSide(
-                width: 1.5, color: Colors.white, style: BorderStyle.solid),
-            BorderSide(
-                width: 1.5, color: Colors.white, style: BorderStyle.solid),
+          side: BorderSide(
+            width: 1.5,
+            color: Colors.white,
           ),
           borderRadius: BorderRadius.circular(20),
         ),
@@ -66,9 +55,7 @@ class _JobCardState extends State<JobCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   ClipRRect(
@@ -80,106 +67,85 @@ class _JobCardState extends State<JobCard> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
+                  const SizedBox(width: 10),
                   Expanded(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.position,
-                            style: GoogleFonts.lexendDeca(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                            ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.position,
+                          style: GoogleFonts.lexendDeca(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
                           ),
-                          SizedBox(
-                            height: 5,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          widget.company,
+                          style: GoogleFonts.lexendDeca(
+                            fontSize: 12,
                           ),
-                          Text(
-                            widget.company,
-                            style: GoogleFonts.lexendDeca(
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.location_pin,
                     size: 18,
                   ),
-                  SizedBox(
-                    width: 5,
-                  ),
+                  const SizedBox(width: 5),
                   Text(
                     widget.address,
-                    style: TextStyle(fontSize: 12),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.date_range,
                     size: 18,
                   ),
-                  SizedBox(
-                    width: 5,
-                  ),
+                  const SizedBox(width: 5),
                   Text(
                     "Closing date: ${widget.closing}",
-                    style: TextStyle(fontSize: 12),
-                  )
+                    style: const TextStyle(fontSize: 12),
+                  ),
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Obx(() {
                 return _statusService.isLoading.value
-                    ? SizedBox(
+                    ? const SizedBox(
                         width: 12,
                         height: 12,
-                        child: const CircularProgressIndicator(
+                        child: CircularProgressIndicator(
                           color: Colors.black,
                           strokeWidth: 2.0,
                         ),
                       )
                     : Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.info_outline,
                             size: 18,
                           ),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          const SizedBox(width: 5),
                           Text(
-                            jobStatus.value.isEmpty
-                                ? "Not Applied"
-                                : jobStatus.value,
-                            style: TextStyle(fontSize: 12),
-                          )
+                            _statusService.jobStatuses[widget.jobListingId] ??
+                                "Not Applied",
+                            style: const TextStyle(fontSize: 12),
+                          ),
                         ],
                       );
               }),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
             ],
           ),
         ),

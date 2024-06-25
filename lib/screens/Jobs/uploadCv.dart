@@ -9,7 +9,9 @@ import 'package:path/path.dart' as p;
 import 'package:tizibane/Services/JobsService.dart';
 
 class UploadCv extends StatefulWidget {
-  const UploadCv({super.key});
+  final String jobId;
+  final String jobApplication; 
+  const UploadCv({super.key,required this.jobApplication,required this.jobId,});
 
   @override
   State<UploadCv> createState() => _UploadCvState();
@@ -172,7 +174,7 @@ class _UploadCvState extends State<UploadCv> {
                                 onTap: () async {
                                   if (_file != null) {
                                     await _jobsService.sendCv(
-                                        curriculumVitaeUrl: _file);
+                                        curriculumVitaeUrl: _file,jobApplication: widget.jobApplication,jobId: widget.jobId);
                                   } else {
                                     Get.snackbar(
                                       'Error',

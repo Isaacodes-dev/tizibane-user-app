@@ -147,7 +147,7 @@ class _JobsFeedState extends State<JobsFeed> {
                                 onTap: () {
                                   Get.to(JobDetails(
                                     id: _jobsService.foundJobs.value[index].id.toString(),
-                                    statusValue: _statusService.status.value,
+                                    statusValue: _statusService.jobStatuses[_jobsService.foundJobs.value[index].id.toString()] ?? "Not Applied",
                                   ));
                                 },
                                 child: JobCard(

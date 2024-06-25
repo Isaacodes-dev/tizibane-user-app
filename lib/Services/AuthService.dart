@@ -128,7 +128,9 @@ class AuthService extends GetxController {
 
         SharedPreferences preferences = await SharedPreferences.getInstance();
         preferences.remove('token');
+        preferences.remove('nrcNumber');
         preferences.remove('contacts');
+        preferences.remove('employeeContactHistory');
         preferences.remove('user');
 
         Get.snackbar(

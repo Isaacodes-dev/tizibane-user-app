@@ -12,6 +12,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
 import 'package:tizibane/screens/Contact/ContactEmploymentDetails.dart';
+import 'package:tizibane/screens/NFCScanner.dart';
 import 'package:tizibane/screens/QRScanner.dart';
 import 'package:tizibane/components/share/ShareUrlLink.dart';
 
@@ -99,38 +100,7 @@ class _ContactsState extends State<Contacts> {
     Get.to(const QRScanner());
   }
 
-  void _tagRead() {
-    result.value = '';
-    try {
-      NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-        var payload =
-            tag.data["ndef"]["cachedMessage"]["records"][0]["payload"];
-
-        var stringPayload = String.fromCharCodes(payload);
-
-        result.value = stringPayload;
-
-        String resultString = result.value.toString();
-
-        String resultSubString = resultString.substring(3);
-
-        if (resultSubString.isNotEmpty) {
-          loadUser(resultSubString);
-
-          NfcManager.instance.stopSession();
-        } else {
-          NfcManager.instance
-              .stopSession(errorMessage: "Error reading NFC tag");
-        }
-      });
-    } catch (ex) {
-      print("Error starting NFC session: $ex");
-    }
-  }
-
-  loadUser(resultSubString) async {
-    await _contactService.getContact(resultSubString);
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -314,7 +284,7 @@ class _ContactsState extends State<Contacts> {
                 style: TextStyle(fontSize: 16),
               ),
               onPressed: () {
-                _tagRead();
+                Get.to(NFCScanner());
               },
             ),
             SimpleDialogOption(

@@ -13,6 +13,7 @@ import 'package:tizibane/screens/Settings.dart';
 import 'package:get/get.dart';
 import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/screens/UpdateUserCredentials.dart';
+import 'package:tizibane/screens/UserQRCode.dart';
 
 class More extends StatefulWidget {
   const More({super.key});
@@ -98,7 +99,6 @@ class _MoreState extends State<More> {
             color: Colors.black,
           ),
           title: Text('Notifications', style: GoogleFonts.lexendDeca()),
-          
           onTap: () => {Get.to(const Notifications())},
         ),
         ListTile(
@@ -111,10 +111,15 @@ class _MoreState extends State<More> {
           title: Text('Change Password', style: GoogleFonts.lexendDeca()),
           onTap: () => {Get.to(const UpdateUserCredentials())},
         ),
+        // ListTile(
+        //   leading: Icon(Icons.upload_file_rounded, color: Colors.black),
+        //   title: Text('Upload Cv', style: GoogleFonts.lexendDeca()),
+        //   onTap: () => {Get.to(UploadCv())},
+        // ),
         ListTile(
-          leading: Icon(Icons.upload_file_rounded, color: Colors.black),
-          title: Text('Upload Cv', style: GoogleFonts.lexendDeca()),
-          onTap: () => {Get.to(UploadCv())},
+          leading: Icon(Icons.qr_code_2_outlined, color: Colors.black),
+          title: Text('Offline QRCode', style: GoogleFonts.lexendDeca()),
+          onTap: () => {Get.to(UserQRCode())},
         ),
         Obx(() {
           return _authService.isLoading.value

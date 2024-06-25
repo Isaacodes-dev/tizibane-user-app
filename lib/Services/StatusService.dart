@@ -8,20 +8,13 @@ import 'package:tizibane/constants/constants.dart';
 
 class StatusService extends GetxController {
   RxBool isLoading = false.obs;
-
-  RxBool isVisible = false.obs;
-
-  final box = GetStorage();
-
-  final nrcStorage = GetStorage();
-
-  RxString status = ''.obs;
+  final RxMap<String, String> jobStatuses = <String, String>{}.obs;
 
   Future<void> getJobStatus(String jobListingId) async {
     isLoading.value = true;
-      String accessToken = await getStoredToken();
-      String storedNrc = await getStoredNrc();
-      status.value = '';
+    String accessToken = await getStoredToken();
+    String storedNrc = await getStoredNrc();
+
     final response = await http.get(
       Uri.parse("$baseUrl$applicationStatus/$jobListingId/$storedNrc"),
       headers: {
@@ -31,27 +24,24 @@ class StatusService extends GetxController {
     );
 
     if (response.statusCode == 200) {
-      isLoading.value = false;
       var responseData = jsonDecode(response.body);
       if (responseData['status'] != null) {
-        status.value = responseData['status'];
-        isLoading.value = false;
-        print(status.value );
+        jobStatuses[jobListingId] = responseData['status'];
       } else {
-        status.value = '';
-        isLoading.value = false;
+        jobStatuses[jobListingId] = '';
         throw Exception("Status data is null");
       }
     } else if (response.statusCode == 404) {
-      status.value = '';
-      isLoading.value = false;
+      jobStatuses[jobListingId] = '';
     } else {
-      status.value = '';
-      isLoading.value = false;
+      jobStatuses[jobListingId] = '';
       throw Exception('Failed to get Job status: ${response.statusCode}');
     }
+
+    isLoading.value = false;
   }
-      Future<String> getStoredToken() async {
+
+  Future<String> getStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') ?? '';
   }
