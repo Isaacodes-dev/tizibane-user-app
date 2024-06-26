@@ -9,7 +9,9 @@ import 'package:path/path.dart' as p;
 import 'package:tizibane/Services/JobsService.dart';
 
 class UploadCv extends StatefulWidget {
-  const UploadCv({super.key});
+  final String? jobId;
+  final String? jobApplication; 
+  const UploadCv({super.key, this.jobApplication,this.jobId,});
 
   @override
   State<UploadCv> createState() => _UploadCvState();
@@ -25,7 +27,7 @@ class _UploadCvState extends State<UploadCv> {
     Future<void> _pickFile() async {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc', 'docx'],
+        allowedExtensions: ['pdf'],
       );
 
       if (result != null) {
@@ -86,7 +88,7 @@ class _UploadCvState extends State<UploadCv> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Please submit pdf, doc, or docx format',
+                              'Please Submit PDF Format',
                               style: GoogleFonts.lexendDeca(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -172,7 +174,7 @@ class _UploadCvState extends State<UploadCv> {
                                 onTap: () async {
                                   if (_file != null) {
                                     await _jobsService.sendCv(
-                                        curriculumVitaeUrl: _file);
+                                        curriculumVitaeUrl: _file,jobApplication: widget.jobApplication,jobId: widget.jobId);
                                   } else {
                                     Get.snackbar(
                                       'Error',

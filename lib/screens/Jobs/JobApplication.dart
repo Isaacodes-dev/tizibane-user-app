@@ -8,7 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
 import 'package:tizibane/Services/JobsService.dart';
 import 'package:tizibane/Services/UserService.dart';
+import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/screens/Jobs/uploadCv.dart';
 
 class JobApplication extends StatefulWidget {
   final String position;
@@ -32,6 +34,7 @@ final TextEditingController _applicationLetterController =
 final _formKey = GlobalKey<FormState>();
 final JobsService _jobsService = Get.put(JobsService());
 final UserService _userService = Get.put(UserService());
+
 class _JobApplicationState extends State<JobApplication> {
   File? _file;
   Future<void> _pickFile() async {
@@ -176,17 +179,13 @@ class _JobApplicationState extends State<JobApplication> {
                     SizedBox(
                       height: 20,
                     ),
-
                     Obx(() {
                       return _jobsService.isLoading.value
                           ? CircularProgressIndicator()
                           : SubmitButton(
                               text: 'Send Application',
-                              onTap: () async {
-                                await _jobsService.sendApplication(
-                                    jobApplicationLetter:
-                                        _applicationLetterController.text,
-                                    jobListingId: widget.jobId);
+                              onTap: () {
+                                showCVDialog();
                               },
                             );
                     })
@@ -198,5 +197,62 @@ class _JobApplicationState extends State<JobApplication> {
         ],
       ),
     );
+  }
+
+  void showCVDialog() {
+    Get.defaultDialog(
+      title: '',
+      contentPadding: const EdgeInsets.only(bottom: 20, right: 15, left: 15),
+      content: const Text("Do you want to upload an updated CV?"),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Get.back();
+                Get.to(UploadCv(jobApplication: _applicationLetterController.text,jobId: widget.jobId));
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              child: Text(
+                "Yes",
+                style: GoogleFonts.lexendDeca(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(width: 20),
+            ElevatedButton(
+              onPressed: () {
+                sendJobApplication();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              child: Text(
+                "No",
+                style: GoogleFonts.lexendDeca(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void sendJobApplication() async {
+    await _jobsService.sendApplication(
+        jobApplicationLetter: _applicationLetterController.text,
+        jobListingId: widget.jobId);
   }
 }

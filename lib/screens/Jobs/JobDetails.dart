@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,21 +11,23 @@ import 'package:tizibane/screens/Jobs/JobApplication.dart';
 class JobDetails extends StatefulWidget {
   final String statusValue;
   final String id;
-  const JobDetails({super.key, required this.id, required this.statusValue});
+  const JobDetails({super.key, required this.id,required this.statusValue});
 
   @override
   State<JobDetails> createState() => _JobDetailsState();
 }
 
 class _JobDetailsState extends State<JobDetails> {
+
   final JobsService _jobsService = Get.put(JobsService());
+
   final StatusService _statusService = Get.put(StatusService());
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _jobsService.getJobDetail(widget.id);
+    _jobsService.getJobDetail(widget.id);
     });
   }
 
@@ -53,11 +56,12 @@ class _JobDetailsState extends State<JobDetails> {
           final job = _jobsService.jobDetails.value!;
           final logoUrl = job.company?.companyLogoUrl ?? '';
           List<String> responsibilities =
-              _splitAndTrim(job.responsibilitiesAndDuties);
+              job.responsibilitiesAndDuties?.split('\n') ?? [];
           List<String> qualifications =
-              _splitAndTrim(job.qualificationsAndExperience);
-          List<String> additionalRequirements = _splitAndTrim(job.otherComment);
-
+              job.qualificationsAndExperience?.split('\n') ?? [];
+          List<String> additionalRequirements =
+              job.otherComment?.split('\n') ?? [];
+          
           return Stack(
             children: [
               Column(
@@ -164,7 +168,42 @@ class _JobDetailsState extends State<JobDetails> {
                                 ),
                               ),
                               SizedBox(height: 10),
-                              _buildListView(responsibilities),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: responsibilities.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '\u2022',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            responsibilities[index],
+                                            style: GoogleFonts.lexendDeca(
+                                              textStyle: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w300,
+                                                height: 1.5,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                               SizedBox(height: 10),
                               Text(
                                 "Qualifications",
@@ -176,7 +215,42 @@ class _JobDetailsState extends State<JobDetails> {
                                 ),
                               ),
                               SizedBox(height: 10),
-                              _buildListView(qualifications),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: qualifications.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '\u2022',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            qualifications[index],
+                                            style: GoogleFonts.lexendDeca(
+                                              textStyle: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w300,
+                                                height: 1.5,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                               SizedBox(height: 10),
                               Text(
                                 "Additional Requirements",
@@ -188,23 +262,55 @@ class _JobDetailsState extends State<JobDetails> {
                                 ),
                               ),
                               SizedBox(height: 10),
-                              _buildListView(additionalRequirements),
-                              SizedBox(height: 10),
-                              widget.statusValue == ''
-                                  ? SubmitButton(
-                                      text: 'Apply',
-                                      onTap: () => Get.to(JobApplication(
-                                        position:
-                                            job.position?.positionName ?? '',
-                                        company: job.company?.companyName ?? '',
-                                        companyLogo:
-                                            job.company?.companyLogoUrl ?? '',
-                                        jobId: widget.id,
-                                      )),
-                                    )
-                                  : SubmitButton(
-                                      text: 'Already Applied',
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: additionalRequirements.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '\u2022',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            additionalRequirements[index],
+                                            style: GoogleFonts.lexendDeca(
+                                              textStyle: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w300,
+                                                height: 1.5,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              widget.statusValue == '' ?
+                              SubmitButton(
+                                text: 'Apply',
+                                onTap: () => Get.to(JobApplication(
+                                  position: job.position?.positionName ?? '',
+                                  company: job.company?.companyName ?? '',
+                                  companyLogo: job.company?.companyLogoUrl ?? '',
+                                  jobId: widget.id,
+                                )),
+                              ) : SubmitButton(
+                                text: 'Already Applied',
+                              ),
                               SizedBox(height: 20),
                             ],
                           ),
@@ -218,50 +324,6 @@ class _JobDetailsState extends State<JobDetails> {
           );
         }
       }),
-    );
-  }
-
-  List<String> _splitAndTrim(String? text) {
-    if (text == null) return [];
-    return text
-        .split('\n')
-        .map((item) => item.trim())
-        .where((item) => item.isNotEmpty)
-        .toList();
-  }
-
-  Widget _buildListView(List<String> items) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '\u2022',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  items[index],
-                  style: GoogleFonts.lexendDeca(
-                    textStyle: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

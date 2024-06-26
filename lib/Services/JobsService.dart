@@ -102,8 +102,8 @@ class JobsService extends GetxController {
   }
 
   Future<void> sendApplication({
-    required String jobApplicationLetter,
-    required String jobListingId,
+     String? jobApplicationLetter,
+    String? jobListingId,
   }) async {
     try {
       String accessToken = await getStoredToken();
@@ -136,56 +136,7 @@ class JobsService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-
-        Get.defaultDialog(
-          title: '',
-          contentPadding:
-              const EdgeInsets.only(bottom: 20, right: 15, left: 15),
-          content: const Text("Do you want to upload an updated CV?"),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Get.back();
-                    Get.to(const UploadCv());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  child: Text(
-                    "Yes",
-                    style: GoogleFonts.lexendDeca(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.to(() => BottomMenuBarItems(selectedIndex: 2));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  child: Text(
-                    "No",
-                    style: GoogleFonts.lexendDeca(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
+        Get.to(BottomMenuBarItems(selectedIndex: 2,));
       } else {
         Get.snackbar(
           'Error',
@@ -209,6 +160,8 @@ class JobsService extends GetxController {
 
   Future<void> sendCv({
     required File? curriculumVitaeUrl,
+    required String? jobApplication,
+    required String? jobId,
   }) async {
     try {
       
@@ -250,6 +203,12 @@ class JobsService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+        if(jobId != null){
+          await sendApplication(jobApplicationLetter: jobApplication, jobListingId: jobId);
+        }else{
+          Get.to(BottomMenuBarItems(selectedIndex: 3,));
+        }
+        
       }
       else if (response.statusCode == 201) {
         isLoading.value = false;
@@ -260,6 +219,11 @@ class JobsService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+        if(jobId != null){
+          await sendApplication(jobApplicationLetter: jobApplication, jobListingId: jobId);
+        }else{
+          Get.to(BottomMenuBarItems(selectedIndex: 3,));
+        }
       } else {
         isLoading.value = false;
         Get.snackbar(
