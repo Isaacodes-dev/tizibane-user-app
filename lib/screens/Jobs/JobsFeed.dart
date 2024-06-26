@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:tizibane/Services/JobsService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/Services/StatusService.dart';
@@ -25,10 +26,41 @@ class _JobsFeedState extends State<JobsFeed> {
   @override
   void initState() {
     super.initState();
-       WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _jobsService.getJobsFeed();
       _jobsService.foundJobs.value = _jobsService.jobsFeedList;
     });
+  }
+
+  DateTime convertToDate(String dateString) {
+    try {
+      return DateFormat('yyyy-MM-dd').parse(dateString);
+    } catch (e) {
+      print('Error parsing date: $e');
+      return DateTime.now(); // Default to current date in case of error
+    }
+  }
+
+  void showAlertDialog(BuildContext context, String position, String company,
+      String closingDate) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Job Closed"),
+          content: Text(
+              "The job you are trying to apply for is closed.\n\nPosition: $position\nCompany: $company\nClosing Date: $closingDate"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -58,22 +90,24 @@ class _JobsFeedState extends State<JobsFeed> {
                       radius: 32,
                       backgroundColor: Colors.white,
                       child: Obx(() => CircleAvatar(
-                        radius: 29,
-                        backgroundImage: Image.network(imageBaseUrl + _profileService.imagePath.value).image,
-                      )),
+                            radius: 29,
+                            backgroundImage: Image.network(imageBaseUrl +
+                                    _profileService.imagePath.value)
+                                .image,
+                          )),
                     ),
                     SizedBox(
                       width: 20,
                     ),
                     Obx(() => Text(
-                      'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].first_name + ' ' + _userService.userObj.value[0].last_name : ''}',
-                      style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.white),
-                      ),
-                    )),
+                          'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].first_name + ' ' + _userService.userObj.value[0].last_name : ''}',
+                          style: GoogleFonts.lexendDeca(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white),
+                          ),
+                        )),
                   ],
                 ),
                 SizedBox(
@@ -138,33 +172,73 @@ class _JobsFeedState extends State<JobsFeed> {
                         if (_jobsService.isLoading.value) {
                           return Center(child: CircularProgressIndicator());
                         } else {
-                          return _jobsService.foundJobs.value.isEmpty ? Text("No Jobs To Display") : ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: _jobsService.foundJobs.value.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Get.to(JobDetails(
-                                    id: _jobsService.foundJobs.value[index].id.toString(),
-                                    statusValue: _statusService.jobStatuses[_jobsService.foundJobs.value[index].id.toString()] ?? "Not Applied",
-                                  ));
-                                },
-                                child: JobCard(
-                                  jobListingId: _jobsService.foundJobs.value[index].id.toString(),
-                                  position: _jobsService.foundJobs.value[index].position!,
-                                  company: _jobsService.foundJobs.value[index].companyName!,
-                                  address: _jobsService.foundJobs.value[index].companyAddress!,
-                                  closing: _jobsService.foundJobs.value[index].closed!,
-                                  companyLogo: _jobsService.foundJobs.value[index].companyLogoUrl!,
-                                ),
-                              );
-                            },
-                          );
+                          return _jobsService.foundJobs.value.isEmpty
+                              ? Text("No Jobs To Display")
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                      _jobsService.foundJobs.value.length,
+                                  itemBuilder: (context, index) {
+                                    DateTime jobClosingDate = convertToDate(
+                                        _jobsService
+                                            .foundJobs.value[index].closed!);
+                                    DateTime currentDate = DateTime.now();
+                                    bool isJobStillOpen =
+                                        jobClosingDate.isAfter(currentDate) ||
+                                            jobClosingDate
+                                                .isAtSameMomentAs(currentDate);
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (isJobStillOpen) {
+                                          Get.to(JobDetails(
+                                            id: _jobsService
+                                                .foundJobs.value[index].id
+                                                .toString(),
+                                            statusValue:
+                                                _statusService.jobStatuses[
+                                                        _jobsService.foundJobs
+                                                            .value[index].id
+                                                            .toString()] ??
+                                                    'Not Applied',
+                                          ));
+                                        } else {
+                                          showAlertDialog(
+                                            context,
+                                            _jobsService.foundJobs.value[index]
+                                                .position!,
+                                            _jobsService.foundJobs.value[index]
+                                                .companyName!,
+                                            _jobsService
+                                                .foundJobs.value[index].closed!,
+                                          );
+                                        }
+                                      },
+                                      child: JobCard(
+                                        jobListingId: _jobsService
+                                            .foundJobs.value[index].id
+                                            .toString(),
+                                        position: _jobsService
+                                            .foundJobs.value[index].position!,
+                                        company: _jobsService.foundJobs
+                                            .value[index].companyName!,
+                                        address: _jobsService.foundJobs
+                                            .value[index].companyAddress!,
+                                        closing: _jobsService
+                                            .foundJobs.value[index].closed!,
+                                        companyLogo: _jobsService.foundJobs
+                                            .value[index].companyLogoUrl!,
+                                      ),
+                                    );
+                                  },
+                                );
                         }
                       },
                     ),
-                    SizedBox(height: 5,)
+                    SizedBox(
+                      height: 5,
+                    )
                   ],
                 ),
               ),

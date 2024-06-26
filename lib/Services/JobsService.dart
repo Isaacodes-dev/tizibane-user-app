@@ -102,8 +102,8 @@ class JobsService extends GetxController {
   }
 
   Future<void> sendApplication({
-    required String jobApplicationLetter,
-    required String jobListingId,
+     String? jobApplicationLetter,
+    String? jobListingId,
   }) async {
     try {
       String accessToken = await getStoredToken();
@@ -160,8 +160,8 @@ class JobsService extends GetxController {
 
   Future<void> sendCv({
     required File? curriculumVitaeUrl,
-    required String jobApplication,
-    required String jobId,
+    required String? jobApplication,
+    required String? jobId,
   }) async {
     try {
       
@@ -203,7 +203,12 @@ class JobsService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        await sendApplication(jobApplicationLetter: jobApplication, jobListingId: jobId);
+        if(jobId != null){
+          await sendApplication(jobApplicationLetter: jobApplication, jobListingId: jobId);
+        }else{
+          Get.to(BottomMenuBarItems(selectedIndex: 3,));
+        }
+        
       }
       else if (response.statusCode == 201) {
         isLoading.value = false;
@@ -214,7 +219,11 @@ class JobsService extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        await sendApplication(jobApplicationLetter: jobApplication, jobListingId: jobId);
+        if(jobId != null){
+          await sendApplication(jobApplicationLetter: jobApplication, jobListingId: jobId);
+        }else{
+          Get.to(BottomMenuBarItems(selectedIndex: 3,));
+        }
       } else {
         isLoading.value = false;
         Get.snackbar(

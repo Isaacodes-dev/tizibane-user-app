@@ -24,7 +24,6 @@ class _UserQRCodeState extends State<UserQRCode> {
             _userService.userObj[0].last_name,
         _userService.userObj[0].phone_number,
         _userService.userObj[0].companyEmail,
-        _userService.userObj[0].comapny_phone,
         );
     return Scaffold(
       appBar: AppBar(
@@ -56,12 +55,11 @@ class _UserQRCodeState extends State<UserQRCode> {
   }
 
   String generateVCard(String name, String phoneNumber,
-      String companyEmail, String companyPhoneNumber) {
+      String companyEmail) {
     return 'BEGIN:VCARD\n'
         'VERSION:3.0\n'
         'FN:$name\n'
         'TEL:$phoneNumber\n'
-        'TEL;TYPE=WORK:$companyPhoneNumber\n'
         'EMAIL;TYPE=WORK:$companyEmail\n'
         'END:VCARD';
   }

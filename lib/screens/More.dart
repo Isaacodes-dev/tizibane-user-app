@@ -39,13 +39,6 @@ class _MoreState extends State<More> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString('token');
     nrcNumber.value = preferences.getString('nrcNumber') ?? '';
-
-    if (token != null && nrcNumber.value.isNotEmpty) {
-      print('Token: $token');
-      print('NRC Number: ${nrcNumber.value}');
-    } else {
-      print('No user data found');
-    }
   }
 
   @override
@@ -102,20 +95,20 @@ class _MoreState extends State<More> {
           onTap: () => {Get.to(const Notifications())},
         ),
         ListTile(
-          leading: const Icon(Icons.settings, color: Colors.black),
-          title: Text('Settings', style: GoogleFonts.lexendDeca()),
-          onTap: () => {Get.to(const Settings())},
+          leading: Icon(Icons.upload_file_rounded, color: Colors.black),
+          title: Text('Upload Cv', style: GoogleFonts.lexendDeca()),
+          onTap: () => {Get.to(UploadCv())},
         ),
+        // ListTile(
+        //   leading: const Icon(Icons.settings, color: Colors.black),
+        //   title: Text('Settings', style: GoogleFonts.lexendDeca()),
+        //   onTap: () => {Get.to(const Settings())},
+        // ),
         ListTile(
           leading: const Icon(Icons.lock, color: Colors.black),
           title: Text('Change Password', style: GoogleFonts.lexendDeca()),
           onTap: () => {Get.to(const UpdateUserCredentials())},
         ),
-        // ListTile(
-        //   leading: Icon(Icons.upload_file_rounded, color: Colors.black),
-        //   title: Text('Upload Cv', style: GoogleFonts.lexendDeca()),
-        //   onTap: () => {Get.to(UploadCv())},
-        // ),
         ListTile(
           leading: Icon(Icons.qr_code_2_outlined, color: Colors.black),
           title: Text('Offline QRCode', style: GoogleFonts.lexendDeca()),
