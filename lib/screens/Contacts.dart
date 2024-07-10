@@ -51,26 +51,6 @@ class _ContactsState extends State<Contacts> {
     });
   }
 
-  // Future<void> _loadLocalData() async {
-  //   if (box.hasData('contacts_data')) {
-  //     _contactService.foundContacts.value = box.read('contacts_data');
-
-  //     setState(() {});
-  //   }
-  // }
-
-  // Future<void> _fetchContactData() async {
-  //   try {
-  //     await _contactService.getContacts();
-
-  //     setState(() {});
-
-  //     _refreshIfDataChanged();
-  //   } catch (error) {
-  //     print('Error fetching contacts data: $error');
-  //   }
-  // }
-
   void _initializeAsync() {
     _checkConnectivityAndFetchData();
   }
@@ -81,18 +61,6 @@ class _ContactsState extends State<Contacts> {
       _contactService.getContacts();
     } else {
       _contactService.loadLocalContacts();
-    }
-  }
-
-  Future<void> _refreshIfDataChanged() async {
-    try {
-      await _contactService.getContacts();
-      if (_contactService.foundContacts.value != box.read('contacts_data')) {
-        box.write('contacts_data', _contactService.foundContacts.value);
-        setState(() {});
-      }
-    } catch (error) {
-      print('Error checking for data changes: $error');
     }
   }
 

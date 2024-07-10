@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
-import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/Services/Jobs/JobsService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';

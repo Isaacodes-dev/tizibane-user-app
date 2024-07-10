@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/Services/Connectivity.dart';
+import 'package:tizibane/Services/Jobs/JobsService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/Services/UserService.dart';
@@ -22,13 +23,20 @@ class _JobsFeedState extends State<JobsFeed> {
   final UserService _userService = Get.put(UserService());
   final ProfileService _profileService = Get.put(ProfileService());
   final StatusService _statusService = Get.put(StatusService());
+  final ConnectivityService _connectivityService = Get.put(ConnectivityService());
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _jobsService.getJobsFeed();
-      _jobsService.foundJobs.value = _jobsService.jobsFeedList;
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      if(_connectivityService.isConnected.value){
+        await _jobsService.getJobsFeed();
+        await _jobsService.getJobsFromLocalStorage();
+        _jobsService.foundJobs.value = _jobsService.jobsFeedList;
+      }else{
+        await _jobsService.getJobsFromLocalStorage();
+        _jobsService.foundJobs.value = _jobsService.jobsFeedList;
+      }
     });
   }
 
@@ -85,6 +93,7 @@ class _JobsFeedState extends State<JobsFeed> {
             child: Column(
               children: [
                 Row(
+                  
                   children: [
                     CircleAvatar(
                       radius: 32,
@@ -108,6 +117,18 @@ class _JobsFeedState extends State<JobsFeed> {
                                 color: Colors.white),
                           ),
                         )),
+                    SizedBox(
+                      width: 115,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _jobsService.getJobsFeed();
+                      },
+                      child: Icon(
+                        Icons.replay_circle_filled_rounded,
+                        color: Colors.white,
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(

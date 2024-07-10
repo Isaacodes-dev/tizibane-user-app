@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
 import 'package:path/path.dart' as p;
-import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/Services/Jobs/JobsService.dart';
 
 class UploadCv extends StatefulWidget {
   final String? jobId;

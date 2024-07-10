@@ -32,6 +32,33 @@ class AuthService extends GetxController {
 
   final nrcStorage = GetStorage();
 
+  Future<void> createUser(User user) async {
+    try {
+      
+      const url = baseUrl + register;
+
+      final jsonString = jsonEncode(user.toJson());
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonString,
+      );
+
+      if (response.statusCode == 201) {
+        print('User created successfully');
+      } else {
+        print('Failed to create user. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } catch (e) {
+      print('Error creating user: $e');
+    }
+  }
+  
+
  Future<void> loginUser({
     required String nrc,
     required String password,

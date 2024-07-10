@@ -25,6 +25,7 @@ class _HomeState extends State<Home> {
   final ProfileService _profileService = Get.put(ProfileService());
   final box = GetStorage();
   ConnectivityService _connectivityService = Get.put(ConnectivityService());
+  
   @override
   void initState(){
     super.initState();
@@ -40,13 +41,11 @@ class _HomeState extends State<Home> {
     if (isConnected) {
       _userService.getUser();
       _profileService.getImagePath().catchError((error) {
-        print('Error fetching image path: $error');
       });
       _profileService.isVisible.value = false;
     } else {
       _userService.loadLocalData();
-            _profileService.getImagePath().catchError((error) {
-        print('Error fetching image path: $error');
+      _profileService.getImagePath().catchError((error) {
       });
     }
   }
@@ -55,8 +54,7 @@ class _HomeState extends State<Home> {
     try {
       await _userService.getUser();
       if (_userService.userObj.value != box.read('user_data')) {
-        box.write('user_data',
-            _userService.userObj.value.map((e) => e.toJson()).toList());
+        box.write('user_data', _userService.userObj.value.map((e) => e.toJson()).toList());
         setState(() {});
       }
     } catch (error) {
@@ -115,12 +113,9 @@ class _HomeState extends State<Home> {
                             color: Colors.transparent,
                             child: InkWell(
                               child: CachedNetworkImage(
-                                imageUrl: imageBaseUrl +
-                                    _profileService.imagePath.value,
-                                placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
+                                imageUrl: imageBaseUrl + _profileService.imagePath.value,
+                                placeholder: (context, url) => CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
                                 fit: BoxFit.cover,
                                 width: 150,
                                 height: 150,
@@ -141,55 +136,35 @@ class _HomeState extends State<Home> {
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                           ),
-                          if (_userService
-                                  .userObj.value[0].company_name.isNotEmpty &&
-                              _userService
-                                  .userObj.value[0].position_name.isNotEmpty)
+                          if (_userService.userObj.value[0].company_name.isNotEmpty &&
+                              _userService.userObj.value[0].position_name.isNotEmpty)
                             const SizedBox(height: 5),
-                          if (_userService
-                                  .userObj.value[0].company_name.isNotEmpty &&
-                              _userService
-                                  .userObj.value[0].position_name.isNotEmpty)
+                          if (_userService.userObj.value[0].company_name.isNotEmpty &&
+                              _userService.userObj.value[0].position_name.isNotEmpty)
                             GestureDetector(
                               onTap: () {
                                 Get.to(EmployeementDetails(
-                                  cell: _userService
-                                      .userObj.value[0].phone_number,
-                                  first_name:
-                                      _userService.userObj.value[0].first_name,
-                                  last_name:
-                                      _userService.userObj.value[0].last_name,
-                                  position_name: _userService
-                                      .userObj.value[0].position_name,
-                                  email: _userService
-                                      .userObj.value[0].companyEmail,
-                                  user_profile_pic:
-                                      _profileService.imagePath.value,
-                                  company_logo_url: _userService
-                                      .userObj.value[0].company_logo_url,
-                                  company_address: _userService
-                                      .userObj.value[0].company_address,
-                                  telephone: _userService
-                                      .userObj.value[0].comapny_phone,
-                                  company_name: _userService
-                                      .userObj.value[0].company_name,
-                                  company_website: _userService
-                                      .userObj.value[0].comapny_website,
+                                  cell: _userService.userObj.value[0].phone_number,
+                                  first_name: _userService.userObj.value[0].first_name,
+                                  last_name: _userService.userObj.value[0].last_name,
+                                  position_name: _userService.userObj.value[0].position_name,
+                                  email: _userService.userObj.value[0].companyEmail,
+                                  user_profile_pic: _profileService.imagePath.value,
+                                  company_logo_url: _userService.userObj.value[0].company_logo_url,
+                                  company_address: _userService.userObj.value[0].company_address,
+                                  telephone: _userService.userObj.value[0].comapny_phone,
+                                  company_name: _userService.userObj.value[0].company_name,
+                                  company_website: _userService.userObj.value[0].comapny_website,
                                 ));
                               },
-                              child: Text(
-                                  _userService.userObj.value[0].position_name,
+                              child: Text(_userService.userObj.value[0].position_name,
                                   style: GoogleFonts.lexendDeca()),
                             ),
-                          if (_userService
-                                  .userObj.value[0].company_name.isNotEmpty &&
-                              _userService
-                                  .userObj.value[0].position_name.isNotEmpty)
+                          if (_userService.userObj.value[0].company_name.isNotEmpty &&
+                              _userService.userObj.value[0].position_name.isNotEmpty)
                             const SizedBox(height: 3),
-                          if (_userService
-                                  .userObj.value[0].company_name.isNotEmpty &&
-                              _userService
-                                  .userObj.value[0].position_name.isNotEmpty)
+                          if (_userService.userObj.value[0].company_name.isNotEmpty &&
+                              _userService.userObj.value[0].position_name.isNotEmpty)
                             Text(
                               _userService.userObj.value[0].company_name,
                               style: GoogleFonts.lexendDeca(),
@@ -241,19 +216,15 @@ class _HomeState extends State<Home> {
                                   const SizedBox(
                                     height: 3,
                                   ),
-                                  Text(
-                                      _userService
-                                          .userObj.value[0].phone_number,
+                                  Text(_userService.userObj.value[0].phone_number,
                                       style: GoogleFonts.lexendDeca())
                                 ],
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.07,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.07,
+                                  width: MediaQuery.of(context).size.width * 0.07,
+                                  height: MediaQuery.of(context).size.width * 0.07,
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.black,
@@ -306,10 +277,8 @@ class _HomeState extends State<Home> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.07,
-                                    height: MediaQuery.of(context).size.width *
-                                        0.07,
+                                    width: MediaQuery.of(context).size.width * 0.07,
+                                    height: MediaQuery.of(context).size.width * 0.07,
                                     decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.black),
@@ -356,18 +325,15 @@ class _HomeState extends State<Home> {
                                       height: 3,
                                     ),
                                     Text(
-                                        formatNrc(
-                                            _userService.userObj.value[0].nrc),
+                                        formatNrc(_userService.userObj.value[0].nrc),
                                         style: GoogleFonts.lexendDeca()),
                                   ],
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.07,
-                                    height: MediaQuery.of(context).size.width *
-                                        0.07,
+                                    width: MediaQuery.of(context).size.width * 0.07,
+                                    height: MediaQuery.of(context).size.width * 0.07,
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
@@ -449,8 +415,7 @@ class _HomeState extends State<Home> {
   }
 
   String formatNrc(String userNrc) {
-    String formattedNrc =
-        '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
+    String formattedNrc = '${userNrc.substring(0, 6)}/${userNrc.substring(6, 8)}/${userNrc.substring(8)}';
     return formattedNrc;
   }
 }

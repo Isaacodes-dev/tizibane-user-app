@@ -42,10 +42,12 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_cache_manager: ^3.1.2
   flutter_barcode_scanner: ^2.0.0
+  connectivity_plus: ^2.3.0
   http: ^1.1.0
   file_picker: ^8.0.0+1
   get: ^4.6.6
   intl: ^0.19.0
+  sqflite: ^2.3.0
   get_storage: ^2.1.1
   path: ^1.8.0
   google_fonts: ^4.0.0

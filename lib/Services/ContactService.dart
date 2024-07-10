@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
+import 'package:tizibane/Services/localDb/localdb.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
 import 'package:tizibane/screens/Contact/NewContact.dart';
@@ -16,28 +17,29 @@ class ContactService extends GetxController {
   final isLoading = false.obs;
   final box = GetStorage();
   final nrcStorage = GetStorage();
-  ConnectivityService _connectivityService = Get.put(ConnectivityService()); 
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());
+  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   var contactDetails = ContactModel(
-    nrc: '',
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
-    roleId: '',
-    createdAt: '',
-    updatedAt: '',
-    profilePicture: '',
-    positionName: '',
-    companyName: '',
-    companyLogo: '',
-    companyAssignedEmail: '',
-    companyEmail: '',
-    companyPhone: '',
-    comapnyWebsite: '',
-    comapnyAddress: '',
-    telephone: ''
-  ).obs;
+          nrc: '',
+          firstName: '',
+          lastName: '',
+          phoneNumber: '',
+          email: '',
+          roleId: '',
+          createdAt: '',
+          updatedAt: '',
+          profilePicture: '',
+          positionName: '',
+          companyName: '',
+          companyLogo: '',
+          companyAssignedEmail: '',
+          companyEmail: '',
+          companyPhone: '',
+          comapnyWebsite: '',
+          comapnyAddress: '',
+          telephone: '')
+      .obs;
 
   RxList<ContactModel> contactsList = <ContactModel>[].obs;
   RxList<ContactModel> foundContacts = <ContactModel>[].obs;
@@ -66,48 +68,51 @@ class ContactService extends GetxController {
         var responseData = jsonDecode(response.body);
 
         if (responseData['contact'] != null) {
-          if (responseData['contact'] is List && responseData['contact'].isNotEmpty) {
-            contactDetails.value = ContactModel.fromJson(responseData['contact'][0]);
+          if (responseData['contact'] is List &&
+              responseData['contact'].isNotEmpty) {
+            contactDetails.value =
+                ContactModel.fromJson(responseData['contact'][0]);
           } else if (responseData['contact'] is Map) {
-            contactDetails.value = ContactModel.fromJson(responseData['contact']);
+            contactDetails.value =
+                ContactModel.fromJson(responseData['contact']);
           } else {
             contactDetails.value = ContactModel(
-                        nrc: '',
-          firstName: '',
-          lastName: '',
-          phoneNumber: '',
-          email: '',
-          roleId: '',
-          createdAt: '',
-          updatedAt: '',
-          profilePicture: '',
-          positionName: '',
-          companyName: '',
-          companyLogo: '',
-          companyAssignedEmail: '',
-          companyEmail: '',
-          companyPhone: '',
-          comapnyWebsite: '',
-          comapnyAddress: '',
-          telephone: ''
-            );
+                nrc: '',
+                firstName: '',
+                lastName: '',
+                phoneNumber: '',
+                email: '',
+                roleId: '',
+                createdAt: '',
+                updatedAt: '',
+                profilePicture: '',
+                positionName: '',
+                companyName: '',
+                companyLogo: '',
+                companyAssignedEmail: '',
+                companyEmail: '',
+                companyPhone: '',
+                comapnyWebsite: '',
+                comapnyAddress: '',
+                telephone: '');
             throw Exception('Unexpected response format');
           }
           Get.to(() => NewContact(
-            contactNrc: contactDetails.value.nrc,
-            firstName: contactDetails.value.firstName,
-            lastName: contactDetails.value.lastName,
-            email: contactDetails.value.email,
-            phoneNumber: contactDetails.value.phoneNumber,
-            profilePicture: contactDetails.value.profilePicture,
-            positionName: contactDetails.value.positionName,
-            companyName: contactDetails.value.companyName,
-          ));
+                contactNrc: contactDetails.value.nrc,
+                firstName: contactDetails.value.firstName,
+                lastName: contactDetails.value.lastName,
+                email: contactDetails.value.email,
+                phoneNumber: contactDetails.value.phoneNumber,
+                profilePicture: contactDetails.value.profilePicture,
+                positionName: contactDetails.value.positionName,
+                companyName: contactDetails.value.companyName,
+              ));
         } else {
           throw Exception("Contact data is null");
         }
       } else {
-        throw Exception('Failed to fetch contact details: ${response.statusCode}');
+        throw Exception(
+            'Failed to fetch contact details: ${response.statusCode}');
       }
     }
   }
@@ -130,14 +135,13 @@ class ContactService extends GetxController {
         List<dynamic> data = jsonDecode(response.body)['contacts'];
         contactsList.value = data.map((e) => ContactModel.fromJson(e)).toList();
         foundContacts.value = contactsList;
-        await saveContactsToLocal(contactsList.map((contact) => contact.toJson()).toList());
+        await saveContactsToLocal(
+            contactsList.map((contact) => contact.toJson()).toList());
         isLoading.value = false;
         update();
-      }
-      else if(response.statusCode == 404){
+      } else if (response.statusCode == 404) {
         isLoading.value = false;
-      } 
-      else {
+      } else {
         isLoading.value = false;
         Get.snackbar(
           'Error',
@@ -147,29 +151,28 @@ class ContactService extends GetxController {
           colorText: Colors.white,
         );
       }
+    } else {
+      loadLocalContacts();
     }
   }
 
-Future<void> loadLocalContacts() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (prefs.containsKey('contacts')) {
-    List<String> contactStrings = prefs.getStringList('contacts') ?? [];
-    
-    List<ContactModel> contacts = contactStrings.map((e) {
-      var json = jsonDecode(e);
-      print('Decoded JSON: $json');
-      return ContactModel.fromJson(json);
-    }).toList();
-    foundContacts.value = contacts;
-  } else {
-    print('No contacts found in SharedPreferences');
+  Future<void> loadLocalContacts() async {
+    try {
+      List<Map<String, dynamic>> localData = await _dbHelper.getContacts();
+      if (localData.isNotEmpty) {
+        contactsList.value =
+            localData.map((e) => ContactModel.fromJson(e)).toList();
+        foundContacts.value = contactsList;
+      } else {
+        print('No contacts found in local storage');
+      }
+    } catch (error) {
+      print('Error loading local contacts: $error');
+    }
   }
-}
 
   Future<void> saveContactsToLocal(List<Map<String, dynamic>> contacts) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> contactStrings = contacts.map((e) => jsonEncode(e)).toList();
-    await prefs.setStringList('contacts', contactStrings);
+    await _dbHelper.insertContacts(contacts);
   }
 
   Future<void> saveContact(Map<String, dynamic> contactBody) async {
@@ -258,10 +261,13 @@ Future<void> loadLocalContacts() async {
     PermissionStatus permissionStatus = await Permission.contacts.request();
     if (permissionStatus.isGranted) {
       try {
-        String combineNames = '${contactDetails.value.firstName} ${contactDetails.value.lastName}';
+        String combineNames =
+            '${contactDetails.value.firstName} ${contactDetails.value.lastName}';
         Contact contact = Contact(
           givenName: combineNames,
-          phones: [Item(label: 'mobile', value: contactDetails.value.phoneNumber)],
+          phones: [
+            Item(label: 'mobile', value: contactDetails.value.phoneNumber)
+          ],
           emails: [Item(label: 'work', value: contactDetails.value.email)],
         );
 
@@ -294,7 +300,8 @@ Future<void> loadLocalContacts() async {
     } else {
       results = contactsList.where((element) {
         final trimmedContact = contact.toLowerCase().trim();
-        final fullName = '${element.firstName.toLowerCase()} ${element.lastName.toLowerCase()}';
+        final fullName =
+            '${element.firstName.toLowerCase()} ${element.lastName.toLowerCase()}';
         return fullName.contains(trimmedContact);
       }).toList();
     }

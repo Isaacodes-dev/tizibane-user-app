@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Contact/ViewCurrentEmployeeDetails.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,6 +44,13 @@ class ViewContact extends StatefulWidget {
 }
 
 class _ViewContactState extends State<ViewContact> {
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
