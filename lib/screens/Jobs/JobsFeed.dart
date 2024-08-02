@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,19 +26,24 @@ class _JobsFeedState extends State<JobsFeed> {
   final UserService _userService = Get.put(UserService());
   final ProfileService _profileService = Get.put(ProfileService());
   final StatusService _statusService = Get.put(StatusService());
-  final ConnectivityService _connectivityService = Get.put(ConnectivityService());
+  final ConnectivityService _connectivityService =
+      Get.put(ConnectivityService());
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      if(_connectivityService.isConnected.value){
+      if (_connectivityService.isConnected.value) {
+        await _userService.getUser();
         await _jobsService.getJobsFeed();
         await _jobsService.getJobsFromLocalStorage();
         _jobsService.foundJobs.value = _jobsService.jobsFeedList;
-      }else{
+      } else {
         await _jobsService.getJobsFromLocalStorage();
         _jobsService.foundJobs.value = _jobsService.jobsFeedList;
+      }
+      for (var job in _jobsService.foundJobs.value) {
+        await _statusService.getJobStatus(job.id.toString());
       }
     });
   }
@@ -74,17 +82,17 @@ class _JobsFeedState extends State<JobsFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Image.asset(
-            'assets/images/tizibaneicon.png',
-            width: 50,
-            height: 50,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.black,
+      //   leading: Padding(
+      //     padding: const EdgeInsets.only(left: 16.0),
+      //     child: Image.asset(
+      //       'assets/images/tizibaneicon.png',
+      //       width: 50,
+      //       height: 50,
+      //     ),
+      //   ),
+      // ),
       backgroundColor: Colors.black,
       body: Stack(
         children: [
@@ -92,47 +100,57 @@ class _JobsFeedState extends State<JobsFeed> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
               children: [
+                SizedBox(height: 10,),
                 Row(
-                  
                   children: [
                     CircleAvatar(
                       radius: 32,
                       backgroundColor: Colors.white,
                       child: Obx(() => CircleAvatar(
                             radius: 29,
-                            backgroundImage: Image.network(imageBaseUrl +
-                                    _profileService.imagePath.value)
-                                .image,
+                            backgroundImage: CachedNetworkImageProvider(
+                              imageBaseUrl + _profileService.imagePath.value,
+                            ),
                           )),
                     ),
                     SizedBox(
-                      width: 20,
+                      width: 10,
                     ),
-                    Obx(() => Text(
-                          'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].first_name + ' ' + _userService.userObj.value[0].last_name : ''}',
-                          style: GoogleFonts.lexendDeca(
-                            textStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.white),
-                          ),
-                        )),
-                    SizedBox(
-                      width: 115,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _jobsService.getJobsFeed();
-                      },
-                      child: Icon(
-                        Icons.replay_circle_filled_rounded,
-                        color: Colors.white,
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Obx(() => Text(
+                                'Hi, ${_userService.userObj.value.isNotEmpty ? _userService.userObj.value[0].name : ''}',
+                                style: GoogleFonts.lexendDeca(
+                                  textStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Colors.white),
+                                ),
+                              )),
+                          GestureDetector(
+                            onTap: () {
+                              if (_connectivityService.isConnected.value) {
+                                _jobsService.getJobsFeed();
+                                for (var job in _jobsService.foundJobs.value) {
+                                  _statusService
+                                      .getJobStatus(job.id.toString());
+                                }
+                              }
+                            },
+                            child: Icon(
+                              Icons.replay_circle_filled_rounded,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
                       ),
-                    )
+                    ),
                   ],
                 ),
                 SizedBox(
-                  height: 25,
+                  height: 15,
                 ),
                 TextField(
                   onChanged: (value) => _jobsService.filterJobs(value),
@@ -212,7 +230,9 @@ class _JobsFeedState extends State<JobsFeed> {
 
                                     return GestureDetector(
                                       onTap: () {
-                                        if (isJobStillOpen) {
+                                        if (isJobStillOpen ||
+                                            _connectivityService
+                                                .isConnected.value) {
                                           Get.to(JobDetails(
                                             id: _jobsService
                                                 .foundJobs.value[index].id

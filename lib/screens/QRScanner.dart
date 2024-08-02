@@ -14,7 +14,7 @@ class QRScanner extends StatefulWidget {
 }
 
 class _QRScannerState extends State<QRScanner> {
-  final ContactService _contactService = Get.put(ContactService());
+  //final ContactService _contactService = Get.put(ContactService());
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -24,10 +24,10 @@ class _QRScannerState extends State<QRScanner> {
 
   String userNrc = '';
 
-  loadUser(userNrc) async {
-    print(userNrc);
-    await _contactService.getContact(userNrc);
-  }
+  // loadUser(userNrc) async {
+  //   print(userNrc);
+  //   await _contactService.getContact(userNrc);
+  // }
 
   @override
   void reassemble() {
@@ -59,7 +59,7 @@ class _QRScannerState extends State<QRScanner> {
           )
         ],
       ),
-      floatingActionButton: const ShareUrlLink(),
+      // floatingActionButton: const ShareUrlLink(),
     );
   }
 
@@ -74,7 +74,6 @@ class _QRScannerState extends State<QRScanner> {
           result = scanData;
           print(result!.code.toString());
           userNrc = result!.code.toString();
-          loadUser(userNrc);
           isUserLoaded = true;
         });
         controller.stopCamera();

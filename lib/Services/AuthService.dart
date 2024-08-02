@@ -14,17 +14,18 @@ import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Contact.dart';
 import 'package:tizibane/models/EmploymentHistory.dart';
 import 'package:tizibane/models/User.dart';
+import 'package:tizibane/screens/ChangeProfilePicture.dart';
 import 'package:tizibane/screens/Login.dart';
 
 class AuthService extends GetxController {
   final UserService _userService = Get.put(UserService());
 
-  final ContactService _contactService = Get.put(ContactService());
+  // final ContactService _contactService = Get.put(ContactService());
 
   final EmployeeHistoryService _employeeHistory =
       Get.put(EmployeeHistoryService());
 
-  final isLoading = false.obs;
+  final RxBool isLoading = false.obs;
 
   final token = ''.obs;
 
@@ -32,35 +33,57 @@ class AuthService extends GetxController {
 
   final nrcStorage = GetStorage();
 
-  Future<void> createUser(User user) async {
+  int userId = 0;
+
+  Future<void> createUser(Map<String, dynamic> user) async {
     try {
-      
       const url = baseUrl + register;
 
-      final jsonString = jsonEncode(user.toJson());
+      isLoading.value = true;
 
       final response = await http.post(
         Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonString,
+        body: jsonEncode(user),
       );
 
       if (response.statusCode == 201) {
-        print('User created successfully');
+        isLoading.value = false;
+        userId = json.decode(response.body)['id'];
+        Get.snackbar(
+          'Success',
+          'User Registration Successfully',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setInt('userId', userId);
+        Get.to(Login());
       } else {
+        Get.snackbar(
+          'Error',
+          'User Registration Failed',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
         print('Failed to create user. Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
+        isLoading.value = false;
       }
     } catch (e) {
       print('Error creating user: $e');
+      isLoading.value = false;
+    } finally {
+      isLoading.value = false;
     }
   }
-  
 
- Future<void> loginUser({
-    required String nrc,
+  Future<void> loginUser({
+    required String email,
     required String password,
   }) async {
     try {
@@ -68,7 +91,7 @@ class AuthService extends GetxController {
       isLoading.value = true;
 
       final data = {
-        'nrc': nrc,
+        'email': email,
         'password': password,
       };
 
@@ -80,13 +103,13 @@ class AuthService extends GetxController {
 
       if (response.statusCode == 200) {
         isLoading.value = false;
-        token.value = json.decode(response.body)['token'];
+        // token.value = json.decode(response.body)['token'];
 
         // Save token and nrc to SharedPreferences
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        await preferences.setString('token', token.value);
-        await preferences.setString('nrcNumber', nrc);
-
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
+        // await preferences.setString('token', token.value);
+         SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setString('email', email);
         Get.offAll(() => const BottomMenuBarItems(
               selectedIndex: 0,
             ));
@@ -143,9 +166,9 @@ class AuthService extends GetxController {
 
         _userService.userObj.value = <User>[].obs;
 
-        _contactService.contactsList.value = <ContactModel>[].obs;
+        // _contactService.contactsList.value = <ContactModel>[].obs;
 
-        _contactService.foundContacts.value = <ContactModel>[].obs;
+        // _contactService.foundContacts.value = <ContactModel>[].obs;
 
         _employeeHistory.contactEmployeeHistoryDetails.value =
             <EmploymentHistory>[].obs;
@@ -179,12 +202,14 @@ class AuthService extends GetxController {
         );
         isLoading.value = false;
       }
+      print(response.statusCode);
     } catch (e) {
       print('Error: $e');
       isLoading.value = false;
     }
   }
-    Future<String> getStoredToken() async {
+
+  Future<String> getStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') ?? '';
   }
@@ -193,5 +218,4 @@ class AuthService extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('nrcNumber') ?? '';
   }
-
 }
