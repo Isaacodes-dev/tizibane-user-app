@@ -1,19 +1,35 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tizibane/Services/Connectivity.dart';
+import 'package:tizibane/Services/localDb/localdb.dart';
 import 'package:tizibane/constants/constants.dart';
 
 class StatusService extends GetxController {
   RxBool isLoading = false.obs;
   final RxMap<String, String> jobStatuses = <String, String>{}.obs;
+  final ConnectivityService _connectivityService = Get.put(ConnectivityService());
+  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   Future<void> getJobStatus(String jobListingId) async {
     isLoading.value = true;
-    String accessToken = await getStoredToken();
-    String storedNrc = await getStoredNrc();
+
+    // Check connectivity
+    if (_connectivityService.isConnected.value) {
+      // Fetch status from remote server
+      await _fetchJobStatusFromRemote(jobListingId);
+    } else {
+      // Fetch status from local database
+      await _fetchJobStatusFromLocal(jobListingId);
+    }
+
+    isLoading.value = false;
+  }
+
+  Future<void> _fetchJobStatusFromRemote(String jobListingId) async {
+    String accessToken = await _getStoredToken();
+    String storedNrc = await _getStoredNrc();
 
     final response = await http.get(
       Uri.parse("$baseUrl$applicationStatus/$jobListingId/$storedNrc"),
@@ -24,29 +40,34 @@ class StatusService extends GetxController {
     );
 
     if (response.statusCode == 200) {
+      isLoading.value = false;
       var responseData = jsonDecode(response.body);
       if (responseData['status'] != null) {
         jobStatuses[jobListingId] = responseData['status'];
+        await _dbHelper.insertJobStatus(jobListingId, responseData['status']);
+        isLoading.value = false;
       } else {
-        jobStatuses[jobListingId] = '';
-        throw Exception("Status data is null");
+        jobStatuses[jobListingId] = 'Not Applied';
+        isLoading.value = false;
       }
-    } else if (response.statusCode == 404) {
-      jobStatuses[jobListingId] = '';
     } else {
-      jobStatuses[jobListingId] = '';
-      throw Exception('Failed to get Job status: ${response.statusCode}');
+      isLoading.value = false;
+      jobStatuses[jobListingId] = 'Not Applied';
     }
+  }
 
+  Future<void> _fetchJobStatusFromLocal(String jobListingId) async {
+    String? localStatus = await _dbHelper.getJobStatus(jobListingId);
+    jobStatuses[jobListingId] = localStatus ?? 'Not Applied';
     isLoading.value = false;
   }
 
-  Future<String> getStoredToken() async {
+  Future<String> _getStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') ?? '';
   }
 
-  Future<String> getStoredNrc() async {
+  Future<String> _getStoredNrc() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('nrcNumber') ?? '';
   }

@@ -9,6 +9,7 @@ import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/screens/Jobs/uploadCv.dart';
 import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
+import 'package:tizibane/screens/Payment.dart';
 import 'package:tizibane/screens/Settings.dart';
 import 'package:get/get.dart';
 import 'package:tizibane/components/share/ShareUrlLink.dart';
@@ -79,7 +80,7 @@ class _MoreState extends State<More> {
           Expanded(child: getListView())
         ],
       ),
-      floatingActionButton: const ShareUrlLink(),
+      // floatingActionButton: const ShareUrlLink(),
     );
   }
 
@@ -104,16 +105,21 @@ class _MoreState extends State<More> {
         //   title: Text('Settings', style: GoogleFonts.lexendDeca()),
         //   onTap: () => {Get.to(const Settings())},
         // ),
+        // ListTile(
+        //   leading: const Icon(Icons.lock, color: Colors.black),
+        //   title: Text('Change Password', style: GoogleFonts.lexendDeca()),
+        //   onTap: () => {Get.to(const UpdateUserCredentials())},
+        // ),
         ListTile(
-          leading: const Icon(Icons.lock, color: Colors.black),
-          title: Text('Change Password', style: GoogleFonts.lexendDeca()),
-          onTap: () => {Get.to(const UpdateUserCredentials())},
+          leading: const Icon(Icons.credit_card, color: Colors.black),
+          title: Text('Payment', style: GoogleFonts.lexendDeca()),
+          onTap: () => {Get.to(const Payment())},
         ),
-        ListTile(
-          leading: Icon(Icons.qr_code_2_outlined, color: Colors.black),
-          title: Text('Offline QRCode', style: GoogleFonts.lexendDeca()),
-          onTap: () => {Get.to(UserQRCode())},
-        ),
+        // ListTile(
+        //   leading: Icon(Icons.qr_code_2_outlined, color: Colors.black),
+        //   title: Text('Offline QRCode', style: GoogleFonts.lexendDeca()),
+        //   onTap: () => {Get.to(UserQRCode())},
+        // ),
         Obx(() {
           return _authService.isLoading.value
               ? const Center(

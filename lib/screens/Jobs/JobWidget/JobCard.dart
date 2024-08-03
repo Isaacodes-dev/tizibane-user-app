@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/constants/constants.dart';
 
@@ -28,11 +29,17 @@ class JobCard extends StatefulWidget {
 
 class _JobCardState extends State<JobCard> {
   final StatusService _statusService = Get.put(StatusService());
-
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());
   @override
   void initState() {
     super.initState();
-    _statusService.getJobStatus(widget.jobListingId);
+    // if(_connectivityService.isConnected.value)
+    // {
+    //   _statusService.getJobStatus(widget.jobListingId);
+    // }else{
+    //   _statusService.getJobStatus(widget.jobListingId);
+    // }
+    
   }
 
   @override

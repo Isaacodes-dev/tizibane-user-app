@@ -7,6 +7,8 @@ import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/screens/Login.dart';
 
 String? finalToken;
+bool rememberMe = false;
+bool? finalRememberMe;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -31,11 +33,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> getValidationData() async {
     try {
       final SharedPreferences preferences = await SharedPreferences.getInstance();
-      final obtainedToken = preferences.getString('token');
+      //final obtainedToken = preferences.getString('token');
+      final rememberMe =  preferences.getBool('remember_me');
       setState(() {
-        finalToken = obtainedToken;
+         finalRememberMe = rememberMe;
       });
-      print(finalToken);
     } catch (e) {
       // Handle error fetching token
       print('Error fetching token: $e');
@@ -43,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigateToNextScreen() {
-    if (finalToken == null) {
+    if (finalRememberMe == false) {
       Get.offAll(() => const Login());
     } else {
       Get.offAll(() => const BottomMenuBarItems(selectedIndex: 0));

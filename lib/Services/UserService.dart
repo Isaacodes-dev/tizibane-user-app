@@ -8,30 +8,35 @@ import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/localDb/localdb.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
+import 'package:tizibane/models/IndividualProfile.dart';
 import 'package:tizibane/models/User.dart';
-
 
 class UserService extends GetxService {
   final isLoading = false.obs;
   final isLoaded = false.obs;
   var userObj = <User>[].obs;
+  var individualProfileOject = <IndividualProfile>[].obs;
+  String? email;
   ConnectivityService _connectivityService = Get.put(ConnectivityService());
   final box = GetStorage();
-  final url = baseUrl + tizibaneUser;
+  final url = baseUrl + userData;
+  final urlIndividualProfile = baseUrl + individualProfile;
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
   Future<void> getUser() async {
     bool isConnected = await _connectivityService.checkConnectivity();
     if (isConnected) {
-      String accessToken = await getStoredToken();
-      String storedNrc = await getStoredNrc();
-
+      // String accessToken = await getStoredToken();
+      // String storedNrc = await getStoredNrc();
+      final prefs = await SharedPreferences.getInstance();
+      //int userId = prefs.getInt('userId') ?? 0;
+      email = prefs.getString('email');
       isLoading.value = true;
       final response = await http.get(
-        Uri.parse("$url/$storedNrc"),
+        Uri.parse("$url/$email"),
         headers: {
           'Accept': 'application/json',
-          'Authorization': 'Bearer $accessToken',
+          // 'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -42,7 +47,7 @@ class UserService extends GetxService {
           userObj.value = data.map((e) => User.fromJson(e)).toList();
 
           // Save the user object to local storage
-          await _dbHelper.insertUser(userObj.map((user) => user.toJson()).toList());
+          //await _dbHelper.insertUser(userObj.map((user) => user.toJson()).toList());
 
           isLoading.value = false;
           isLoaded.value = true;
@@ -58,6 +63,35 @@ class UserService extends GetxService {
       }
     } else {
       loadLocalData();
+    }
+  }
+
+  Future<void> getIndividualProfile() async {
+    try {
+      bool isConnected = await _connectivityService.checkConnectivity();
+      if (isConnected) {
+        final prefs = await SharedPreferences.getInstance();
+        int? userId = prefs.getInt('userId');
+        isLoading.value = true;
+        final response = await http.get(
+          Uri.parse("$urlIndividualProfile/$userId"),
+          headers: {
+            'Accept': 'application/json',
+            // 'Authorization': 'Bearer $accessToken',
+          },
+        );
+        if (response.statusCode == 200) {
+          var responseData = jsonDecode(response.body);
+          if (responseData != null) {
+            List<dynamic> data = responseData;
+            individualProfileOject.value = data.map((e) => IndividualProfile.fromJson(e)).toList();
+          }else{
+            print("Error Fecting User data");
+          }
+        }
+      }
+    } catch (error) {
+      print('Error loading local data: $error');
     }
   }
 

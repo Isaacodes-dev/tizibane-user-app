@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:get/get.dart';
+import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
+import 'package:tizibane/screens/Registration.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,7 +16,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController nrcController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
 
@@ -39,7 +41,7 @@ class _LoginState extends State<Login> {
   void dispose() {
     // TODO: implement dispose
 
-    nrcController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -49,7 +51,7 @@ class _LoginState extends State<Login> {
     setState(() {
       _rememberMe = prefs.getBool('remember_me') ?? false;
       if (_rememberMe) {
-        nrcController.text = prefs.getString('nrcValue') ?? '';
+        emailController.text = prefs.getString('emailValue') ?? '';
         passwordController.text = prefs.getString('password') ?? '';
       }
     });
@@ -59,10 +61,10 @@ class _LoginState extends State<Login> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('remember_me', _rememberMe);
     if (_rememberMe) {
-      prefs.setString('nrcValue', nrcController.text);
+      prefs.setString('emailValue', emailController.text);
       prefs.setString('password', passwordController.text);
     } else {
-      prefs.remove('nrcValue');
+      prefs.remove('emailValue');
       prefs.remove('password');
     }
   }
@@ -114,7 +116,7 @@ class _LoginState extends State<Login> {
                   children: [
                     TextField(
                       cursorColor: Colors.black,
-                      controller: nrcController,
+                      controller: emailController,
                       obscureText: false,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
@@ -122,10 +124,10 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(40.0),
                         ),
                         suffixIcon: const Icon(
-                          Icons.credit_card,
+                          Icons.email,
                           color: Colors.black,
                         ),
-                        hintText: 'Nrc',
+                        hintText: 'Email',
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 10.0,
                           horizontal: 15.0,
@@ -190,7 +192,7 @@ class _LoginState extends State<Login> {
                               text: 'Sign In',
                               onTap: () async {
                                 await _authService.loginUser(
-                                  nrc: nrcController.text.trim(),
+                                  email: emailController.text.trim(),
                                   password: passwordController.text.trim(),
                                 );
                                 saveRememberMe();
@@ -201,25 +203,28 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              
-              // Center(
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Text('Dont have an account?',style: GoogleFonts.lexendDeca()),
-              //       SizedBox(width: 4),
-              //       GestureDetector(
-              //         onTap: () {
-              //           Get.off(() => Registration());
-              //         },
-              //         child: Text(
-              //           'Sign Up',
-              //           style: GoogleFonts.lexendDeca(textStyle: TextStyle(fontWeight: FontWeight.bold,color: Colors.orange)),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Dont have an account?',
+                        style: GoogleFonts.lexendDeca()),
+                    SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => Registration());
+                      },
+                      child: Text(
+                        'Sign Up',
+                        style: GoogleFonts.lexendDeca(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.orange)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

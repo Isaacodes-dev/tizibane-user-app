@@ -12,7 +12,7 @@ class NFCScanner extends StatefulWidget {
 }
 
 class _NFCScannerState extends State<NFCScanner> {
-  final ContactService _contactService = Get.put(ContactService());
+  // final ContactService _contactService = Get.put(ContactService());
 
   ValueNotifier<dynamic> result = ValueNotifier(null);
 
@@ -32,7 +32,7 @@ class _NFCScannerState extends State<NFCScanner> {
         String resultSubString = resultString.substring(3);
 
         if (resultSubString.isNotEmpty) {
-          loadUser(resultSubString);
+          // loadUser(resultSubString);
 
           NfcManager.instance.stopSession();
         } else {
@@ -45,9 +45,9 @@ class _NFCScannerState extends State<NFCScanner> {
     }
   }
 
-  loadUser(resultSubString) async {
-    await _contactService.getContact(resultSubString);
-  }
+  // loadUser(resultSubString) async {
+  //   await _contactService.getContact(resultSubString);
+  // }
 
   @override
   void initState() {

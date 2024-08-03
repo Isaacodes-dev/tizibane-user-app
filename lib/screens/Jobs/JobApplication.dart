@@ -60,7 +60,7 @@ class _JobApplicationState extends State<JobApplication> {
         'I am writing to apply for the position of ${widget.position} at ${widget.company}. '
         'With [number] years of experience in [field/industry], '
         'I am confident in my ability to contribute to your team.\n\n'
-        'Sincerely,\n${_userService.userObj.value[0].first_name} ${_userService.userObj.value[0].last_name}';
+        'Sincerely,\n${_userService.userObj.value[0].name}';
   }
 
   Widget build(BuildContext context) {

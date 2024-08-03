@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/Jobs/JobsService.dart';
 import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
@@ -23,11 +24,17 @@ class _JobDetailsState extends State<JobDetails> {
 
   final StatusService _statusService = Get.put(StatusService());
 
+  final ConnectivityService _connectivityService = Get.put(ConnectivityService());
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-    _jobsService.getJobDetail(widget.id);
+      if(_connectivityService.isConnected.value)
+      {
+         _jobsService.getJobDetail(widget.id);
+      }
+   
     });
   }
 
@@ -48,7 +55,7 @@ class _JobDetailsState extends State<JobDetails> {
         } else if (_jobsService.jobDetails.value == null) {
           return Center(
             child: Text(
-              'No job details available',
+              'No job details available or Check internet Connectivity',
               style: TextStyle(color: Colors.white),
             ),
           );
@@ -112,7 +119,7 @@ class _JobDetailsState extends State<JobDetails> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              job.position?.positionName ?? '',
+                              job.position ?? '',
                               style: GoogleFonts.lexendDeca(
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -299,11 +306,11 @@ class _JobDetailsState extends State<JobDetails> {
                                 },
                               ),
                               SizedBox(height: 10),
-                              widget.statusValue == '' ?
+                              widget.statusValue == 'Not Applied' ?
                               SubmitButton(
                                 text: 'Apply',
                                 onTap: () => Get.to(JobApplication(
-                                  position: job.position?.positionName ?? '',
+                                  position: job.position ?? '',
                                   company: job.company?.companyName ?? '',
                                   companyLogo: job.company?.companyLogoUrl ?? '',
                                   jobId: widget.id,
