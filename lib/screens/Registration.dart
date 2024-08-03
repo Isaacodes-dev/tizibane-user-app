@@ -33,13 +33,24 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
-     //const String defaultProfilePic = 'assets/images/user.jpg';
+    //const String defaultProfilePic = 'assets/images/user.jpg';
     user = User(
       nrc: nrcController.text,
       first_name: fullNamesController.text,
+      last_name: fullNamesController.text,
+      telephone: phoneController.text,
       phone_number: phoneController.text,
       email: emailController.text,
+      companyEmail: emailController.text,
       password: passwordController.text,
+      profilePicture: passwordController.text,
+      position_name: passwordController.text,
+      company_name: passwordController.text,
+      comapny_website: passwordController.text,
+      comapny_phone: passwordController.text,
+      company_address: passwordController.text,
+      company_assigned_email: passwordController.text,
+      company_logo_url: passwordController.text,
     );
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -169,16 +180,12 @@ class _RegistrationState extends State<Registration> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.orange),
                       ),
-                      
                     )
                   ],
-                  
                 ),
-                
               ),
-               const SizedBox(height: 25),
+              const SizedBox(height: 25),
             ],
-            
           ),
         ),
       ),
