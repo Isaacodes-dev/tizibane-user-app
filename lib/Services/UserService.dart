@@ -23,48 +23,52 @@ class UserService extends GetxService {
   final urlIndividualProfile = baseUrl + individualProfile;
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
-  Future<void> getUser() async {
-    bool isConnected = await _connectivityService.checkConnectivity();
-    if (isConnected) {
-      // String accessToken = await getStoredToken();
-      // String storedNrc = await getStoredNrc();
-      final prefs = await SharedPreferences.getInstance();
-      //int userId = prefs.getInt('userId') ?? 0;
-      email = prefs.getString('email');
-      isLoading.value = true;
-      final response = await http.get(
-        Uri.parse("$url/$email"),
-        headers: {
-          'Accept': 'application/json',
-          // 'Authorization': 'Bearer $accessToken',
-        },
-      );
 
-      if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
-        if (responseData['user'] != null) {
-          List<dynamic> data = responseData['user'];
-          userObj.value = data.map((e) => User.fromJson(e)).toList();
+Future<void> getUser() async {
+  bool isConnected = await _connectivityService.checkConnectivity();
+  if (isConnected) {
+    // String accessToken = await getStoredToken();
+    // String storedNrc = await getStoredNrc();
+    final prefs = await SharedPreferences.getInstance();
+    //int userId = prefs.getInt('userId') ?? 0;
+    email = prefs.getString('email');
+    isLoading.value = true;
+    final response = await http.get(
+      Uri.parse("$url/$email"),
+      headers: {
+        'Accept': 'application/json',
+        // 'Authorization': 'Bearer $accessToken',
+      },
+    );
+    
+    if (response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      if (responseData != null && responseData is Map<String, dynamic>) {
+        User user = User.fromJson(responseData);
+        int userId = user.id;
+        userObj.value = [user];
 
-          // Save the user object to local storage
-          //await _dbHelper.insertUser(userObj.map((user) => user.toJson()).toList());
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setInt('userId', userId );
+        // Save the user object to local storage
+        await _dbHelper.insertUser(userObj.map((user) => user.toJson()).toList());
 
-          isLoading.value = false;
-          isLoaded.value = true;
-        } else {
-          isLoading.value = false;
-          userObj.value = [];
-          throw Exception("User data is null");
-        }
+        isLoading.value = false;
+        isLoaded.value = true;
       } else {
         isLoading.value = false;
         userObj.value = [];
-        throw Exception('Failed to load user data: ${response.statusCode}');
+        throw Exception("User data is null");
       }
     } else {
-      loadLocalData();
+      isLoading.value = false;
+      userObj.value = [];
+      throw Exception('Failed to load user data: ${response.statusCode}');
     }
+  } else {
+    loadLocalData();
   }
+}
 
   Future<void> getIndividualProfile() async {
     try {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tizibane/Services/ProfileServices/EducationService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'dart:io';
 import 'package:path/path.dart' as p;
@@ -14,8 +15,15 @@ class AddEducation extends StatefulWidget {
 }
 
 class _AddEducationState extends State<AddEducation> {
+  final TextEditingController _institutionName = TextEditingController();
+  final TextEditingController _other = TextEditingController();
+  final TextEditingController _degree = TextEditingController();
+  final TextEditingController _fieldOfStudy = TextEditingController();
+  final TextEditingController _grade = TextEditingController();
+  final TextEditingController _certificate = TextEditingController();
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
+  EducationService _educationService = Get.put(EducationService());
   File? _file;
   Future<void> _selectDate(
       BuildContext context, TextEditingController controller) async {
@@ -73,6 +81,7 @@ class _AddEducationState extends State<AddEducation> {
               ),
               const SizedBox(height: 20),
               TextField(
+                controller: _institutionName,
                 cursorColor: Colors.black,
                 obscureText: false,
                 decoration: InputDecoration(
@@ -88,13 +97,14 @@ class _AddEducationState extends State<AddEducation> {
                     Icons.person,
                     color: Colors.black,
                   ),
-                  hintText: 'Institution Name',
+                  hintText: 'Institution',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
               ),
               const SizedBox(height: 20),
               TextField(
+                controller: _degree,
                 cursorColor: Colors.black,
                 obscureText: false,
                 decoration: InputDecoration(
@@ -115,30 +125,9 @@ class _AddEducationState extends State<AddEducation> {
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
               ),
-              // const SizedBox(height: 20),
-              // TextField(
-              //   cursorColor: Colors.black,
-              //   obscureText: false,
-              //   decoration: InputDecoration(
-              //     contentPadding: const EdgeInsets.symmetric(
-              //       vertical: 10.0,
-              //       horizontal: 15.0,
-              //     ),
-              //     suffixIcon: const Icon(
-              //       Icons.school,
-              //       color: Colors.black,
-              //     ),
-              //     focusedBorder: OutlineInputBorder(
-              //       borderSide: const BorderSide(color: Colors.black),
-              //       borderRadius: BorderRadius.circular(40.0),
-              //     ),
-              //     hintText: 'Degree',
-              //     border: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(20.0)),
-              //   ),
-              // ),
               const SizedBox(height: 20),
               TextField(
+                controller: _fieldOfStudy,
                 cursorColor: Colors.black,
                 obscureText: false,
                 decoration: InputDecoration(
@@ -256,16 +245,30 @@ class _AddEducationState extends State<AddEducation> {
                     borderRadius: BorderRadius.circular(40.0),
                   ),
                   hintText:
-                      _file == null ? 'Upload Cv' : p.basename(_file!.path),
+                      _file == null ? 'Upload Certificate' : p.basename(_file!.path),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
               ),
               const SizedBox(height: 20),
-              SubmitButton(
+              Obx((){
+              return _educationService.isLoading.value ? CircularProgressIndicator() : SubmitButton(
                 text: 'Add Education',
-                onTap: () async {},
-              )
+                onTap: () async {
+                  var education = {
+                    'institution_name':_institutionName.text,
+                    'other': null,
+                    'degree':_degree.text,
+                    'start_date': _startDateController.text,
+                    'end_date': _endDateController.text,
+                    'grade': _grade.text,
+                  };
+                  await _educationService.addEducation(
+                    education, _file
+                  );
+                },
+              );
+              })
             ],
           ),
         ),

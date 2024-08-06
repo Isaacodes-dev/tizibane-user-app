@@ -18,7 +18,7 @@ const String logout = 'logoutuser';
 
 const String tizibaneUser = 'tizibaneuser';
 
-const String education = 'education';
+const String educationUpload = 'education';
 
 const String experience = 'experience';
 

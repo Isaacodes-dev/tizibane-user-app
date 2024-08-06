@@ -1,26 +1,24 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/constants/constants.dart';
-import 'package:tizibane/models/Education.dart';
+import 'package:tizibane/models/Experience.dart';
 
-class EducationService extends GetxController {
+class ExperienceService extends GetxController {
   final RxBool isLoading = false.obs;
 
-  var edcuationObj = <Education>[].obs;
+  var experienceObj = <Experience>[].obs;
 
-  final urlEducation = baseUrl + educationUpload;
+   final urlExperience = baseUrl + experience;
 
   ConnectivityService _connectivityService = Get.put(ConnectivityService());
 
-   Future<void> getUser() async {
+     Future<void> getUser() async {
     bool isConnected = await _connectivityService.checkConnectivity();
     if (isConnected) {
       // String accessToken = await getStoredToken();
@@ -29,7 +27,7 @@ class EducationService extends GetxController {
       int userId = prefs.getInt('userId') ?? 0;
       isLoading.value = true;
       final response = await http.get(
-        Uri.parse("$urlEducation/$userId"),
+        Uri.parse("$urlExperience/$userId"),
         headers: {
           'Accept': 'application/json',
           // 'Authorization': 'Bearer $accessToken',
@@ -40,7 +38,7 @@ class EducationService extends GetxController {
         var responseData = jsonDecode(response.body);
         if (responseData['user'] != null) {
           List<dynamic> data = responseData['user'];
-          edcuationObj.value = data.map((e) => Education.fromJson(e)).toList();
+          experienceObj.value = data.map((e) => Experience.fromJson(e)).toList();
 
           // Save the user object to local storage
           //await _dbHelper.insertUser(userObj.map((user) => user.toJson()).toList());
@@ -49,12 +47,12 @@ class EducationService extends GetxController {
 
         } else {
           isLoading.value = false;
-          edcuationObj.value = [];
+          experienceObj.value = [];
           throw Exception("User data is null");
         }
       } else {
         isLoading.value = false;
-        edcuationObj.value = [];
+        experienceObj.value = [];
         throw Exception('Failed to load user data: ${response.statusCode}');
       }
     } else {
@@ -62,89 +60,7 @@ class EducationService extends GetxController {
     }
   }
 
- Future<void> addEducation(Map<String, dynamic> education, File? certificateFile) async {
-  try {
-    bool isConnected = await _connectivityService.checkConnectivity();
-
-    if (isConnected) {
-      isLoading.value = true;
-
-      final prefs = await SharedPreferences.getInstance();
-      int? userId = prefs.getInt('userId');
-      
-      if (userId != null) {
-        final url = '$baseUrl$educationUpload/$userId';
-
-        var request = http.MultipartRequest('POST', Uri.parse(url));
-
-        // Add headers
-        request.headers.addAll({
-          'Content-Type': 'multipart/form-data',
-        });
-
-        // Add JSON data as fields
-        education.forEach((key, value) {
-          request.fields[key] = value.toString();
-        });
-
-        // Add file if it exists
-        if (certificateFile != null) {
-          request.files.add(await http.MultipartFile.fromPath(
-            'certificate', // The field name for the file in the request
-            certificateFile.path,
-            filename: basename(certificateFile.path),
-          ));
-        }
-
-        var streamedResponse = await request.send();
-        var response = await http.Response.fromStream(streamedResponse);
-
-        if (response.statusCode == 201) {
-          isLoading.value = false;
-          Get.snackbar(
-            'Success',
-            'Education Added Successfully',
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          );
-        } else {
-          isLoading.value = false;
-          Get.snackbar(
-            'Error',
-            'Education Not Added Successfully',
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-          print(response.statusCode);
-        }
-      } else {
-        print('error');
-        isLoading.value = false;
-        Get.snackbar(
-          'Error',
-          'Education Not Added Successfully',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-    }
-  } catch (ex) {
-    print(ex);
-    isLoading.value = false;
-    Get.snackbar(
-      'Error',
-      'Education Not Added Successfully',
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-    );
-  }
-}
-
-  Future<void> updateEducation(Map<String, dynamic> education) async {
+  Future<void> addExperience(Map<String, dynamic> experience) async {
     try {
       bool isConnected = await _connectivityService.checkConnectivity();
 
@@ -155,30 +71,31 @@ class EducationService extends GetxController {
         int? userId = prefs.getInt('userId');
 
         if (userId != null) {
-          final url = '$baseUrl$education/$userId';
+          final url = '$urlExperience/$userId';
 
           final response = await http.post(
             Uri.parse(url),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
-            body: jsonEncode(education),
+            body: jsonEncode(experience),
           );
 
           if (response.statusCode == 201) {
             isLoading.value = false;
             Get.snackbar(
               'Success',
-              'Education Added Successfully',
+              'Experience Added Successfully',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.green,
               colorText: Colors.white,
             );
           } else {
+            print(response.statusCode);
             isLoading.value = false;
             Get.snackbar(
               'Error',
-              'Education Not Added Successfully',
+              'Experience Not Added Successfully',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.red,
               colorText: Colors.white,
@@ -188,7 +105,7 @@ class EducationService extends GetxController {
           isLoading.value = false;
           Get.snackbar(
             'Error',
-            'Education Not Added Successfully',
+            'Experience Not Added Successfully',
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.red,
             colorText: Colors.white,
@@ -199,7 +116,70 @@ class EducationService extends GetxController {
       isLoading.value = false;
       Get.snackbar(
         'Error',
-        'Education Not Added Successfully',
+        'Experience Not Added Successfully',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  Future<void> updateExperience(Map<String, dynamic> user) async {
+    try {
+      bool isConnected = await _connectivityService.checkConnectivity();
+
+      if (isConnected) {
+        isLoading.value = true;
+
+        final prefs = await SharedPreferences.getInstance();
+        int? userId = prefs.getInt('userId');
+
+        if (userId != null) {
+          final url = '$baseUrl$educationUpload/$userId';
+
+          final response = await http.post(
+            Uri.parse(url),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(user),
+          );
+
+          if (response.statusCode == 201) {
+            isLoading.value = false;
+            Get.snackbar(
+              'Success',
+              'Experience Added Successfully',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.green,
+              colorText: Colors.white,
+            );
+          } else {
+            isLoading.value = false;
+            Get.snackbar(
+              'Error',
+              'Experience Not Added Successfully',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
+          }
+        } else {
+          isLoading.value = false;
+          Get.snackbar(
+            'Error',
+            'Experience Not Added Successfully',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
+      }
+    } catch (ex) {
+      isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        'Experience Not Added Successfully',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,

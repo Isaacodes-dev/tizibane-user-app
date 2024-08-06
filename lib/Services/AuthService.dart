@@ -145,13 +145,14 @@ class AuthService extends GetxController {
 
       isLoading.value = true;
 
-      String? accessToken = await getStoredToken();
-
+      // String? accessToken = await getStoredToken();
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.remove('remember_me');
       final response = await http.post(
         Uri.parse(url),
         headers: {
           'Accept': 'application/json',
-          'Authorization': 'Bearer $accessToken',
+          // 'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -182,6 +183,7 @@ class AuthService extends GetxController {
         preferences.remove('contacts');
         preferences.remove('employeeContactHistory');
         preferences.remove('user');
+        //preferences.remove('remember_me');
 
         Get.snackbar(
           'Success',

@@ -1,22 +1,29 @@
+
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as p;
 import 'package:get/get.dart';
-import 'package:tizibane/Services/ProfileServices/ExperienceService.dart';
+import 'package:tizibane/Services/ProfileServices/ProfessionalAffiliationsService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 
-class AddExperience extends StatefulWidget {
-  const AddExperience({super.key});
+class AddProfessionalAffiliations extends StatefulWidget {
+  const AddProfessionalAffiliations({super.key});
 
   @override
-  State<AddExperience> createState() => _AddExperienceState();
+  State<AddProfessionalAffiliations> createState() => _AddProfessionalAffiliationsState();
 }
 
-class _AddExperienceState extends State<AddExperience> {
-  ExperienceService _experienceService = Get.put(ExperienceService());
-  final TextEditingController _companyName = TextEditingController();
-  final TextEditingController _jobTitle = TextEditingController();
-  final TextEditingController _responsibilities = TextEditingController();
-  final TextEditingController _startDateController = TextEditingController();
-  final TextEditingController _endDateController = TextEditingController();
+class _AddProfessionalAffiliationsState extends State<AddProfessionalAffiliations> {
+  ProfessionalAffiliationsService _affiliationsService = Get.put(ProfessionalAffiliationsService());
+  final TextEditingController _organizationName = TextEditingController();
+  final TextEditingController _membershipId = TextEditingController();
+  final TextEditingController _role = TextEditingController();
+  final TextEditingController _certificate = TextEditingController();
+  final TextEditingController _validFromDateController = TextEditingController();
+  final TextEditingController _validToController = TextEditingController();
+    File? _file;
   Future<void> _selectDate(
       BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
@@ -32,6 +39,21 @@ class _AddExperienceState extends State<AddExperience> {
     }
   }
 
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result != null) {
+      setState(() {
+        _file = File(result.files.single.path!);
+      });
+      print(_file?.path);
+    } else {
+      // User canceled the picker
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +61,7 @@ class _AddExperienceState extends State<AddExperience> {
         backgroundColor: Colors.black,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(15.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -47,7 +69,7 @@ class _AddExperienceState extends State<AddExperience> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'Experience',
+                    'Professional Affiliation',
                     style: TextStyle(
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold,
@@ -57,7 +79,7 @@ class _AddExperienceState extends State<AddExperience> {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: _companyName,
+                controller: _organizationName,
                 cursorColor: Colors.black,
                 obscureText: false,
                 decoration: InputDecoration(
@@ -73,14 +95,14 @@ class _AddExperienceState extends State<AddExperience> {
                     Icons.person,
                     color: Colors.black,
                   ),
-                  hintText: 'Company',
+                  hintText: 'Oranization Name',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: _jobTitle,
+                controller: _membershipId,
                 cursorColor: Colors.black,
                 obscureText: false,
                 decoration: InputDecoration(
@@ -88,22 +110,22 @@ class _AddExperienceState extends State<AddExperience> {
                     vertical: 10.0,
                     horizontal: 15.0,
                   ),
+                  suffixIcon: const Icon(
+                    Icons.school,
+                    color: Colors.black,
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.black),
                     borderRadius: BorderRadius.circular(40.0),
                   ),
-                  suffixIcon: const Icon(
-                    Icons.person,
-                    color: Colors.black,
-                  ),
-                  hintText: 'Job Title',
+                  hintText: 'Membership Id',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: _responsibilities,
+                controller: _role,
                 cursorColor: Colors.black,
                 obscureText: false,
                 decoration: InputDecoration(
@@ -111,26 +133,26 @@ class _AddExperienceState extends State<AddExperience> {
                     vertical: 10.0,
                     horizontal: 15.0,
                   ),
+                  suffixIcon: const Icon(
+                    Icons.email,
+                    color: Colors.black,
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.black),
                     borderRadius: BorderRadius.circular(40.0),
                   ),
-                  suffixIcon: const Icon(
-                    Icons.person,
-                    color: Colors.black,
-                  ),
-                  hintText: 'Responsibilities',
+                  hintText: 'Role',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: _startDateController,
+                controller: _validFromDateController,
                 cursorColor: Colors.black,
                 obscureText: false,
                 readOnly: true,
-                onTap: () => _selectDate(context, _startDateController),
+                onTap: () => _selectDate(context, _validFromDateController),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 10.0,
@@ -152,11 +174,11 @@ class _AddExperienceState extends State<AddExperience> {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: _endDateController,
+                controller: _validToController,
                 cursorColor: Colors.black,
                 obscureText: false,
                 readOnly: true,
-                onTap: () => _selectDate(context, _endDateController),
+                onTap: () => _selectDate(context, _validToController),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 10.0,
@@ -177,22 +199,50 @@ class _AddExperienceState extends State<AddExperience> {
                 ),
               ),
               const SizedBox(height: 20),
-              Obx(() {
-                return _experienceService.isLoading.value
-                    ? CircularProgressIndicator()
-                    : SubmitButton(
-                        text: 'Add Experience',
-                        onTap: () async{
-                          var experienceObj = {
-                            'company_name': _companyName.text,
-                            'job_title': _jobTitle.text,
-                            'responsibilities': _responsibilities.text,
-                            'start_date': _startDateController.text,
-                            'end_date': _endDateController.text
-                          };
-                          await _experienceService.addExperience(experienceObj);
-                        },
-                      );
+              TextField(
+                onTap: () {
+                  _pickFile();
+                },
+                showCursor: false,
+                readOnly: true,
+                cursorColor: Colors.black,
+                obscureText: false,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0,
+                    horizontal: 15.0,
+                  ),
+                  suffixIcon: const Icon(
+                    Icons.upload_file,
+                    color: Colors.black,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(40.0),
+                  ),
+                  hintText:
+                      _file == null ? 'Upload Certificate' : p.basename(_file!.path),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Obx((){
+              return _affiliationsService.isLoading.value ? CircularProgressIndicator() : SubmitButton(
+                text: 'Add Professional Affiliation',
+                onTap: () async {
+                  var affiliation = {
+                    'organization_name':_organizationName.text,
+                    'member_id':_membershipId.text,
+                    'role': _role.text,
+                    'valid_from': _validFromDateController.text,
+                    'valid_to': _validToController.text,
+                  };
+                  await _affiliationsService.addProfessionalAffiliation(
+                    affiliation, _file
+                  );
+                },
+              );
               })
             ],
           ),

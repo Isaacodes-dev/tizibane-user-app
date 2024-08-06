@@ -35,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final SharedPreferences preferences = await SharedPreferences.getInstance();
       //final obtainedToken = preferences.getString('token');
       final rememberMe =  preferences.getBool('remember_me');
+      print(rememberMe);
       setState(() {
          finalRememberMe = rememberMe;
       });
@@ -45,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigateToNextScreen() {
-    if (finalRememberMe == false) {
+    if (finalRememberMe == false || finalRememberMe == null) {
       Get.offAll(() => const Login());
     } else {
       Get.offAll(() => const BottomMenuBarItems(selectedIndex: 0));

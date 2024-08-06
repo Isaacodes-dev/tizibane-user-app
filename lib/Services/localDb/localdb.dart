@@ -27,22 +27,9 @@ class DatabaseHelper {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS users (
-        nrc TEXT PRIMARY KEY,
-        first_name TEXT,
-        last_name TEXT,
-        phone_number TEXT,
-        user_email TEXT,
-        password TEXT,
-        profilePicture TEXT,
-        position_name TEXT,
-        company_name TEXT,
-        company_address TEXT,
-        comapny_website TEXT,
-        comapny_phone TEXT,
-        company_assigned_email TEXT,
-        companyEmail TEXT,
-        telephone TEXT,
-        company_logo_url TEXT
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        email TEXT
       )
     ''');
 

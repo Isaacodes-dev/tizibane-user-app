@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tizibane/Services/ProfileServices/SkillService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 
 class AddSkill extends StatefulWidget {
@@ -9,6 +11,9 @@ class AddSkill extends StatefulWidget {
 }
 
 class _AddSkillState extends State<AddSkill> {
+  SkillService _skillService = Get.put(SkillService());
+  final TextEditingController _skillName = TextEditingController();
+  final TextEditingController _proficiencyLevel = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +38,7 @@ class _AddSkillState extends State<AddSkill> {
             ),
             const SizedBox(height: 20),
             TextField(
+              controller: _skillName,
               cursorColor: Colors.black,
               obscureText: false,
               decoration: InputDecoration(
@@ -55,6 +61,7 @@ class _AddSkillState extends State<AddSkill> {
             ),
             const SizedBox(height: 20),
             TextField(
+              controller: _proficiencyLevel,
               cursorColor: Colors.black,
               obscureText: false,
               decoration: InputDecoration(
@@ -76,7 +83,20 @@ class _AddSkillState extends State<AddSkill> {
               ),
             ),
             const SizedBox(height: 20),
-            SubmitButton(text: 'Add Skill')
+            Obx(() {
+              return _skillService.isLoading.value
+                  ? CircularProgressIndicator()
+                  : SubmitButton(
+                      text: 'Add Skill',
+                      onTap: () async{
+                        var skill = {
+                          'skill_name' : _skillName.text,
+                          'proficiency_level': _proficiencyLevel.text 
+                        };
+                       await _skillService.addSkill(skill);
+                      },
+                    );
+            })
           ],
         ),
       ),
