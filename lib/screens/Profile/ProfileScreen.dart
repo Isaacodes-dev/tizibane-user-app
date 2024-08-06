@@ -6,6 +6,7 @@ import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/screens/Profile/EditProfileScreen.dart';
 import 'package:tizibane/screens/Profile/EditScreens/AddEducation.dart';
+import 'package:tizibane/screens/Profile/EditScreens/AddExperience.dart';
 import 'package:tizibane/screens/Profile/EditScreens/AddSkill.dart';
 
 class JobExperience {
@@ -438,7 +439,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     icon: Icon(Icons.add),
                                     color: Colors.white,
                                     onPressed: () {
-                                      // Add your onPressed code here!
+                                      Get.to(AddExperience());
                                     },
                                   ),
                                 ),
