@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tizibane/screens/Contacts.dart';
-import 'package:tizibane/screens/Home.dart';
-import 'package:tizibane/screens/Jobs/JobsFeed.dart';
+import 'package:tizibane/screens/Jobs/Jobs.dart';
 import 'package:tizibane/screens/More.dart';
+import 'package:tizibane/screens/Profile/ProfileScreen.dart';
 
 class BottomMenuBarItems extends StatefulWidget {
   final int selectedIndex;
@@ -48,10 +47,10 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildMaterialButton(0, Icons.home_filled, "Home"),
-                buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
-                buildMaterialButton(2, Icons.work, "Jobs"),
-                buildMaterialButton(3, Icons.more_horiz_outlined, "More"),
+                buildMaterialButton(0, Icons.person, "Profile"),
+                buildMaterialButton(1, Icons.work, "Jobs"),
+                // buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
+                buildMaterialButton(2, Icons.more_horiz_outlined, "More"),
               ],
             ),
           ),
@@ -63,15 +62,13 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
   Widget getCurrentScreen() {
     switch (currentIndex) {
       case 0:
-        return const Home();
+        return const ProfileScreen();
       case 1:
-        return const Contacts();
+        return const Jobs();
       case 2:
-        return const JobsFeed();
-      case 3:
         return const More();
       default:
-        return const Home();
+        return const ProfileScreen();
     }
   }
 

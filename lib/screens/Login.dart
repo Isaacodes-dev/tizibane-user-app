@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/AuthService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 import 'package:get/get.dart';
+import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
+import 'package:tizibane/screens/Registration.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,32 +16,25 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController nrcController = TextEditingController();
-
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
   final AuthService _authService = Get.put(AuthService());
-
   final box = GetStorage();
-
   final nrcStorage = GetStorage();
+  final _formKey = GlobalKey<FormState>();
 
   bool _obscureText = true;
-
   bool _rememberMe = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadRememberMe();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
-    nrcController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -49,7 +44,7 @@ class _LoginState extends State<Login> {
     setState(() {
       _rememberMe = prefs.getBool('remember_me') ?? false;
       if (_rememberMe) {
-        nrcController.text = prefs.getString('nrcValue') ?? '';
+        emailController.text = prefs.getString('emailValue') ?? '';
         passwordController.text = prefs.getString('password') ?? '';
       }
     });
@@ -59,10 +54,10 @@ class _LoginState extends State<Login> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('remember_me', _rememberMe);
     if (_rememberMe) {
-      prefs.setString('nrcValue', nrcController.text);
+      prefs.setString('emailValue', emailController.text);
       prefs.setString('password', passwordController.text);
     } else {
-      prefs.remove('nrcValue');
+      prefs.remove('emailValue');
       prefs.remove('password');
     }
   }
@@ -110,116 +105,143 @@ class _LoginState extends State<Login> {
               ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      cursorColor: Colors.black,
-                      controller: nrcController,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        suffixIcon: const Icon(
-                          Icons.credit_card,
-                          color: Colors.black,
-                        ),
-                        hintText: 'Nrc',
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        hintStyle: const TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      cursorColor: Colors.black,
-                      controller: passwordController,
-                      obscureText: _obscureText,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        suffixIcon: IconButton(
-                          color: Colors.black,
-                          icon: Icon(
-                            _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        cursorColor: Colors.black,
+                        controller: emailController,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(40.0),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
+                          suffixIcon: const Icon(
+                            Icons.email,
+                            color: Colors.black,
+                          ),
+                          hintText: 'Email',
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 15.0,
+                          ),
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                         ),
-                        hintText: 'Password',
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        cursorColor: Colors.black,
+                        controller: passwordController,
+                        obscureText: _obscureText,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(40.0),
+                          ),
+                          suffixIcon: IconButton(
+                            color: Colors.black,
+                            icon: Icon(
+                              _obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          ),
+                          hintText: 'Password',
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 15.0,
+                          ),
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                         ),
-                        hintStyle: const TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters long';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Checkbox(
+                            activeColor: Colors.black,
+                            checkColor: Colors.white,
+                            value: _rememberMe,
+                            onChanged: _onRememberMeChanged,
+                          ),
+                          Text('Remember Me', style: GoogleFonts.lexendDeca())
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Obx(() {
+                        return _authService.isLoading.value
+                            ? const CircularProgressIndicator()
+                            : SubmitButton(
+                                text: 'Sign In',
+                                onTap: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    await _authService.loginUser(
+                                      email: emailController.text.trim(),
+                                      password: passwordController.text.trim(),
+                                    );
+                                    saveRememberMe();
+                                  }
+                                },
+                              );
+                      }),
+                      SizedBox(height: 25),
+                    ],
+                  ),
+                ),
+              ),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Dont have an account?',
+                        style: GoogleFonts.lexendDeca()),
+                    SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => Registration());
+                      },
+                      child: Text(
+                        'Sign Up',
+                        style: GoogleFonts.lexendDeca(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.orange)),
                       ),
                     ),
-                    SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Checkbox(
-                          activeColor: Colors.black,
-                          checkColor: Colors.white,
-                          value: _rememberMe,
-                          onChanged: _onRememberMeChanged,
-                        ),
-                        Text('Remember Me', style: GoogleFonts.lexendDeca())
-                      ],
-                    ),
-                    SizedBox(height: 5),
-                    Obx(() {
-                      return _authService.isLoading.value
-                          ? const CircularProgressIndicator()
-                          : SubmitButton(
-                              text: 'Sign In',
-                              onTap: () async {
-                                await _authService.loginUser(
-                                  nrc: nrcController.text.trim(),
-                                  password: passwordController.text.trim(),
-                                );
-                                saveRememberMe();
-                              },
-                            );
-                    }),
-                    SizedBox(height: 25),
                   ],
                 ),
               ),
-              
-              // Center(
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Text('Dont have an account?',style: GoogleFonts.lexendDeca()),
-              //       SizedBox(width: 4),
-              //       GestureDetector(
-              //         onTap: () {
-              //           Get.off(() => Registration());
-              //         },
-              //         child: Text(
-              //           'Sign Up',
-              //           style: GoogleFonts.lexendDeca(textStyle: TextStyle(fontWeight: FontWeight.bold,color: Colors.orange)),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),

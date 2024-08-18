@@ -1,12 +1,13 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
-import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/Services/Jobs/JobsService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
@@ -60,7 +61,7 @@ class _JobApplicationState extends State<JobApplication> {
         'I am writing to apply for the position of ${widget.position} at ${widget.company}. '
         'With [number] years of experience in [field/industry], '
         'I am confident in my ability to contribute to your team.\n\n'
-        'Sincerely,\n${_userService.userObj.value[0].first_name} ${_userService.userObj.value[0].last_name}';
+        'Sincerely,\n${_userService.userObj.value[0].name}';
   }
 
   Widget build(BuildContext context) {
@@ -101,12 +102,16 @@ class _JobApplicationState extends State<JobApplication> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(60),
-                      child: Image.network(
-                        companyLogoUrl + widget.companyLogo,
-                        height: 60,
-                        width: 60,
-                        fit: BoxFit.cover,
-                      ),
+                      child: CachedNetworkImage(
+                      imageUrl: companyLogoUrl + widget.companyLogo,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          Image.asset('assets/images/samplelogo.png'),
+                      height: 65,
+                      width: 65,
+                      fit: BoxFit.contain,
+                    ),
                     ),
                     SizedBox(
                       width: 10,
@@ -211,7 +216,9 @@ class _JobApplicationState extends State<JobApplication> {
             ElevatedButton(
               onPressed: () {
                 Get.back();
-                Get.to(UploadCv(jobApplication: _applicationLetterController.text,jobId: widget.jobId));
+                Get.to(UploadCv(
+                    jobApplication: _applicationLetterController.text,
+                    jobId: widget.jobId));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,

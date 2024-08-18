@@ -4,14 +4,19 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Components/SubmitButton.dart';
 import 'package:path/path.dart' as p;
-import 'package:tizibane/Services/JobsService.dart';
+import 'package:tizibane/Services/Jobs/JobsService.dart';
 
 class UploadCv extends StatefulWidget {
   final String? jobId;
-  final String? jobApplication; 
-  const UploadCv({super.key, this.jobApplication,this.jobId,});
+  final String? jobApplication;
+  const UploadCv({
+    super.key,
+    this.jobApplication,
+    this.jobId,
+  });
 
   @override
   State<UploadCv> createState() => _UploadCvState();
@@ -77,7 +82,10 @@ class _UploadCvState extends State<UploadCv> {
                   children: [
                     ClipRRect(
                         borderRadius: BorderRadius.circular(60),
-                        child: Icon(Icons.upload_file,color: Colors.white,)),
+                        child: Icon(
+                          Icons.upload_file,
+                          color: Colors.white,
+                        )),
                     SizedBox(
                       width: 10,
                     ),
@@ -173,8 +181,20 @@ class _UploadCvState extends State<UploadCv> {
                                 text: 'Upload Cv',
                                 onTap: () async {
                                   if (_file != null) {
+                                    final prefs =
+                                        await SharedPreferences.getInstance();
+                                    int individualProfileId =
+                                        prefs.getInt('individualProfileId') ?? 0;
+
+                                    int userId = prefs.getInt('userId') ??
+                                            0;
                                     await _jobsService.sendCv(
-                                        curriculumVitaeUrl: _file,jobApplication: widget.jobApplication,jobId: widget.jobId);
+                                        curriculumVitaeUrl: _file,
+                                        jobApplication: widget.jobApplication,
+                                        jobId: widget.jobId,
+                                        userId: userId,
+                                        individualProfileId: individualProfileId
+                                        );
                                   } else {
                                     Get.snackbar(
                                       'Error',

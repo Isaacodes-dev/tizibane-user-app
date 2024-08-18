@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/constants/constants.dart';
 
@@ -28,16 +30,31 @@ class JobCard extends StatefulWidget {
 
 class _JobCardState extends State<JobCard> {
   final StatusService _statusService = Get.put(StatusService());
-
+  ConnectivityService _connectivityService = Get.put(ConnectivityService());
   @override
   void initState() {
     super.initState();
-    _statusService.getJobStatus(widget.jobListingId);
+    // if(_connectivityService.isConnected.value)
+    // {
+    //   _statusService.getJobStatus(widget.jobListingId);
+    // }else{
+    //   _statusService.getJobStatus(widget.jobListingId);
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    String getCompanyInitials(String name) {
+      List<String> nameParts = name.split(' ');
+      String initials = '';
+      for (var part in nameParts) {
+        if (part.isNotEmpty) {
+          initials += part[0];
+        }
+      }
+      return initials.toUpperCase();
+    }
 
     return SizedBox(
       height: 205,
@@ -59,14 +76,26 @@ class _JobCardState extends State<JobCard> {
               Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(60),
-                    child: Image.network(
-                      companyLogoUrl + widget.companyLogo,
-                      height: 65,
-                      width: 65,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                      borderRadius: BorderRadius.circular(60),
+                      child: CachedNetworkImage(
+                        imageUrl: companyLogoUrl + widget.companyLogo,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          child: Text(
+                            getCompanyInitials(widget.company),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          radius: 32.5, // half of the width/height
+                        ),
+                        height: 65,
+                        width: 65,
+                        fit: BoxFit.contain,
+                      )),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
@@ -114,7 +143,7 @@ class _JobCardState extends State<JobCard> {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    "Closing date: ${widget.closing}",
+                    widget.closing,
                     style: const TextStyle(fontSize: 12),
                   ),
                 ],
