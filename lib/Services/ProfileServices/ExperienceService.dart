@@ -6,6 +6,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/Connectivity.dart';
+import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Experience.dart';
 
@@ -90,6 +91,7 @@ class ExperienceService extends GetxController {
               backgroundColor: Colors.green,
               colorText: Colors.white,
             );
+            Get.to(BottomMenuBarItems(selectedIndex: 0));
           } else {
             print(response.statusCode);
             isLoading.value = false;
@@ -124,7 +126,7 @@ class ExperienceService extends GetxController {
     }
   }
 
-  Future<void> updateExperience(Map<String, dynamic> user) async {
+  Future<void> updateExperience(int id,Map<String, dynamic> experienceObj) async {
     try {
       bool isConnected = await _connectivityService.checkConnectivity();
 
@@ -135,21 +137,22 @@ class ExperienceService extends GetxController {
         int? userId = prefs.getInt('userId');
 
         if (userId != null) {
-          final url = '$baseUrl$educationUpload/$userId';
-
+          
+          final url = '$baseUrl$experience/$id';
+          print(url);
           final response = await http.post(
             Uri.parse(url),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
-            body: jsonEncode(user),
+            body: jsonEncode(experienceObj),
           );
 
-          if (response.statusCode == 201) {
+          if (response.statusCode == 200 || response.statusCode == 201) {
             isLoading.value = false;
             Get.snackbar(
               'Success',
-              'Experience Added Successfully',
+              'Experience Updated Successfully',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.green,
               colorText: Colors.white,
@@ -158,17 +161,18 @@ class ExperienceService extends GetxController {
             isLoading.value = false;
             Get.snackbar(
               'Error',
-              'Experience Not Added Successfully',
+              'Experience Not Updated Successfully',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.red,
               colorText: Colors.white,
             );
+            print(response.statusCode);
           }
         } else {
           isLoading.value = false;
           Get.snackbar(
             'Error',
-            'Experience Not Added Successfully',
+            'Experience Not Updated Successfully',
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.red,
             colorText: Colors.white,
@@ -179,7 +183,7 @@ class ExperienceService extends GetxController {
       isLoading.value = false;
       Get.snackbar(
         'Error',
-        'Experience Not Added Successfully',
+        'Experience Not Updated Successfully',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,

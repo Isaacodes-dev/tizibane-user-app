@@ -1,10 +1,10 @@
 class Experience {
   final int id;
-  final String companyName;
-  final String jobTitle;
+  final String? companyName;
+  final String? jobTitle;
   final DateTime startDate;
   final DateTime endDate;
-  final String responsibilities;
+  final String? responsibilities;
   final int individualProfileId;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -24,14 +24,14 @@ class Experience {
   factory Experience.fromJson(Map<String, dynamic> json) {
     return Experience(
       id: json['id'] ?? 0,
-      companyName: json['companyName'] ?? '',
-      jobTitle: json['jobTitle'] ?? '',
-      startDate: json['startDate'] != null ? DateTime.parse(json['startDate']) : DateTime.now(),
-      endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : DateTime.now(),
+      companyName: json['company_name'] ?? '',
+      jobTitle: json['job_title'] ?? '',
+      startDate: json['start_date'] != null ? DateTime.parse(json['start_date']) : DateTime.now(),
+      endDate: json['end_date'] != null ? DateTime.parse(json['end_date']) : DateTime.now(),
       responsibilities: json['responsibilities'] ?? '',
-      individualProfileId: json['individualProfileId'] ?? 0,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
+      individualProfileId: json['individual_profile_id'] ?? 0,
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : DateTime.now(),
     );
   }
 

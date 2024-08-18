@@ -1,13 +1,13 @@
 class ProfessionalAffiliation {
   final int id;
-  final String organizationName;
-  final String membershipId;
-  final String role;
-  final String certificate;
+  final String? organizationName;
+  final String? membershipId;
+  final String? role;
+  final String? certificate;
   final DateTime validFrom;
   final DateTime validTo;
   final int verified;
-  final dynamic verifiedBy;
+  final String? verifiedBy;
   final int individualProfileId;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -30,17 +30,17 @@ class ProfessionalAffiliation {
   factory ProfessionalAffiliation.fromJson(Map<String, dynamic> json) {
     return ProfessionalAffiliation(
       id: json['id'] ?? 0,
-      organizationName: json['organizationName'] ?? '',
-      membershipId: json['membershipId'] ?? '',
+      organizationName: json['organization_name'] ?? '',
+      membershipId: json['membership_id'] ?? '',
       role: json['role'] ?? '',
       certificate: json['certificate'] ?? '',
-      validFrom: json['validFrom'] != null ? DateTime.parse(json['validFrom']) : DateTime.now(),
-      validTo: json['validTo'] != null ? DateTime.parse(json['validTo']) : DateTime.now(),
+      validFrom: json['valid_from'] != null ? DateTime.parse(json['valid_from']) : DateTime.now(),
+      validTo: json['valid_to'] != null ? DateTime.parse(json['valid_to']) : DateTime.now(),
       verified: json['verified'] ?? 0,
-      verifiedBy: json['verifiedBy'],
-      individualProfileId: json['individualProfileId'] ?? 0,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
+      verifiedBy: json['verified_by'] ?? '',
+      individualProfileId: json['individual_profile_id'] ?? 0,
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : DateTime.now(),
     );
   }
 

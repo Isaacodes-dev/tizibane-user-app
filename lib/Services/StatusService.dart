@@ -21,7 +21,7 @@ class StatusService extends GetxController {
       await _fetchJobStatusFromRemote(jobListingId);
     } else {
       // Fetch status from local database
-      await _fetchJobStatusFromLocal(jobListingId);
+      // await _fetchJobStatusFromLocal(jobListingId);
     }
 
     isLoading.value = false;
@@ -44,7 +44,7 @@ class StatusService extends GetxController {
       var responseData = jsonDecode(response.body);
       if (responseData['status'] != null) {
         jobStatuses[jobListingId] = responseData['status'];
-        await _dbHelper.insertJobStatus(jobListingId, responseData['status']);
+        // await _dbHelper.insertJobStatus(jobListingId, responseData['status']);
         isLoading.value = false;
       } else {
         jobStatuses[jobListingId] = 'Not Applied';
@@ -56,11 +56,11 @@ class StatusService extends GetxController {
     }
   }
 
-  Future<void> _fetchJobStatusFromLocal(String jobListingId) async {
-    String? localStatus = await _dbHelper.getJobStatus(jobListingId);
-    jobStatuses[jobListingId] = localStatus ?? 'Not Applied';
-    isLoading.value = false;
-  }
+  // Future<void> _fetchJobStatusFromLocal(String jobListingId) async {
+  //   String? localStatus = await _dbHelper.getJobStatus(jobListingId);
+  //   jobStatuses[jobListingId] = localStatus ?? 'Not Applied';
+  //   isLoading.value = false;
+  // }
 
   Future<String> _getStoredToken() async {
     final prefs = await SharedPreferences.getInstance();

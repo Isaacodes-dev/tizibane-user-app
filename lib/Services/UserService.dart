@@ -30,7 +30,7 @@ Future<void> getUser() async {
     // String accessToken = await getStoredToken();
     // String storedNrc = await getStoredNrc();
     final prefs = await SharedPreferences.getInstance();
-    //int userId = prefs.getInt('userId') ?? 0;
+    int userId = prefs.getInt('returnedId') ?? 0;
     email = prefs.getString('email');
     isLoading.value = true;
     final response = await http.get(
@@ -69,35 +69,6 @@ Future<void> getUser() async {
     loadLocalData();
   }
 }
-
-  Future<void> getIndividualProfile() async {
-    try {
-      bool isConnected = await _connectivityService.checkConnectivity();
-      if (isConnected) {
-        final prefs = await SharedPreferences.getInstance();
-        int? userId = prefs.getInt('userId');
-        isLoading.value = true;
-        final response = await http.get(
-          Uri.parse("$urlIndividualProfile/$userId"),
-          headers: {
-            'Accept': 'application/json',
-            // 'Authorization': 'Bearer $accessToken',
-          },
-        );
-        if (response.statusCode == 200) {
-          var responseData = jsonDecode(response.body);
-          if (responseData != null) {
-            List<dynamic> data = responseData;
-            individualProfileOject.value = data.map((e) => IndividualProfile.fromJson(e)).toList();
-          }else{
-            print("Error Fecting User data");
-          }
-        }
-      }
-    } catch (error) {
-      print('Error loading local data: $error');
-    }
-  }
 
   Future<void> loadLocalData() async {
     try {

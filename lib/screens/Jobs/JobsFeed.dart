@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/Jobs/JobsService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
+import 'package:tizibane/Services/ProfileServices/IndividualProfileService.dart';
 import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
@@ -28,6 +29,8 @@ class _JobsFeedState extends State<JobsFeed> {
   final StatusService _statusService = Get.put(StatusService());
   final ConnectivityService _connectivityService =
       Get.put(ConnectivityService());
+  IndividualProfileService _individualProfileService =
+      Get.put(IndividualProfileService());
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _JobsFeedState extends State<JobsFeed> {
       if (_connectivityService.isConnected.value) {
         await _userService.getUser();
         await _jobsService.getJobsFeed();
-        await _jobsService.getJobsFromLocalStorage();
+        // await _jobsService.getJobsFromLocalStorage();
         _jobsService.foundJobs.value = _jobsService.jobsFeedList;
       } else {
         await _jobsService.getJobsFromLocalStorage();
@@ -100,7 +103,9 @@ class _JobsFeedState extends State<JobsFeed> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
               children: [
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: [
                     CircleAvatar(
@@ -109,7 +114,11 @@ class _JobsFeedState extends State<JobsFeed> {
                       child: Obx(() => CircleAvatar(
                             radius: 29,
                             backgroundImage: CachedNetworkImageProvider(
-                              imageBaseUrl + _profileService.imagePath.value,
+                              imageBaseUrl +
+                                  _individualProfileService
+                                      .individualProfileObject
+                                      .value!
+                                      .profilePicture!,
                             ),
                           )),
                     ),
@@ -153,7 +162,7 @@ class _JobsFeedState extends State<JobsFeed> {
                   height: 15,
                 ),
                 TextField(
-                  onChanged: (value) => _jobsService.filterJobs(value),
+                  // onChanged: (value) => _jobsService.filterJobs(value),
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Search',
@@ -220,8 +229,11 @@ class _JobsFeedState extends State<JobsFeed> {
                                       _jobsService.foundJobs.value.length,
                                   itemBuilder: (context, index) {
                                     DateTime jobClosingDate = convertToDate(
-                                        _jobsService
-                                            .foundJobs.value[index].closed!);
+                                        _jobsService.foundJobs.value[index]
+                                            .applicationDeadline
+                                            .toLocal()
+                                            .toString()
+                                            .substring(0, 10));
                                     DateTime currentDate = DateTime.now();
                                     bool isJobStillOpen =
                                         jobClosingDate.isAfter(currentDate) ||
@@ -237,6 +249,33 @@ class _JobsFeedState extends State<JobsFeed> {
                                             id: _jobsService
                                                 .foundJobs.value[index].id
                                                 .toString(),
+                                                experience: _jobsService
+                                                .foundJobs.value[index].experience,
+                                                employementType: _jobsService
+                                                .foundJobs.value[index].employmentType,
+                                            title: _jobsService
+                                                .foundJobs.value[index].title,
+                                            companyName: _jobsService
+                                                .foundJobs
+                                                .value[index]
+                                                .company
+                                                .companyName,
+                                            responsobilities: _jobsService
+                                                .foundJobs
+                                                .value[index]
+                                                .responsibilities,
+                                            companyAddress: _jobsService
+                                                .foundJobs
+                                                .value[index]
+                                                .company
+                                                .companyAddress,
+                                            description: _jobsService.foundJobs
+                                                .value[index].description,
+                                            companyLogo: _jobsService
+                                                .foundJobs
+                                                .value[index]
+                                                .company
+                                                .companyLogoUrl,
                                             statusValue:
                                                 _statusService.jobStatuses[
                                                         _jobsService.foundJobs
@@ -247,12 +286,15 @@ class _JobsFeedState extends State<JobsFeed> {
                                         } else {
                                           showAlertDialog(
                                             context,
-                                            _jobsService.foundJobs.value[index]
-                                                .position!,
-                                            _jobsService.foundJobs.value[index]
-                                                .companyName!,
                                             _jobsService
-                                                .foundJobs.value[index].closed!,
+                                                .foundJobs.value[index].title,
+                                            _jobsService.foundJobs.value[index]
+                                                .company.companyName,
+                                            _jobsService.foundJobs.value[index]
+                                                .applicationDeadline
+                                                .toLocal()
+                                                .toString()
+                                                .substring(0, 10),
                                           );
                                         }
                                       },
@@ -261,15 +303,25 @@ class _JobsFeedState extends State<JobsFeed> {
                                             .foundJobs.value[index].id
                                             .toString(),
                                         position: _jobsService
-                                            .foundJobs.value[index].position!,
+                                            .foundJobs.value[index].title,
                                         company: _jobsService.foundJobs
-                                            .value[index].companyName!,
-                                        address: _jobsService.foundJobs
-                                            .value[index].companyAddress!,
-                                        closing: _jobsService
-                                            .foundJobs.value[index].closed!,
-                                        companyLogo: _jobsService.foundJobs
-                                            .value[index].companyLogoUrl!,
+                                            .value[index].company.companyName,
+                                        address: _jobsService
+                                            .foundJobs
+                                            .value[index]
+                                            .company
+                                            .companyAddress,
+                                        closing: 'Dealine: ' +
+                                            _jobsService.foundJobs.value[index]
+                                                .applicationDeadline
+                                                .toLocal()
+                                                .toString()
+                                                .substring(0, 10),
+                                        companyLogo: _jobsService
+                                            .foundJobs
+                                            .value[index]
+                                            .company
+                                            .companyLogoUrl,
                                       ),
                                     );
                                   },

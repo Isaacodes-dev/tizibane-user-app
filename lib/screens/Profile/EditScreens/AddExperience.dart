@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/ProfileServices/ExperienceService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
 
@@ -182,13 +183,17 @@ class _AddExperienceState extends State<AddExperience> {
                     ? CircularProgressIndicator()
                     : SubmitButton(
                         text: 'Add Experience',
-                        onTap: () async{
+                        onTap: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          int individualProfileId =
+                              prefs.getInt('individualProfileId') ?? 0;
                           var experienceObj = {
                             'company_name': _companyName.text,
                             'job_title': _jobTitle.text,
                             'responsibilities': _responsibilities.text,
                             'start_date': _startDateController.text,
-                            'end_date': _endDateController.text
+                            'end_date': _endDateController.text,
+                            'individual_profile_id': individualProfileId,
                           };
                           await _experienceService.addExperience(experienceObj);
                         },

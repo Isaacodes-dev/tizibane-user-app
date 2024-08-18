@@ -1,40 +1,50 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tizibane/Services/AuthService.dart';
-import 'package:tizibane/Services/ProfileService.dart';
 import 'package:tizibane/Services/ProfileServices/IndividualProfileService.dart';
 import 'package:tizibane/components/SubmitButton.dart';
-import 'package:tizibane/models/IndividualProfile.dart';
 
-class EditBasicDetails extends StatefulWidget {
-  const EditBasicDetails({super.key});
+class EditUserProfile extends StatefulWidget {
+  final String selectedTitle;
+  final String phoneNumber;
+  final String address;
+  final String about;
+  final String selectedStatus;
+  final String gender;
+  final String imagePath;
+
+  const EditUserProfile({
+    Key? key,
+    required this.selectedTitle,
+    required this.phoneNumber,
+    required this.address,
+    required this.about,
+    required this.selectedStatus,
+    required this.gender,
+    required this.imagePath,
+  }) : super(key: key);
 
   @override
-  State<EditBasicDetails> createState() => _EditBasicDetailsState();
+  State<EditUserProfile> createState() => _EditUserProfileState();
 }
 
-class _EditBasicDetailsState extends State<EditBasicDetails> {
+class _EditUserProfileState extends State<EditUserProfile> {
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
-  final TextEditingController _phoneNumber = TextEditingController();
-  final TextEditingController _address = TextEditingController();
-  final TextEditingController _about = TextEditingController();
-  ProfileService _profileService = Get.put(ProfileService());
-  IndividualProfileService _individualProfileService = Get.put(IndividualProfileService());
+  final _formKey = GlobalKey<FormState>();
+  IndividualProfileService _individualProfileService =
+      Get.put(IndividualProfileService());
+
   final List<String> _titles = ['Mr', 'Ms', 'Miss', 'Mrs'];
   final List<String> _workStatus = ['Yes', 'No'];
   final List<String> _genders = ['Male', 'Female'];
 
-  String? _selectedTitle;
-  String? _selectedWorkStatus;
-  String? _selectedGender;
-
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _phoneNumber = TextEditingController();
+  final TextEditingController _address = TextEditingController();
+  final TextEditingController _about = TextEditingController();
 
   Future<void> _pickImage() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
@@ -45,10 +55,12 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
     }
   }
 
-  Future<void> _uploadImage() async {
-    if (_image != null) {
-      await _profileService.uploadImage(_image!);
-    }
+  @override
+  void initState() {
+    super.initState();
+    _phoneNumber.text = widget.phoneNumber;
+    _address.text = widget.address;
+    _about.text = widget.about;
   }
 
   @override
@@ -66,7 +78,8 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
               child: Center(
                 child: Column(
                   children: [
-                    Text('Upload Profile Picture', style: GoogleFonts.lexendDeca()),
+                    Text('Upload Profile Picture',
+                        style: GoogleFonts.lexendDeca()),
                     SizedBox(height: 20),
                     Stack(
                       children: [
@@ -133,10 +146,12 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                 child: Column(
                   children: [
                     DropdownButtonFormField<String>(
-                      value: _selectedTitle,
+                      value: _titles.contains(widget.selectedTitle)
+                          ? widget.selectedTitle
+                          : null,
                       onChanged: (value) {
                         setState(() {
-                          _selectedTitle = value;
+                          // _selectedTitle = value!;
                         });
                       },
                       items: _titles.map((title) {
@@ -154,7 +169,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                           borderSide: const BorderSide(color: Colors.black),
                           borderRadius: BorderRadius.circular(40.0),
                         ),
-                        hintText: 'Title',
+                        hintText: 'Select Title',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -185,7 +200,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                         ),
                         hintText: 'Phone Number',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                            borderRadius: BorderRadius.circular(20.0)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -216,7 +231,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                         ),
                         hintText: 'Address',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                            borderRadius: BorderRadius.circular(20.0)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -244,7 +259,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                         ),
                         hintText: 'About',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                            borderRadius: BorderRadius.circular(20.0)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -255,10 +270,12 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                     ),
                     const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
-                      value: _selectedWorkStatus,
+                      value: _workStatus.contains(widget.selectedStatus)
+                          ? widget.selectedStatus
+                          : null,
                       onChanged: (value) {
                         setState(() {
-                          _selectedWorkStatus = value;
+                          // _selectedWorkStatus = value!;
                         });
                       },
                       items: _workStatus.map((status) {
@@ -276,7 +293,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                           borderSide: const BorderSide(color: Colors.black),
                           borderRadius: BorderRadius.circular(40.0),
                         ),
-                        hintText: 'Open to work',
+                        hintText: 'Select Work Status',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -290,10 +307,12 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                     ),
                     const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
-                      value: _selectedGender,
+                      value: _genders.contains(widget.gender)
+                          ? widget.gender
+                          : null,
                       onChanged: (value) {
                         setState(() {
-                          _selectedGender = value;
+                          // _selectedGender = value!;
                         });
                       },
                       items: _genders.map((gender) {
@@ -311,7 +330,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                           borderSide: const BorderSide(color: Colors.black),
                           borderRadius: BorderRadius.circular(40.0),
                         ),
-                        hintText: 'Gender',
+                        hintText: 'Select Gender',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -331,18 +350,19 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                               text: 'Submit',
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  final prefs = await SharedPreferences.getInstance();
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
                                   int? userId = prefs.getInt('userId');
-                                  var profileData = {
-                                    'title': _selectedTitle,
-                                    'phone_number': _phoneNumber.text,
-                                    'address': _address.text,
-                                    'gender': _selectedGender,
-                                    'about': _about.text,
-                                    'open_to_work': _selectedWorkStatus == 'Yes' ? 1 : 0,
-                                    'user_id': userId,
-                                  };
-                                  await _individualProfileService.createProfile(profileData, _image);
+                                  // var profileData = {
+                                  //   'title': _selectedTitle,
+                                  //   'phone_number': _phoneNumber.text,
+                                  //   'address': _address.text,
+                                  //   'gender': _selectedGender,
+                                  //   'about': _about.text,
+                                  //   'open_to_work': _selectedWorkStatus == 'Yes' ? 1 : 0,
+                                  //   'user_id': userId,
+                                  // };
+                                  // await _individualProfileService.createProfile(profileData, _image);
                                 }
                               },
                             );

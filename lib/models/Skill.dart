@@ -1,7 +1,7 @@
 class Skill {
   final int id;
-  final String skillName;
-  final String proficiencyLevel;
+  final String? skillName;
+  final String? proficiencyLevel;
   final int individualProfileId;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -18,11 +18,11 @@ class Skill {
   factory Skill.fromJson(Map<String, dynamic> json) {
     return Skill(
       id: json['id'] ?? 0,
-      skillName: json['skillName'] ?? '',
-      proficiencyLevel: json['proficiencyLevel'] ?? '',
-      individualProfileId: json['individualProfileId'] ?? 0,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
+      skillName: json['skill_name'] ?? '',
+      proficiencyLevel: json['proficiency_level'] ?? '',
+      individualProfileId: json['individual_profile_id'] ?? 0,
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : DateTime.now(),
     );
   }
 

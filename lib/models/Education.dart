@@ -1,15 +1,15 @@
 class Education {
   final int id;
-  final String institutionName;
+  final String? institutionName;
   final dynamic other;
-  final String degree;
-  final String fieldOfStudy;
+  final String? degree;
+  final String? fieldOfStudy;
   final DateTime startDate;
   final DateTime endDate;
-  final String grade;
-  final String certificate;
+  final String? grade;
+  final String? certificate;
   final int verified;
-  final dynamic verifiedBy;
+  final String? verifiedBy;
   final int individualProfileId;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -34,26 +34,26 @@ class Education {
   factory Education.fromJson(Map<String, dynamic> json) {
     return Education(
       id: json['id'] ?? 0,
-      institutionName: json['institutionName'] ?? '',
+      institutionName: json['institution_name'] ?? '',
       other: json['other'],
       degree: json['degree'] ?? '',
-      fieldOfStudy: json['fieldOfStudy'] ?? '',
-      startDate: json['startDate'] != null ? DateTime.parse(json['startDate']) : DateTime.now(),
-      endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : DateTime.now(),
+      fieldOfStudy: json['field_of_study'] ?? '',
+      startDate: json['start_date'] != null ? DateTime.parse(json['start_date']) : DateTime.now(),
+      endDate: json['end_date'] != null ? DateTime.parse(json['end_date']) : DateTime.now(),
       grade: json['grade'] ?? '',
       certificate: json['certificate'] ?? '',
       verified: json['verified'] ?? 0,
-      verifiedBy: json['verifiedBy'],
-      individualProfileId: json['individualProfileId'] ?? 0,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
+      verifiedBy: json['verified_by'] ?? '',
+      individualProfileId: json['individual_profile_id'] ?? 0,
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : DateTime.now(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'institutionName': institutionName,
+      'institution_name': institutionName,
       'other': other,
       'degree': degree,
       'fieldOfStudy': fieldOfStudy,
@@ -62,7 +62,7 @@ class Education {
       'grade': grade,
       'certificate': certificate,
       'verified': verified,
-      'verifiedBy': verifiedBy,
+      'verified_by': verifiedBy,
       'individualProfileId': individualProfileId,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
