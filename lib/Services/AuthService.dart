@@ -108,7 +108,7 @@ class AuthService extends GetxController {
         // Save token and nrc to SharedPreferences
         // SharedPreferences preferences = await SharedPreferences.getInstance();
         // await preferences.setString('token', token.value);
-         SharedPreferences preferences = await SharedPreferences.getInstance();
+        SharedPreferences preferences = await SharedPreferences.getInstance();
         await preferences.setString('email', email);
         Get.offAll(() => const BottomMenuBarItems(
               selectedIndex: 0,
