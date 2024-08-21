@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
@@ -101,12 +102,16 @@ class _JobApplicationState extends State<JobApplication> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(60),
-                      child: Image.network(
-                        companyLogoUrl + widget.companyLogo,
-                        height: 60,
-                        width: 60,
-                        fit: BoxFit.cover,
-                      ),
+                      child: CachedNetworkImage(
+                      imageUrl: companyLogoUrl + widget.companyLogo,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          Image.asset('assets/images/samplelogo.png'),
+                      height: 65,
+                      width: 65,
+                      fit: BoxFit.contain,
+                    ),
                     ),
                     SizedBox(
                       width: 10,
@@ -211,7 +216,9 @@ class _JobApplicationState extends State<JobApplication> {
             ElevatedButton(
               onPressed: () {
                 Get.back();
-                Get.to(UploadCv(jobApplication: _applicationLetterController.text,jobId: widget.jobId));
+                Get.to(UploadCv(
+                    jobApplication: _applicationLetterController.text,
+                    jobId: widget.jobId));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,

@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/Connectivity.dart';
+import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Education.dart';
 
@@ -65,7 +66,7 @@ class EducationService extends GetxController {
  Future<void> addEducation(Map<String, dynamic> education, File? certificateFile) async {
   try {
     bool isConnected = await _connectivityService.checkConnectivity();
-
+    
     if (isConnected) {
       isLoading.value = true;
 
@@ -108,6 +109,7 @@ class EducationService extends GetxController {
             backgroundColor: Colors.green,
             colorText: Colors.white,
           );
+          Get.to(BottomMenuBarItems(selectedIndex: 0));
         } else {
           isLoading.value = false;
           Get.snackbar(
@@ -144,67 +146,89 @@ class EducationService extends GetxController {
   }
 }
 
-  Future<void> updateEducation(Map<String, dynamic> education) async {
-    try {
+  Future<void> updateEducation(Map<String, dynamic> education,int id, File? certificateFile) async {
+    print(id);
+    print(education);
+    print(certificateFile);
+    try{
       bool isConnected = await _connectivityService.checkConnectivity();
+    if (isConnected) {
+      isLoading.value = true;
 
-      if (isConnected) {
-        isLoading.value = true;
+      final prefs = await SharedPreferences.getInstance();
+      int? userId = prefs.getInt('userId');
+      
+      if (userId != null) {
+        final url = '$baseUrl$educationUpload/$id';
 
-        final prefs = await SharedPreferences.getInstance();
-        int? userId = prefs.getInt('userId');
+        var request = http.MultipartRequest('POST', Uri.parse(url));
 
-        if (userId != null) {
-          final url = '$baseUrl$education/$userId';
+        // Add headers
+        request.headers.addAll({
+          'Content-Type': 'multipart/form-data',
+        });
 
-          final response = await http.post(
-            Uri.parse(url),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(education),
+        // Add JSON data as fields
+        education.forEach((key, value) {
+          request.fields[key] = value.toString();
+        });
+
+        // Add file if it exists
+        if (certificateFile != null) {
+          request.files.add(await http.MultipartFile.fromPath(
+            'certificate', // The field name for the file in the request
+            certificateFile.path,
+            filename: basename(certificateFile.path),
+          ));
+        }
+
+        var streamedResponse = await request.send();
+        var response = await http.Response.fromStream(streamedResponse);
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          isLoading.value = false;
+          Get.snackbar(
+            'Success',
+            'Education Updated Successfully',
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
           );
-
-          if (response.statusCode == 201) {
-            isLoading.value = false;
-            Get.snackbar(
-              'Success',
-              'Education Added Successfully',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.green,
-              colorText: Colors.white,
-            );
-          } else {
-            isLoading.value = false;
-            Get.snackbar(
-              'Error',
-              'Education Not Added Successfully',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.red,
-              colorText: Colors.white,
-            );
-          }
+          Get.to(BottomMenuBarItems(selectedIndex: 0));
         } else {
           isLoading.value = false;
           Get.snackbar(
             'Error',
-            'Education Not Added Successfully',
+            'Education Not Updated Successfully',
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.red,
             colorText: Colors.white,
           );
+          print(response.statusCode);
         }
+      } else {
+        print('error');
+        isLoading.value = false;
+        Get.snackbar(
+          'Error',
+          'Education Not Updated Successfully',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
-    } catch (ex) {
-      isLoading.value = false;
-      Get.snackbar(
-        'Error',
-        'Education Not Added Successfully',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
     }
+  } catch (ex) {
+    print(ex);
+    isLoading.value = false;
+    Get.snackbar(
+      'Error',
+      'Education Not Updated Successfully',
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+  }
   }
 
 }

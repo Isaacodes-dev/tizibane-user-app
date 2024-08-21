@@ -6,59 +6,59 @@ import 'package:tizibane/models/Skill.dart';
 
 class IndividualProfile {
   final int id;
-  final String title;
-  final String phoneNumber;
-  final String address;
-  final String gender;
-  final String profilePicture;
-  final String about;
-  final int openToWork;
-  final int userId;
+  final String? title;
+  final String? phoneNumber;
+  final String? address;
+  final String? gender;
+  final String? profilePicture;
+  final String? about;
+  final int? openToWork;
+  final int? userId;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final List<ProfessionalAffiliation> professionalAffiliations;
-  final List<Experience> experience;
-  final List<Education> education;
-  final List<Skill> skills;
-  final List<dynamic> resumes;
-  final Identification identification;
-  final List<dynamic> subscriptions;
+  final List<ProfessionalAffiliation>? professionalAffiliations;
+  final List<Experience>? experience;
+  final List<Education>? education;
+  final List<Skill>? skills;
+  final List<dynamic>? resumes;
+  final Identification? identification;
+  final List<dynamic>? subscriptions;
 
   IndividualProfile({
     required this.id,
-    required this.title,
-    required this.phoneNumber,
-    required this.address,
-    required this.gender,
-    required this.profilePicture,
-    required this.about,
+    this.title,
+    this.phoneNumber,
+    this.address,
+    this.gender,
+    this.profilePicture,
+    this.about,
     required this.openToWork,
     required this.userId,
     required this.createdAt,
     required this.updatedAt,
-    required this.professionalAffiliations,
-    required this.experience,
-    required this.education,
-    required this.skills,
-    required this.resumes,
-    required this.identification,
-    required this.subscriptions,
+    this.professionalAffiliations,
+    this.experience,
+    this.education,
+    this.skills,
+    this.resumes,
+    this.identification,
+    this.subscriptions,
   });
 
   factory IndividualProfile.fromJson(Map<String, dynamic> json) {
     return IndividualProfile(
       id: json['id'] ?? 0,
       title: json['title'] ?? '',
-      phoneNumber: json['phoneNumber'] ?? '',
+      phoneNumber: json['phone_number'] ?? '',
       address: json['address'] ?? '',
       gender: json['gender'] ?? '',
-      profilePicture: json['profilePicture'] ?? '',
+      profilePicture: json['profile_picture'] ?? '',
       about: json['about'] ?? '',
-      openToWork: json['openToWork'] ?? 0,
-      userId: json['userId'] ?? 0,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
-      professionalAffiliations: (json['professionalAffiliations'] as List<dynamic>?)
+      openToWork: json['open_to_work'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : DateTime.now(),
+      professionalAffiliations: (json['professional_affiliations'] as List<dynamic>?)
               ?.map((item) => ProfessionalAffiliation.fromJson(item))
               .toList() ??
           [],
@@ -75,7 +75,9 @@ class IndividualProfile {
               .toList() ??
           [],
       resumes: json['resumes'] ?? [],
-      identification: Identification.fromJson(json['identification'] ?? {}),
+      identification: json['identification'] != null 
+          ? Identification.fromJson(json['identification']) 
+          : null,
       subscriptions: json['subscriptions'] ?? [],
     );
   }
@@ -84,22 +86,22 @@ class IndividualProfile {
     return {
       'id': id,
       'title': title,
-      'phoneNumber': phoneNumber,
+      'phone_number': phoneNumber,
       'address': address,
       'gender': gender,
-      'profilePicture': profilePicture,
+      'profile_picture': profilePicture,
       'about': about,
-      'openToWork': openToWork,
-      'userId': userId,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      'professionalAffiliations': professionalAffiliations.map((item) => item.toJson()).toList(),
-      'experience': experience.map((item) => item.toJson()).toList(),
-      'education': education.map((item) => item.toJson()).toList(),
-      'skills': skills.map((item) => item.toJson()).toList(),
-      'resumes': resumes,
-      'identification': identification.toJson(),
-      'subscriptions': subscriptions,
+      'open_to_work': openToWork,
+      'user_id': userId,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+      'professional_affiliations': professionalAffiliations?.map((item) => item.toJson()).toList(),
+      'experience': experience?.map((item) => item.toJson()).toList(),
+      'education': education?.map((item) => item.toJson()).toList(),
+      'skills': skills?.map((item) => item.toJson()).toList(),
+      // 'resumes': resumes,
+      // 'identification': identification?.toJson(),
+      // 'subscriptions': subscriptions,
     };
   }
 }

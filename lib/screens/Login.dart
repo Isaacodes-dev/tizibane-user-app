@@ -17,30 +17,23 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
-
   final AuthService _authService = Get.put(AuthService());
-
   final box = GetStorage();
-
   final nrcStorage = GetStorage();
+  final _formKey = GlobalKey<FormState>();
 
   bool _obscureText = true;
-
   bool _rememberMe = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadRememberMe();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -112,95 +105,119 @@ class _LoginState extends State<Login> {
               ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      cursorColor: Colors.black,
-                      controller: emailController,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        suffixIcon: const Icon(
-                          Icons.email,
-                          color: Colors.black,
-                        ),
-                        hintText: 'Email',
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        hintStyle: const TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      cursorColor: Colors.black,
-                      controller: passwordController,
-                      obscureText: _obscureText,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        suffixIcon: IconButton(
-                          color: Colors.black,
-                          icon: Icon(
-                            _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        cursorColor: Colors.black,
+                        controller: emailController,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(40.0),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
+                          suffixIcon: const Icon(
+                            Icons.email,
+                            color: Colors.black,
+                          ),
+                          hintText: 'Email',
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 15.0,
+                          ),
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                         ),
-                        hintText: 'Password',
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        hintStyle: const TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                    SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Checkbox(
-                          activeColor: Colors.black,
-                          checkColor: Colors.white,
-                          value: _rememberMe,
-                          onChanged: _onRememberMeChanged,
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        cursorColor: Colors.black,
+                        controller: passwordController,
+                        obscureText: _obscureText,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.black),
+                            borderRadius: BorderRadius.circular(40.0),
+                          ),
+                          suffixIcon: IconButton(
+                            color: Colors.black,
+                            icon: Icon(
+                              _obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          ),
+                          hintText: 'Password',
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 15.0,
+                          ),
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                         ),
-                        Text('Remember Me', style: GoogleFonts.lexendDeca())
-                      ],
-                    ),
-                    SizedBox(height: 5),
-                    Obx(() {
-                      return _authService.isLoading.value
-                          ? const CircularProgressIndicator()
-                          : SubmitButton(
-                              text: 'Sign In',
-                              onTap: () async {
-                                await _authService.loginUser(
-                                  email: emailController.text.trim(),
-                                  password: passwordController.text.trim(),
-                                );
-                                saveRememberMe();
-                              },
-                            );
-                    }),
-                    SizedBox(height: 25),
-                  ],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters long';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Checkbox(
+                            activeColor: Colors.black,
+                            checkColor: Colors.white,
+                            value: _rememberMe,
+                            onChanged: _onRememberMeChanged,
+                          ),
+                          Text('Remember Me', style: GoogleFonts.lexendDeca())
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Obx(() {
+                        return _authService.isLoading.value
+                            ? const CircularProgressIndicator()
+                            : SubmitButton(
+                                text: 'Sign In',
+                                onTap: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    await _authService.loginUser(
+                                      email: emailController.text.trim(),
+                                      password: passwordController.text.trim(),
+                                    );
+                                    saveRememberMe();
+                                  }
+                                },
+                              );
+                      }),
+                      SizedBox(height: 25),
+                    ],
+                  ),
                 ),
               ),
               Center(

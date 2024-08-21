@@ -6,6 +6,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizibane/Services/Connectivity.dart';
+import 'package:tizibane/components/bottommenu/BottomMenuBar.dart';
 import 'package:tizibane/constants/constants.dart';
 import 'package:tizibane/models/Skill.dart';
 
@@ -29,7 +30,7 @@ class SkillService extends GetxController {
         int? userId = prefs.getInt('userId');
 
         if (userId != null) {
-          final url = '$urlSkill/$userId';
+          final url = '$urlSkill';
 
           final response = await http.post(
             Uri.parse(url),
@@ -38,7 +39,6 @@ class SkillService extends GetxController {
             },
             body: jsonEncode(skill),
           );
-
           if (response.statusCode == 201) {
             isLoading.value = false;
             Get.snackbar(
@@ -48,6 +48,7 @@ class SkillService extends GetxController {
               backgroundColor: Colors.green,
               colorText: Colors.white,
             );
+            Get.to(BottomMenuBarItems(selectedIndex: 0));
           } else {
             isLoading.value = false;
             Get.snackbar(
@@ -81,7 +82,7 @@ class SkillService extends GetxController {
     }
   }
 
-  Future<void> updateSkill(Map<String, dynamic> user) async {
+  Future<void> updateSkill(Map<String, dynamic> user, int skillId) async {
     try {
       bool isConnected = await _connectivityService.checkConnectivity();
 
@@ -92,7 +93,7 @@ class SkillService extends GetxController {
         int? userId = prefs.getInt('userId');
 
         if (userId != null) {
-          final url = '$baseUrl$educationUpload/$userId';
+          final url = '$urlSkill/$skillId';
 
           final response = await http.post(
             Uri.parse(url),
@@ -102,20 +103,21 @@ class SkillService extends GetxController {
             body: jsonEncode(user),
           );
 
-          if (response.statusCode == 201) {
+          if (response.statusCode == 200 || response.statusCode == 201) {
             isLoading.value = false;
             Get.snackbar(
               'Success',
-              'Education Added Successfully',
+              'Skill Updated Successfully',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.green,
               colorText: Colors.white,
             );
+            Get.to(BottomMenuBarItems(selectedIndex: 0));
           } else {
             isLoading.value = false;
             Get.snackbar(
               'Error',
-              'Education Not Added Successfully',
+              'Skill Updated Not Successfully',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.red,
               colorText: Colors.white,

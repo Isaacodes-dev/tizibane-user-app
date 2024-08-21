@@ -47,8 +47,8 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildMaterialButton(0, Icons.work, "Jobs"),
-                buildMaterialButton(1, Icons.person, "Profile"),
+                buildMaterialButton(0, Icons.person, "Profile"),
+                buildMaterialButton(1, Icons.work, "Jobs"),
                 // buildMaterialButton(1, Icons.contacts_outlined, "Contacts"),
                 buildMaterialButton(2, Icons.more_horiz_outlined, "More"),
               ],
@@ -62,13 +62,13 @@ class _BottomMenuBarItemsState extends State<BottomMenuBarItems> {
   Widget getCurrentScreen() {
     switch (currentIndex) {
       case 0:
-        return const Jobs();
-      case 1:
         return const ProfileScreen();
+      case 1:
+        return const Jobs();
       case 2:
         return const More();
       default:
-        return const Jobs();
+        return const ProfileScreen();
     }
   }
 

@@ -1,12 +1,10 @@
 class Identification {
   final int id;
-  final String identificationType;
-  final String identificationFile;
+  final String? identificationType;
+  final String? identificationFile;
   final int verified;
-  final dynamic verifiedBy;
+  final String? verifiedBy;
   final int individualProfileId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   Identification({
     required this.id,
@@ -15,20 +13,16 @@ class Identification {
     required this.verified,
     required this.verifiedBy,
     required this.individualProfileId,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory Identification.fromJson(Map<String, dynamic> json) {
     return Identification(
       id: json['id'] ?? 0,
-      identificationType: json['identificationType'] ?? '',
-      identificationFile: json['identificationFile'] ?? '',
+      identificationType: json['identification_type'] ?? '',
+      identificationFile: json['identification_file'] ?? '',
       verified: json['verified'] ?? 0,
-      verifiedBy: json['verifiedBy'],
-      individualProfileId: json['individualProfileId'] ?? 0,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
+      verifiedBy: json['verified_by'] ?? '',
+      individualProfileId: json['individual_profile_id'] ?? 0,
     );
   }
 
@@ -36,12 +30,10 @@ class Identification {
     return {
       'id': id,
       'identificationType': identificationType,
-      'identificationFile': identificationFile,
+      'identification_file': identificationFile,
       'verified': verified,
       'verifiedBy': verifiedBy,
       'individualProfileId': individualProfileId,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 }

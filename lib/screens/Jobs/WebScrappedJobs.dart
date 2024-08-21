@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:tizibane/Services/Connectivity.dart';
 import 'package:tizibane/Services/Jobs/JobsService.dart';
 import 'package:tizibane/Services/ProfileService.dart';
+import 'package:tizibane/Services/ProfileServices/IndividualProfileService.dart';
 import 'package:tizibane/Services/StatusService.dart';
 import 'package:tizibane/Services/UserService.dart';
 import 'package:tizibane/constants/constants.dart';
@@ -24,6 +25,8 @@ class _WebScrappedJobsState extends State<WebScrappedJobs> {
   final UserService _userService = Get.put(UserService());
   final ProfileService _profileService = Get.put(ProfileService());
   final StatusService _statusService = Get.put(StatusService());
+  IndividualProfileService _individualProfileService =
+      Get.put(IndividualProfileService());
   final ConnectivityService _connectivityService =
       Get.put(ConnectivityService());
   @override
@@ -106,7 +109,11 @@ class _WebScrappedJobsState extends State<WebScrappedJobs> {
                       child: Obx(() => CircleAvatar(
                             radius: 29,
                             backgroundImage: CachedNetworkImageProvider(
-                              imageBaseUrl + _profileService.imagePath.value,
+                              imageBaseUrl +
+                                  _individualProfileService
+                                      .individualProfileObject
+                                      .value!
+                                      .profilePicture!,
                             ),
                           )),
                     ),
@@ -182,7 +189,7 @@ class _WebScrappedJobsState extends State<WebScrappedJobs> {
                         border:
                             Border.all(color: Colors.white), // Set border color
                         borderRadius: BorderRadius.circular(
-                            20.0), // Adjust border radius if needed
+                            10.0), // Adjust border radius if needed
                       ),
                       child: Center(
                         child: IconButton(
@@ -242,7 +249,7 @@ class _WebScrappedJobsState extends State<WebScrappedJobs> {
                                   itemBuilder: (context, index) {
                                     DateTime jobClosingDate = convertToDate(
                                         _jobsService
-                                            .foundJobs.value[index].closed!);
+                                            .foundJobs.value[index].applicationDeadline.toLocal().toString());
                                     DateTime currentDate = DateTime.now();
                                     bool isJobStillOpen =
                                         jobClosingDate.isAfter(currentDate) ||
@@ -266,32 +273,32 @@ class _WebScrappedJobsState extends State<WebScrappedJobs> {
                                           //           'Not Applied',
                                           // ));
                                         } else {
-                                          showAlertDialog(
-                                            context,
-                                            _jobsService.foundJobs.value[index]
-                                                .position!,
-                                            _jobsService.foundJobs.value[index]
-                                                .companyName!,
-                                            _jobsService
-                                                .foundJobs.value[index].closed!,
-                                          );
+                                          // showAlertDialog(
+                                          //   context,
+                                          //   _jobsService.foundJobs.value[index]
+                                          //       .position!,
+                                          //   _jobsService.foundJobs.value[index]
+                                          //       .companyName!,
+                                          //   _jobsService
+                                          //       .foundJobs.value[index].closed!,
+                                          // );
                                         }
                                       },
-                                      child: JobCard(
-                                        jobListingId: _jobsService
-                                            .foundJobs.value[index].id
-                                            .toString(),
-                                        position: _jobsService
-                                            .foundJobs.value[index].position!,
-                                        company: _jobsService.foundJobs
-                                            .value[index].companyName!,
-                                        address: _jobsService.foundJobs
-                                            .value[index].companyAddress!,
-                                        closing: _jobsService
-                                            .foundJobs.value[index].closed!,
-                                        companyLogo: _jobsService.foundJobs
-                                            .value[index].companyLogoUrl!,
-                                      ),
+                                      // child: JobCard(
+                                      //   jobListingId: _jobsService
+                                      //       .foundJobs.value[index].id
+                                      //       .toString(),
+                                      //   position: _jobsService
+                                      //       .foundJobs.value[index].position!,
+                                      //   company: _jobsService.foundJobs
+                                      //       .value[index].companyName!,
+                                      //   address: _jobsService.foundJobs
+                                      //       .value[index].companyAddress!,
+                                      //   closing: _jobsService
+                                      //       .foundJobs.value[index].closed!,
+                                      //   companyLogo: _jobsService.foundJobs
+                                      //       .value[index].companyLogoUrl!,
+                                      // ),
                                     );
                                   },
                                 );
