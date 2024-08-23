@@ -141,75 +141,103 @@ class AuthService extends GetxController {
 
   Future<void> logOut() async {
     try {
-      const url = baseUrl + logout;
-
       isLoading.value = true;
 
-      // String? accessToken = await getStoredToken();
+      // Remove saved data from SharedPreferences
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.remove('remember_me');
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Accept': 'application/json',
-          // 'Authorization': 'Bearer $accessToken',
-        },
-      );
+      await preferences.remove('email');
+      // Remove any other data you might have saved, like token, etc.
+      // await preferences.remove('token');
 
-      if (response.statusCode == 200) {
-        await Future.delayed(const Duration(milliseconds: 500));
+      isLoading.value = false;
 
-        isLoading.value = false;
-
-        box.remove('token');
-
-        nrcStorage.remove('nrcNumber');
-
-        _userService.userObj.value = <User>[].obs;
-
-        // _contactService.contactsList.value = <ContactModel>[].obs;
-
-        // _contactService.foundContacts.value = <ContactModel>[].obs;
-
-        _employeeHistory.contactEmployeeHistoryDetails.value =
-            <EmploymentHistory>[].obs;
-
-        _employeeHistory.employeeHistoryDetails.value =
-            <EmploymentHistory>[].obs;
-
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        preferences.remove('token');
-        preferences.remove('nrcNumber');
-        preferences.remove('contacts');
-        preferences.remove('employeeContactHistory');
-        preferences.remove('user');
-        //preferences.remove('remember_me');
-
-        Get.snackbar(
-          'Success',
-          'You have logged out Successfully',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-
-        Get.offAll(const Login());
-      } else {
-        Get.snackbar(
-          'Error',
-          'Logout not successful',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-        isLoading.value = false;
-      }
-      print(response.statusCode);
+      // Navigate back to the login screen
+      Get.offAll(const Login());
+      // Get.offAll(() => const LoginScreen());
     } catch (e) {
       print('Error: $e');
       isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        'Failed to log out. Please try again.',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
+
+  // Future<void> logOut() async {
+  //   try {
+  //     const url = baseUrl + logout;
+
+  //     isLoading.value = true;
+
+  //     // String? accessToken = await getStoredToken();
+  //     SharedPreferences preferences = await SharedPreferences.getInstance();
+  //     preferences.remove('remember_me');
+  //     final response = await http.post(
+  //       Uri.parse(url),
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         // 'Authorization': 'Bearer $accessToken',
+  //       },
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       await Future.delayed(const Duration(milliseconds: 500));
+
+  //       isLoading.value = false;
+
+  //       box.remove('token');
+
+  //       nrcStorage.remove('nrcNumber');
+
+  //       _userService.userObj.value = <User>[].obs;
+
+  //       // _contactService.contactsList.value = <ContactModel>[].obs;
+
+  //       // _contactService.foundContacts.value = <ContactModel>[].obs;
+
+  //       _employeeHistory.contactEmployeeHistoryDetails.value =
+  //           <EmploymentHistory>[].obs;
+
+  //       _employeeHistory.employeeHistoryDetails.value =
+  //           <EmploymentHistory>[].obs;
+
+  //       SharedPreferences preferences = await SharedPreferences.getInstance();
+  //       preferences.remove('token');
+  //       preferences.remove('nrcNumber');
+  //       preferences.remove('contacts');
+  //       preferences.remove('employeeContactHistory');
+  //       preferences.remove('user');
+  //       //preferences.remove('remember_me');
+
+  //       Get.snackbar(
+  //         'Success',
+  //         'You have logged out Successfully',
+  //         snackPosition: SnackPosition.TOP,
+  //         backgroundColor: Colors.green,
+  //         colorText: Colors.white,
+  //       );
+
+  //       Get.offAll(const Login());
+  //     } else {
+  //       Get.snackbar(
+  //         'Error',
+  //         'Logout not successful',
+  //         snackPosition: SnackPosition.TOP,
+  //         backgroundColor: Colors.red,
+  //         colorText: Colors.white,
+  //       );
+  //       isLoading.value = false;
+  //     }
+  //     print(response.statusCode);
+  //   } catch (e) {
+  //     print('Error: $e');
+  //     isLoading.value = false;
+  //   }
+  // }
 
   Future<String> getStoredToken() async {
     final prefs = await SharedPreferences.getInstance();
