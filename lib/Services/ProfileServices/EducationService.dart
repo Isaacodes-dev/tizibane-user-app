@@ -21,10 +21,10 @@ class EducationService extends GetxController {
 
   ConnectivityService _connectivityService = Get.put(ConnectivityService());
 
-   Future<void> getUser() async {
+  Future<void> getUser() async {
     bool isConnected = await _connectivityService.checkConnectivity();
     if (isConnected) {
-      // String accessToken = await getStoredToken();
+      String accessToken = await getStoredToken();
       // String storedNrc = await getStoredNrc();
       final prefs = await SharedPreferences.getInstance();
       int userId = prefs.getInt('userId') ?? 0;
@@ -33,7 +33,7 @@ class EducationService extends GetxController {
         Uri.parse("$urlEducation/$userId"),
         headers: {
           'Accept': 'application/json',
-          // 'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -47,7 +47,6 @@ class EducationService extends GetxController {
           //await _dbHelper.insertUser(userObj.map((user) => user.toJson()).toList());
 
           isLoading.value = false;
-
         } else {
           isLoading.value = false;
           edcuationObj.value = [];
@@ -63,54 +62,67 @@ class EducationService extends GetxController {
     }
   }
 
- Future<void> addEducation(Map<String, dynamic> education, File? certificateFile) async {
-  try {
-    bool isConnected = await _connectivityService.checkConnectivity();
-    
-    if (isConnected) {
-      isLoading.value = true;
+  Future<void> addEducation(
+      Map<String, dynamic> education, File? certificateFile) async {
+    try {
+      bool isConnected = await _connectivityService.checkConnectivity();
 
-      final prefs = await SharedPreferences.getInstance();
-      int? userId = prefs.getInt('userId');
-      
-      if (userId != null) {
-        final url = '$baseUrl$educationUpload/$userId';
+      if (isConnected) {
+        isLoading.value = true;
 
-        var request = http.MultipartRequest('POST', Uri.parse(url));
+        final prefs = await SharedPreferences.getInstance();
+        int? userId = prefs.getInt('userId');
 
-        // Add headers
-        request.headers.addAll({
-          'Content-Type': 'multipart/form-data',
-        });
+        if (userId != null) {
+          final url = '$baseUrl$educationUpload/$userId';
 
-        // Add JSON data as fields
-        education.forEach((key, value) {
-          request.fields[key] = value.toString();
-        });
+          var request = http.MultipartRequest('POST', Uri.parse(url));
 
-        // Add file if it exists
-        if (certificateFile != null) {
-          request.files.add(await http.MultipartFile.fromPath(
-            'certificate', // The field name for the file in the request
-            certificateFile.path,
-            filename: basename(certificateFile.path),
-          ));
-        }
+          // Add headers
+          request.headers.addAll({
+            'Content-Type': 'multipart/form-data',
+          });
 
-        var streamedResponse = await request.send();
-        var response = await http.Response.fromStream(streamedResponse);
+          // Add JSON data as fields
+          education.forEach((key, value) {
+            request.fields[key] = value.toString();
+          });
 
-        if (response.statusCode == 201) {
-          isLoading.value = false;
-          Get.snackbar(
-            'Success',
-            'Education Added Successfully',
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          );
-          Get.to(BottomMenuBarItems(selectedIndex: 0));
+          // Add file if it exists
+          if (certificateFile != null) {
+            request.files.add(await http.MultipartFile.fromPath(
+              'certificate', // The field name for the file in the request
+              certificateFile.path,
+              filename: basename(certificateFile.path),
+            ));
+          }
+
+          var streamedResponse = await request.send();
+          var response = await http.Response.fromStream(streamedResponse);
+
+          if (response.statusCode == 201) {
+            isLoading.value = false;
+            Get.snackbar(
+              'Success',
+              'Education Added Successfully',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.green,
+              colorText: Colors.white,
+            );
+            Get.to(BottomMenuBarItems(selectedIndex: 0));
+          } else {
+            isLoading.value = false;
+            Get.snackbar(
+              'Error',
+              'Education Not Added Successfully',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
+            print(response.statusCode);
+          }
         } else {
+          print('error');
           isLoading.value = false;
           Get.snackbar(
             'Error',
@@ -119,83 +131,84 @@ class EducationService extends GetxController {
             backgroundColor: Colors.red,
             colorText: Colors.white,
           );
-          print(response.statusCode);
         }
-      } else {
-        print('error');
-        isLoading.value = false;
-        Get.snackbar(
-          'Error',
-          'Education Not Added Successfully',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
       }
+    } catch (ex) {
+      print(ex);
+      isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        'Education Not Added Successfully',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
-  } catch (ex) {
-    print(ex);
-    isLoading.value = false;
-    Get.snackbar(
-      'Error',
-      'Education Not Added Successfully',
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-    );
   }
-}
 
-  Future<void> updateEducation(Map<String, dynamic> education,int id, File? certificateFile) async {
+  Future<void> updateEducation(
+      Map<String, dynamic> education, int id, File? certificateFile) async {
     print(id);
     print(education);
     print(certificateFile);
-    try{
+    try {
       bool isConnected = await _connectivityService.checkConnectivity();
-    if (isConnected) {
-      isLoading.value = true;
+      if (isConnected) {
+        isLoading.value = true;
 
-      final prefs = await SharedPreferences.getInstance();
-      int? userId = prefs.getInt('userId');
-      
-      if (userId != null) {
-        final url = '$baseUrl$educationUpload/$id';
+        final prefs = await SharedPreferences.getInstance();
+        int? userId = prefs.getInt('userId');
 
-        var request = http.MultipartRequest('POST', Uri.parse(url));
+        if (userId != null) {
+          final url = '$baseUrl$educationUpload/$id';
 
-        // Add headers
-        request.headers.addAll({
-          'Content-Type': 'multipart/form-data',
-        });
+          var request = http.MultipartRequest('POST', Uri.parse(url));
 
-        // Add JSON data as fields
-        education.forEach((key, value) {
-          request.fields[key] = value.toString();
-        });
+          // Add headers
+          request.headers.addAll({
+            'Content-Type': 'multipart/form-data',
+          });
 
-        // Add file if it exists
-        if (certificateFile != null) {
-          request.files.add(await http.MultipartFile.fromPath(
-            'certificate', // The field name for the file in the request
-            certificateFile.path,
-            filename: basename(certificateFile.path),
-          ));
-        }
+          // Add JSON data as fields
+          education.forEach((key, value) {
+            request.fields[key] = value.toString();
+          });
 
-        var streamedResponse = await request.send();
-        var response = await http.Response.fromStream(streamedResponse);
+          // Add file if it exists
+          if (certificateFile != null) {
+            request.files.add(await http.MultipartFile.fromPath(
+              'certificate', // The field name for the file in the request
+              certificateFile.path,
+              filename: basename(certificateFile.path),
+            ));
+          }
 
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          isLoading.value = false;
-          Get.snackbar(
-            'Success',
-            'Education Updated Successfully',
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          );
-          Get.to(BottomMenuBarItems(selectedIndex: 0));
+          var streamedResponse = await request.send();
+          var response = await http.Response.fromStream(streamedResponse);
+
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            isLoading.value = false;
+            Get.snackbar(
+              'Success',
+              'Education Updated Successfully',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.green,
+              colorText: Colors.white,
+            );
+            Get.to(BottomMenuBarItems(selectedIndex: 0));
+          } else {
+            isLoading.value = false;
+            Get.snackbar(
+              'Error',
+              'Education Not Updated Successfully',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
+            print(response.statusCode);
+          }
         } else {
+          print('error');
           isLoading.value = false;
           Get.snackbar(
             'Error',
@@ -204,31 +217,23 @@ class EducationService extends GetxController {
             backgroundColor: Colors.red,
             colorText: Colors.white,
           );
-          print(response.statusCode);
         }
-      } else {
-        print('error');
-        isLoading.value = false;
-        Get.snackbar(
-          'Error',
-          'Education Not Updated Successfully',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
       }
+    } catch (ex) {
+      print(ex);
+      isLoading.value = false;
+      Get.snackbar(
+        'Error',
+        'Education Not Updated Successfully',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
-  } catch (ex) {
-    print(ex);
-    isLoading.value = false;
-    Get.snackbar(
-      'Error',
-      'Education Not Updated Successfully',
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-    );
   }
-  }
+}
 
+Future<String> getStoredToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('token') ?? '';
 }

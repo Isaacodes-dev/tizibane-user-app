@@ -115,6 +115,7 @@ class IndividualProfileService extends GetxController {
       if (isConnected) {
         final prefs = await SharedPreferences.getInstance();
         int? userId = prefs.getInt('returnedId');
+        String accessToken = await getStoredToken();
 
         // Check if userId is null
         if (userId == null) {
@@ -129,7 +130,7 @@ class IndividualProfileService extends GetxController {
           Uri.parse("$urlIndividualProfile/$userId"),
           headers: {
             'Accept': 'application/json',
-            // 'Authorization': 'Bearer $accessToken',
+            'Authorization': 'Bearer $accessToken',
           },
         );
 
@@ -169,4 +170,9 @@ class IndividualProfileService extends GetxController {
       print('Error loading local data: $error');
     }
   }
+}
+
+Future<String> getStoredToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('token') ?? '';
 }

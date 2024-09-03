@@ -113,7 +113,7 @@ class _MoreState extends State<More> {
         ListTile(
           leading: const Icon(Icons.credit_card, color: Colors.black),
           title: Text('Payment', style: GoogleFonts.lexendDeca()),
-          onTap: () => {Get.to(const Payment())},
+          onTap: () => {Get.to(Payment())},
         ),
         // ListTile(
         //   leading: Icon(Icons.qr_code_2_outlined, color: Colors.black),

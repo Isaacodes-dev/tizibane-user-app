@@ -22,6 +22,7 @@ class ProfileService extends GetxController {
   RxBool isVisible = false.obs;
   final uploadUrl = imageBaseUrl;
   var imagePath = ''.obs;
+  RxList<dynamic> countries = <dynamic>[].obs; // Define as RxList
   final box = GetStorage();
   String? imagePathForWidget;
   XFile? _pickedFile;
@@ -64,8 +65,42 @@ class ProfileService extends GetxController {
     } else {
       final prefs = await SharedPreferences.getInstance();
       prefs.getString('imageValue');
-      imagePath.value = prefs.getString('imageValue').toString(); 
+      imagePath.value = prefs.getString('imageValue').toString();
       print(imagePath.value);
+    }
+  }
+
+  // get countries
+  Future<void> getCountries() async {
+    String accessToken = await getStoredToken();
+    bool isConnected = await _connectivityService.checkConnectivity();
+
+    if (isConnected) {
+      countries.clear(); // Clear the list before fetching new data
+
+      final response = await http.get(
+        Uri.parse("$baseUrl$getCountriesEndpoint"),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+
+        if (responseData['status'] == 'success') {
+          countries.value = responseData['data'];
+        } else {
+          throw Exception(
+              "Failed to retrieve countries: ${responseData['message']}");
+        }
+      } else {
+        throw Exception(
+            'Failed to load countries data: ${response.statusCode}');
+      }
+    } else {
+      throw Exception("No internet connection");
     }
   }
 
@@ -102,32 +137,35 @@ class ProfileService extends GetxController {
 
     try {
       String storedNrc = nrcStorage.read('nrcNumber');
-      var request = http.MultipartRequest('POST', Uri.parse("$baseUrl$uploadProfilePic/$storedNrc"))
+      var request = http.MultipartRequest(
+          'POST', Uri.parse("$baseUrl$uploadProfilePic/$storedNrc"))
         ..fields['nrc'] = storedNrc
         ..headers['Accept'] = 'application/json'
-        ..files.add(await http.MultipartFile.fromPath('image', pickedFile.path));
+        ..files
+            .add(await http.MultipartFile.fromPath('image', pickedFile.path));
 
-      var streamedResponse = await request.send().timeout(Duration(seconds: 30));
+      var streamedResponse =
+          await request.send().timeout(Duration(seconds: 30));
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
         Get.snackbar(
-        'Success',
-        'Image uploaded Successfully',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
-      nrcStorage.remove('nrcNumber');
+          'Success',
+          'Image uploaded Successfully',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        nrcStorage.remove('nrcNumber');
         Get.to(Login());
       } else {
         Get.snackbar(
-        'Error',
-        'Image upload failed',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+          'Error',
+          'Image upload failed',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
         print("Image upload failed with status: ${response.statusCode}");
       }
     } on SocketException catch (e) {

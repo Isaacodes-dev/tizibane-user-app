@@ -103,12 +103,12 @@ class AuthService extends GetxController {
 
       if (response.statusCode == 200) {
         isLoading.value = false;
-        // token.value = json.decode(response.body)['token'];
+        token.value = json.decode(response.body)['token'];
 
         // Save token and nrc to SharedPreferences
-        // SharedPreferences preferences = await SharedPreferences.getInstance();
-        // await preferences.setString('token', token.value);
         SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setString('token', token.value);
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
         await preferences.setString('email', email);
         //await preferences.setInt('returnedId', response.body.id);
         final responseBody = json.decode(response.body);
@@ -184,7 +184,7 @@ class AuthService extends GetxController {
   //       Uri.parse(url),
   //       headers: {
   //         'Accept': 'application/json',
-  //         // 'Authorization': 'Bearer $accessToken',
+  //         'Authorization': 'Bearer $accessToken',
   //       },
   //     );
 

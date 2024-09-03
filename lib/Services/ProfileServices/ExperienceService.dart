@@ -15,14 +15,14 @@ class ExperienceService extends GetxController {
 
   var experienceObj = <Experience>[].obs;
 
-   final urlExperience = baseUrl + experience;
+  final urlExperience = baseUrl + experience;
 
   ConnectivityService _connectivityService = Get.put(ConnectivityService());
 
-     Future<void> getUser() async {
+  Future<void> getUser() async {
     bool isConnected = await _connectivityService.checkConnectivity();
     if (isConnected) {
-      // String accessToken = await getStoredToken();
+      String accessToken = await getStoredToken();
       // String storedNrc = await getStoredNrc();
       final prefs = await SharedPreferences.getInstance();
       int userId = prefs.getInt('userId') ?? 0;
@@ -31,7 +31,7 @@ class ExperienceService extends GetxController {
         Uri.parse("$urlExperience/$userId"),
         headers: {
           'Accept': 'application/json',
-          // 'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -39,13 +39,13 @@ class ExperienceService extends GetxController {
         var responseData = jsonDecode(response.body);
         if (responseData['user'] != null) {
           List<dynamic> data = responseData['user'];
-          experienceObj.value = data.map((e) => Experience.fromJson(e)).toList();
+          experienceObj.value =
+              data.map((e) => Experience.fromJson(e)).toList();
 
           // Save the user object to local storage
           //await _dbHelper.insertUser(userObj.map((user) => user.toJson()).toList());
 
           isLoading.value = false;
-
         } else {
           isLoading.value = false;
           experienceObj.value = [];
@@ -126,7 +126,8 @@ class ExperienceService extends GetxController {
     }
   }
 
-  Future<void> updateExperience(int id,Map<String, dynamic> experienceObj) async {
+  Future<void> updateExperience(
+      int id, Map<String, dynamic> experienceObj) async {
     try {
       bool isConnected = await _connectivityService.checkConnectivity();
 
@@ -137,7 +138,6 @@ class ExperienceService extends GetxController {
         int? userId = prefs.getInt('userId');
 
         if (userId != null) {
-          
           final url = '$baseUrl$experience/$id';
           print(url);
           final response = await http.post(
@@ -190,5 +190,9 @@ class ExperienceService extends GetxController {
       );
     }
   }
+}
 
+Future<String> getStoredToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('token') ?? '';
 }

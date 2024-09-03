@@ -21,11 +21,11 @@ class JobsService extends GetxController {
   final isLoading = false.obs;
   final box = GetStorage();
   final nrcStorage = GetStorage();
-  var jobsFeedList = <JobListing >[].obs;
+  var jobsFeedList = <JobListing>[].obs;
   var jobDetails = Rxn<JobDetails>();
   var positionDetails = Rxn<Position>();
   var companyDetails = Rxn<Company>();
-  Rx<List<JobListing >> foundJobs = Rx<List<JobListing>>([]);
+  Rx<List<JobListing>> foundJobs = Rx<List<JobListing>>([]);
 
   @override
   void onInit() {
@@ -89,12 +89,11 @@ class JobsService extends GetxController {
     update();
   }
 
-  Future<void> sendApplication({
-    String? jobApplicationLetter,
-    String? jobListingId,
-    String? individualProfileId,
-    String? curriculumVitaeId
-  }) async {
+  Future<void> sendApplication(
+      {String? jobApplicationLetter,
+      String? jobListingId,
+      String? individualProfileId,
+      String? curriculumVitaeId}) async {
     try {
       String accessToken = await getStoredToken();
       // String storedNrc = await getStoredNrc();
@@ -112,7 +111,7 @@ class JobsService extends GetxController {
         Uri.parse(url),
         headers: {
           'Accept': 'application/json',
-          // 'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $accessToken',
         },
         body: data,
       );
@@ -153,16 +152,15 @@ class JobsService extends GetxController {
     }
   }
 
-  Future<void> sendCv({
-    required File? curriculumVitaeUrl,
-    required String? jobApplication,
-    required String? jobId,
-    required int userId,
-    required int individualProfileId
-  }) async {
+  Future<void> sendCv(
+      {required File? curriculumVitaeUrl,
+      required String? jobApplication,
+      required String? jobId,
+      required int userId,
+      required int individualProfileId}) async {
     try {
       String accessToken = await getStoredToken();
-      
+
       isLoading.value = true;
 
       const url = baseUrl + postCv;
@@ -177,12 +175,12 @@ class JobsService extends GetxController {
       );
       request.fields['user_id'] = userId.toString();
       request.fields['individual_profile_id'] = individualProfileId.toString();
-      request.fields['curriculum_vitae_file'] = 
+      request.fields['curriculum_vitae_file'] =
           p.basename(curriculumVitaeUrl!.path);
 
       request.headers.addAll({
         'Accept': 'application/json',
-        // 'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $accessToken',
       });
 
       final streamedResponse = await request.send();
@@ -202,7 +200,10 @@ class JobsService extends GetxController {
         if (jobId != null) {
           int id = json.decode(response.body)['data']['id'];
           await sendApplication(
-              jobApplicationLetter: jobApplication, jobListingId: jobId,curriculumVitaeId: id.toString(),individualProfileId: individualProfileId.toString());
+              jobApplicationLetter: jobApplication,
+              jobListingId: jobId,
+              curriculumVitaeId: id.toString(),
+              individualProfileId: individualProfileId.toString());
         } else {
           Get.to(BottomMenuBarItems(
             selectedIndex: 1,

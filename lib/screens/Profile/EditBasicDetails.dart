@@ -21,18 +21,26 @@ class EditBasicDetails extends StatefulWidget {
 class _EditBasicDetailsState extends State<EditBasicDetails> {
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
+  final TextEditingController _selectedTitle = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _about = TextEditingController();
-  ProfileService _profileService = Get.put(ProfileService());
-  IndividualProfileService _individualProfileService = Get.put(IndividualProfileService());
+  final ProfileService _profileService = Get.put(ProfileService());
+  IndividualProfileService _individualProfileService =
+      Get.put(IndividualProfileService());
   final List<String> _titles = ['Mr', 'Ms', 'Miss', 'Mrs'];
   final List<String> _workStatus = ['Yes', 'No'];
   final List<String> _genders = ['Male', 'Female'];
+  final List<String> _countries = [];
+  final List<String> _provinces = ['Lusaka', 'Copperbelt'];
+  final List<String> _towns = ['Lusaka', 'Ndola'];
 
-  String? _selectedTitle;
+  // String? _selectedTitle;
   String? _selectedWorkStatus;
   String? _selectedGender;
+  String? _selectedCountry;
+  String? _selectedProvince;
+  String? _selectedTown;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -52,6 +60,24 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _fetchCountries();
+  }
+
+  Future<void> _fetchCountries() async {
+    try {
+      final countries = await _profileService.getCountries();
+      setState(() {
+        _countries.clear(); // Clear existing data
+        _countries.addAll(_countries); // Add new data
+      });
+    } catch (e) {
+      print('Error fetching countries: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -66,7 +92,22 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
               child: Center(
                 child: Column(
                   children: [
-                    Text('Upload Profile Picture', style: GoogleFonts.lexendDeca()),
+                    RichText(
+                      text: TextSpan(
+                        style: GoogleFonts.lexendDeca(),
+                        children: [
+                          TextSpan(
+                            text: 'Upload Profile Picture',
+                            style: TextStyle(
+                                color: Colors.black), // or any other color
+                          ),
+                          TextSpan(
+                            text: ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 20),
                     Stack(
                       children: [
@@ -132,17 +173,52 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: [
+                    // DropdownButtonFormField<String>(
+                    //   value: _selectedTitle,
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       _selectedTitle = value;
+                    //     });
+                    //   },
+                    //   items: _titles.map((title) {
+                    //     return DropdownMenuItem<String>(
+                    //       value: title,
+                    //       child: Text(title),
+                    //     );
+                    //   }).toList(),
+                    //   decoration: InputDecoration(
+                    //     contentPadding: const EdgeInsets.symmetric(
+                    //       vertical: 10.0,
+                    //       horizontal: 15.0,
+                    //     ),
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderSide: const BorderSide(color: Colors.black),
+                    //       borderRadius: BorderRadius.circular(40.0),
+                    //     ),
+                    //     hintText: 'Title',
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(20.0),
+                    //     ),
+                    //   ),
+                    //   validator: (value) {
+                    //     if (value == null || value.isEmpty) {
+                    //       return 'Please select a title';
+                    //     }
+                    //     return null;
+                    //   },
+                    // ),
+                    const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
-                      value: _selectedTitle,
+                      value: _selectedGender,
                       onChanged: (value) {
                         setState(() {
-                          _selectedTitle = value;
+                          _selectedGender = value;
                         });
                       },
-                      items: _titles.map((title) {
+                      items: _genders.map((gender) {
                         return DropdownMenuItem<String>(
-                          value: title,
-                          child: Text(title),
+                          value: gender,
+                          child: Text(gender),
                         );
                       }).toList(),
                       decoration: InputDecoration(
@@ -154,21 +230,22 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                           borderSide: const BorderSide(color: Colors.black),
                           borderRadius: BorderRadius.circular(40.0),
                         ),
-                        hintText: 'Title',
+                        hintText: 'Gender',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a title';
+                          return 'Please select your gender';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
-                      controller: _phoneNumber,
+                      controller:
+                          _selectedTitle, // Ensure this controller matches the purpose of the field
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
@@ -180,47 +257,20 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                           borderRadius: BorderRadius.circular(40.0),
                         ),
                         suffixIcon: const Icon(
-                          Icons.phone,
+                          Icons
+                              .title, // Ensure this icon is appropriate for the field
                           color: Colors.black,
                         ),
-                        hintText: 'Phone Number',
+                        hintText:
+                            'Title eg Project Manager, Software Developer', // Make sure the hint text matches the field's purpose
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your phone number';
-                        }
-                        if (!RegExp(r'^\d{10}$').hasMatch(value)) {
-                          return 'Please enter a valid phone number';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _address,
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        suffixIcon: const Icon(
-                          Icons.home,
-                          color: Colors.black,
-                        ),
-                        hintText: 'Address',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your address';
+                          // Ensure the validation message matches the purpose of the field
+                          return 'Please enter a title';
                         }
                         return null;
                       },
@@ -244,11 +294,39 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                         ),
                         hintText: 'About',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                            borderRadius: BorderRadius.circular(20.0)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter something about yourself';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _phoneNumber,
+                      cursorColor: Colors.black,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 15.0,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        suffixIcon: const Icon(
+                          Icons.phone,
+                          color: Colors.black,
+                        ),
+                        hintText: 'Phone Number',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your phone number';
                         }
                         return null;
                       },
@@ -288,18 +366,47 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                         return null;
                       },
                     ),
+
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _address,
+                      cursorColor: Colors.black,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 15.0,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        suffixIcon: const Icon(
+                          Icons.home,
+                          color: Colors.black,
+                        ),
+                        hintText: 'Address',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your address';
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
-                      value: _selectedGender,
+                      value: _selectedCountry,
                       onChanged: (value) {
                         setState(() {
-                          _selectedGender = value;
+                          _selectedCountry = value;
                         });
                       },
-                      items: _genders.map((gender) {
+                      items: _countries.map((status) {
                         return DropdownMenuItem<String>(
-                          value: gender,
-                          child: Text(gender),
+                          value: status,
+                          child: Text(status),
                         );
                       }).toList(),
                       decoration: InputDecoration(
@@ -311,18 +418,90 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                           borderSide: const BorderSide(color: Colors.black),
                           borderRadius: BorderRadius.circular(40.0),
                         ),
-                        hintText: 'Gender',
+                        hintText: 'Country',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select your gender';
+                          return 'Please select your Country';
                         }
                         return null;
                       },
                     ),
+
+                    const SizedBox(height: 20),
+                    DropdownButtonFormField<String>(
+                      value: _selectedProvince,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedProvince = value;
+                        });
+                      },
+                      items: _provinces.map((status) {
+                        return DropdownMenuItem<String>(
+                          value: status,
+                          child: Text(status),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 15.0,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        hintText: 'Province',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select your Province';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    DropdownButtonFormField<String>(
+                      value: _selectedTown,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedTown = value;
+                        });
+                      },
+                      items: _towns.map((status) {
+                        return DropdownMenuItem<String>(
+                          value: status,
+                          child: Text(status),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 15.0,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        hintText: 'Town',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select your Town';
+                        }
+                        return null;
+                      },
+                    ),
+
                     const SizedBox(height: 20),
                     Obx(() {
                       return _individualProfileService.isLoading.value
@@ -331,18 +510,21 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                               text: 'Submit',
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  final prefs = await SharedPreferences.getInstance();
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
                                   int? userId = prefs.getInt('userId');
                                   var profileData = {
-                                    'title': _selectedTitle,
+                                    'title': _selectedTitle.text,
                                     'phone_number': _phoneNumber.text,
                                     'address': _address.text,
                                     'gender': _selectedGender,
                                     'about': _about.text,
-                                    'open_to_work': _selectedWorkStatus == 'Yes' ? 1 : 0,
+                                    'open_to_work':
+                                        _selectedWorkStatus == 'Yes' ? 1 : 0,
                                     'user_id': userId,
                                   };
-                                  await _individualProfileService.createProfile(profileData, _image);
+                                  await _individualProfileService.createProfile(
+                                      profileData, _image);
                                 }
                               },
                             );

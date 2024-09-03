@@ -1194,7 +1194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                                 Colors.black),
                                                     onPressed: () {
                                                       Get.to(EditProfessionalAffiliations(
-                                                        id: affiliation.id,
+                                                          id: affiliation.id,
                                                           organizationName:
                                                               affiliation
                                                                   .organizationName!,
