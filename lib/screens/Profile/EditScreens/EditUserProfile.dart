@@ -15,6 +15,9 @@ class EditUserProfile extends StatefulWidget {
   final String selectedStatus;
   final String gender;
   final String imagePath;
+  final String country;
+  final String province;
+  final String town;
 
   const EditUserProfile({
     Key? key,
@@ -25,6 +28,9 @@ class EditUserProfile extends StatefulWidget {
     required this.selectedStatus,
     required this.gender,
     required this.imagePath,
+    required this.country,
+    required this.province,
+    required this.town,
   }) : super(key: key);
 
   @override
@@ -38,13 +44,27 @@ class _EditUserProfileState extends State<EditUserProfile> {
   IndividualProfileService _individualProfileService =
       Get.put(IndividualProfileService());
 
-  final List<String> _titles = ['Mr', 'Ms', 'Miss', 'Mrs'];
+  final List<String> _titles = [
+    'Project Manager',
+    'Software Developer'
+  ]; // Example titles
   final List<String> _workStatus = ['Yes', 'No'];
   final List<String> _genders = ['Male', 'Female'];
+  final List<String> _countries = ['Zambia', 'Kenya']; // Example countries
+  final List<String> _provinces = ['Lusaka', 'Copperbelt']; // Example provinces
+  final List<String> _towns = ['Lusaka', 'Kitwe']; // Example towns
 
-  final TextEditingController _phoneNumber = TextEditingController();
-  final TextEditingController _address = TextEditingController();
-  final TextEditingController _about = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _aboutController = TextEditingController();
+
+  String? _selectedTitle;
+  String? _selectedStatus;
+  String? _selectedGender;
+  String? _selectedCountry;
+  String? _selectedProvince;
+  String? _selectedTown;
 
   Future<void> _pickImage() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
@@ -58,9 +78,15 @@ class _EditUserProfileState extends State<EditUserProfile> {
   @override
   void initState() {
     super.initState();
-    _phoneNumber.text = widget.phoneNumber;
-    _address.text = widget.address;
-    _about.text = widget.about;
+    _titleController.text = widget.selectedTitle;
+    _phoneNumberController.text = widget.phoneNumber;
+    _addressController.text = widget.address;
+    _aboutController.text = widget.about;
+    _selectedStatus = widget.selectedStatus;
+    _selectedGender = widget.gender;
+    _selectedCountry = widget.country;
+    _selectedProvince = widget.province;
+    _selectedTown = widget.town;
   }
 
   @override
@@ -68,310 +94,324 @@ class _EditUserProfileState extends State<EditUserProfile> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        title: Text('Edit Profile', style: GoogleFonts.lexendDeca()),
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Center(
-                child: Column(
+        child: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: _pickImage,
+                child: Stack(
                   children: [
-                    Text('Upload Profile Picture',
-                        style: GoogleFonts.lexendDeca()),
-                    SizedBox(height: 20),
-                    Stack(
-                      children: [
-                        Container(
-                          width: 160,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 4,
-                              ),
-                            ],
-                            border: Border.all(
-                              color: Colors.orange,
-                              width: 2.0,
-                            ),
+                    Container(
+                      width: 160,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 4,
                           ),
-                          child: ClipOval(
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                child: _image == null
-                                    ? Image.asset(
-                                        'assets/images/user.jpg',
-                                        fit: BoxFit.cover,
-                                        width: 150,
-                                        height: 150,
-                                      )
-                                    : Image.file(
-                                        File(_image!.path),
-                                        fit: BoxFit.cover,
-                                        width: 150,
-                                        height: 150,
-                                      ),
-                              ),
-                            ),
-                          ),
+                        ],
+                        border: Border.all(
+                          color: Colors.orange,
+                          width: 2.0,
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 15,
-                          child: InkWell(
-                            onTap: _pickImage,
-                            child: Icon(
-                              Icons.camera_alt,
-                              color: const Color.fromARGB(255, 171, 170, 170),
-                              size: 30,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
+                      child: ClipOval(
+                        child: _image == null
+                            ? Image.asset(
+                                'assets/images/user.jpg',
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(_image!.path),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 15,
+                      child: Icon(
+                        Icons.camera_alt,
+                        color: const Color.fromARGB(255, 171, 170, 170),
+                        size: 30,
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-            Divider(color: Colors.black),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    DropdownButtonFormField<String>(
-                      value: _titles.contains(widget.selectedTitle)
-                          ? widget.selectedTitle
-                          : null,
-                      onChanged: (value) {
-                        setState(() {
-                          // _selectedTitle = value!;
-                        });
-                      },
-                      items: _titles.map((title) {
-                        return DropdownMenuItem<String>(
-                          value: title,
-                          child: Text(title),
-                        );
-                      }).toList(),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        hintText: 'Select Title',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select a title';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _phoneNumber,
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        suffixIcon: const Icon(
-                          Icons.phone,
-                          color: Colors.black,
-                        ),
-                        hintText: 'Phone Number',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your phone number';
-                        }
-                        if (!RegExp(r'^\d{10}$').hasMatch(value)) {
-                          return 'Please enter a valid phone number';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _address,
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        suffixIcon: const Icon(
-                          Icons.home,
-                          color: Colors.black,
-                        ),
-                        hintText: 'Address',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your address';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _about,
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        suffixIcon: const Icon(
-                          Icons.info,
-                          color: Colors.black,
-                        ),
-                        hintText: 'About',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter something about yourself';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    DropdownButtonFormField<String>(
-                      value: _workStatus.contains(widget.selectedStatus)
-                          ? widget.selectedStatus
-                          : null,
-                      onChanged: (value) {
-                        setState(() {
-                          // _selectedWorkStatus = value!;
-                        });
-                      },
-                      items: _workStatus.map((status) {
-                        return DropdownMenuItem<String>(
-                          value: status,
-                          child: Text(status),
-                        );
-                      }).toList(),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        hintText: 'Select Work Status',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select your work status';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    DropdownButtonFormField<String>(
-                      value: _genders.contains(widget.gender)
-                          ? widget.gender
-                          : null,
-                      onChanged: (value) {
-                        setState(() {
-                          // _selectedGender = value!;
-                        });
-                      },
-                      items: _genders.map((gender) {
-                        return DropdownMenuItem<String>(
-                          value: gender,
-                          child: Text(gender),
-                        );
-                      }).toList(),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        hintText: 'Select Gender',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select your gender';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Obx(() {
-                      return _individualProfileService.isLoading.value
-                          ? const CircularProgressIndicator()
-                          : SubmitButton(
-                              text: 'Submit',
-                              onTap: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-                                  int? userId = prefs.getInt('userId');
-                                  // var profileData = {
-                                  //   'title': _selectedTitle,
-                                  //   'phone_number': _phoneNumber.text,
-                                  //   'address': _address.text,
-                                  //   'gender': _selectedGender,
-                                  //   'about': _about.text,
-                                  //   'open_to_work': _selectedWorkStatus == 'Yes' ? 1 : 0,
-                                  //   'user_id': userId,
-                                  // };
-                                  // await _individualProfileService.createProfile(profileData, _image);
-                                }
-                              },
-                            );
-                    }),
-                  ],
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: _selectedGender,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedGender = value;
+                  });
+                },
+                items: _genders.map((gender) {
+                  return DropdownMenuItem<String>(
+                    value: gender,
+                    child: Text(gender),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'Select Gender',
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your gender';
+                  }
+                  return null;
+                },
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: _selectedTitle,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedTitle = value;
+                  });
+                },
+                items: _titles.map((title) {
+                  return DropdownMenuItem<String>(
+                    value: title,
+                    child: Text(title),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'Select Title',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a title';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _phoneNumberController,
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'Phone Number',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your phone number';
+                  }
+                  if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                    return 'Please enter a valid phone number';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _addressController,
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'Address',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your address';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _aboutController,
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'About',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter something about yourself';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: _selectedStatus,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedStatus = value;
+                  });
+                },
+                items: _workStatus.map((status) {
+                  return DropdownMenuItem<String>(
+                    value: status,
+                    child: Text(status),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'Open to Work',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your work status';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: _selectedCountry,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCountry = value;
+                  });
+                },
+                items: _countries.map((country) {
+                  return DropdownMenuItem<String>(
+                    value: country,
+                    child: Text(country),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'Select Country',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your country';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: _selectedProvince,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedProvince = value;
+                  });
+                },
+                items: _provinces.map((province) {
+                  return DropdownMenuItem<String>(
+                    value: province,
+                    child: Text(province),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'Select Province',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your province';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: _selectedTown,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedTown = value;
+                  });
+                },
+                items: _towns.map((town) {
+                  return DropdownMenuItem<String>(
+                    value: town,
+                    child: Text(town),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  hintText: 'Select Town',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your town';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              SubmitButton(
+                text: 'Update Profile',
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                    // Handle form submission
+                    final profileData = {
+                      'title': _selectedTitle,
+                      'phone_number': _phoneNumberController.text,
+                      'address': _addressController.text,
+                      'about': _aboutController.text,
+                      'open_to_work': _selectedStatus,
+                      'gender': _selectedGender,
+                      'country': _selectedCountry,
+                      'province': _selectedProvince,
+                      'town': _selectedTown,
+                      'image': _image?.path,
+                    };
+                    _individualProfileService.updateProfile(
+                        profileData, _image);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

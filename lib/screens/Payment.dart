@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts
 import 'package:tizibane/Services/PaymentService.dart'; // Import the PaymentService
 
 class Payment extends StatelessWidget {
@@ -15,11 +16,12 @@ class Payment extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black, // Set the background color to black
-        title: const Text(
+        title: Text(
           'Tizibane',
-          style: TextStyle(
+          style: GoogleFonts.roboto(
             color: Colors.white, // Set the text color to white
             fontWeight: FontWeight.bold, // Make the text bold
+            fontSize: 20, // Set font size
           ),
         ),
         leading: IconButton(
@@ -47,12 +49,12 @@ class Payment extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               'Pro Individual',
-                              style: TextStyle(
+                              style: GoogleFonts.roboto(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -60,21 +62,26 @@ class Payment extends StatelessWidget {
                             Chip(
                               label: Text(
                                 'Popular',
-                                style: TextStyle(color: Colors.white),
+                                style: GoogleFonts.roboto(
+                                  color: Colors.white,
+                                ),
                               ),
                               backgroundColor: Colors.black,
                             ),
                           ],
                         ),
                         const SizedBox(height: 10),
-                        const Text(
+                        Text(
                           'ZMW 150',
-                          style: TextStyle(
+                          style: GoogleFonts.roboto(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Text('Per individual, billed annually'),
+                        Text(
+                          'Per individual, billed annually',
+                          style: GoogleFonts.roboto(),
+                        ),
                         const SizedBox(height: 20),
                         ListView(
                           shrinkWrap: true,
@@ -119,7 +126,12 @@ class Payment extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                            child: const Text('Subscribe'),
+                            child: Text(
+                              'Subscribe',
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                       ],

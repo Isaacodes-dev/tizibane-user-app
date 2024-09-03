@@ -9,7 +9,7 @@ import 'package:tizibane/Services/ProfileServices/ProfessionalAffiliationsServic
 import 'package:tizibane/components/SubmitButton.dart';
 
 class EditProfessionalAffiliations extends StatefulWidget {
-  final int id; 
+  final int id;
   final String organizationName;
   final String membershipId;
   final String role;
@@ -284,8 +284,9 @@ class _EditProfessionalAffiliationsState
                             'valid_to': _validToController.text,
                             'individual_profile_id': individualProfileId,
                           };
-                          await _affiliationsService.updateProfessionalAffiliation(
-                              affiliation, _file);
+                          await _affiliationsService
+                              .updateProfessionalAffiliation(
+                                  affiliation, _file);
                         },
                       );
               }),

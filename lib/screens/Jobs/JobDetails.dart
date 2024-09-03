@@ -242,8 +242,7 @@ class _JobDetailsState extends State<JobDetails> {
                                     onTap: () => Get.to(JobApplication(
                                       position: widget.title,
                                       company: widget.companyName,
-                                      companyLogo:
-                                          widget.companyLogo,
+                                      companyLogo: widget.companyLogo,
                                       jobId: widget.id,
                                     )),
                                   )

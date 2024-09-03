@@ -25,7 +25,8 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
   final TextEditingController _address = TextEditingController();
   final TextEditingController _about = TextEditingController();
   ProfileService _profileService = Get.put(ProfileService());
-  IndividualProfileService _individualProfileService = Get.put(IndividualProfileService());
+  IndividualProfileService _individualProfileService =
+      Get.put(IndividualProfileService());
   final List<String> _titles = ['Mr', 'Ms', 'Miss', 'Mrs'];
   final List<String> _workStatus = ['Yes', 'No'];
   final List<String> _genders = ['Male', 'Female'];
@@ -66,7 +67,8 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
               child: Center(
                 child: Column(
                   children: [
-                    Text('Upload Profile Picture', style: GoogleFonts.lexendDeca()),
+                    Text('Upload Profile Picture',
+                        style: GoogleFonts.lexendDeca()),
                     SizedBox(height: 20),
                     Stack(
                       children: [
@@ -185,7 +187,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                         ),
                         hintText: 'Phone Number',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                            borderRadius: BorderRadius.circular(20.0)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -216,7 +218,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                         ),
                         hintText: 'Address',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                            borderRadius: BorderRadius.circular(20.0)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -244,7 +246,7 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                         ),
                         hintText: 'About',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
+                            borderRadius: BorderRadius.circular(20.0)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -331,7 +333,8 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                               text: 'Submit',
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  final prefs = await SharedPreferences.getInstance();
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
                                   int? userId = prefs.getInt('userId');
                                   var profileData = {
                                     'title': _selectedTitle,
@@ -339,10 +342,12 @@ class _EditBasicDetailsState extends State<EditBasicDetails> {
                                     'address': _address.text,
                                     'gender': _selectedGender,
                                     'about': _about.text,
-                                    'open_to_work': _selectedWorkStatus == 'Yes' ? 1 : 0,
+                                    'open_to_work':
+                                        _selectedWorkStatus == 'Yes' ? 1 : 0,
                                     'user_id': userId,
                                   };
-                                  await _individualProfileService.createProfile(profileData, _image);
+                                  await _individualProfileService.createProfile(
+                                      profileData, _image);
                                 }
                               },
                             );

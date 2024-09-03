@@ -221,8 +221,7 @@ class _RegistrationState extends State<Registration> {
                             },
                           ),
                           contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10.0,
-                            horizontal: 15.0),
+                              vertical: 10.0, horizontal: 15.0),
                           hintText: 'Confirm Password',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0),
@@ -246,7 +245,8 @@ class _RegistrationState extends State<Registration> {
                             value: _agreeToTerms,
                             onChanged: _onAgreeToTerms,
                           ),
-                          Text('Agree to Terms', style: GoogleFonts.lexendDeca())
+                          Text('Agree to Terms',
+                              style: GoogleFonts.lexendDeca())
                         ],
                       ),
                       const SizedBox(height: 20),

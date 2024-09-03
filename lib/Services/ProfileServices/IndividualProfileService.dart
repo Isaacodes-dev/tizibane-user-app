@@ -23,7 +23,7 @@ class IndividualProfileService extends GetxController {
 
   var individualProfileObject = Rx<IndividualProfile?>(null);
 
-  Future<void> createProfile(
+  Future<void> updateProfile(
       Map<String, dynamic> profileData, XFile? profileImage) async {
     try {
       bool isConnected = await _connectivityService.checkConnectivity();
@@ -33,11 +33,10 @@ class IndividualProfileService extends GetxController {
 
         final prefs = await SharedPreferences.getInstance();
         int? userId = prefs.getInt('userId');
-        print(userId);
         if (userId != null) {
-          final url = '$baseUrl$profile/$userId';
+          final url = '$baseUrl/profile/$userId';
 
-          var request = http.MultipartRequest('POST', Uri.parse(url));
+          var request = http.MultipartRequest('PUT', Uri.parse(url));
 
           // Add headers
           request.headers.addAll({
@@ -61,11 +60,11 @@ class IndividualProfileService extends GetxController {
           var streamedResponse = await request.send();
           var response = await http.Response.fromStream(streamedResponse);
 
-          if (response.statusCode == 201) {
+          if (response.statusCode == 200) {
             isLoading.value = false;
             Get.snackbar(
               'Success',
-              'Profile Created Successfully',
+              'Profile Updated Successfully',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.green,
               colorText: Colors.white,
@@ -77,7 +76,7 @@ class IndividualProfileService extends GetxController {
             isLoading.value = false;
             Get.snackbar(
               'Error',
-              'Profile Not Created Successfully',
+              'Profile Update Failed',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.red,
               colorText: Colors.white,
@@ -89,19 +88,29 @@ class IndividualProfileService extends GetxController {
           isLoading.value = false;
           Get.snackbar(
             'Error',
-            'Profile Not Created Successfully',
+            'Profile Update Failed',
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.red,
             colorText: Colors.white,
           );
         }
+      } else {
+        print('No internet connection');
+        isLoading.value = false;
+        Get.snackbar(
+          'Error',
+          'No internet connection',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     } catch (ex) {
       print(ex);
       isLoading.value = false;
       Get.snackbar(
         'Error',
-        'Profile Not Created Successfully',
+        'An error occurred while updating profile',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,

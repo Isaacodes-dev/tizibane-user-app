@@ -303,7 +303,8 @@ class _AddEducationState extends State<AddEducation> {
                             if (_formKey.currentState!.validate()) {
                               final prefs =
                                   await SharedPreferences.getInstance();
-                              int individualProfileId = prefs.getInt('individualProfileId') ?? 0;
+                              int individualProfileId =
+                                  prefs.getInt('individualProfileId') ?? 0;
                               var education = {
                                 'institution_name': _institutionName.text,
                                 'other': null,

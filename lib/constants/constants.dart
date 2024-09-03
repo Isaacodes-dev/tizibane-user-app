@@ -1,18 +1,14 @@
+const String baseUrl = 'http://127.0.0.1:8000/api/';
+const String imageBaseUrl = 'http://127.0.0.1:8000/storage/test/';
+const String companyLogoUrl = 'http://127.0.0.1:8000/storage/logos/';
+
 // const String baseUrl = 'http://127.0.0.1:8000/api/';
-
 // const String imageBaseUrl = 'http://127.0.0.1:8000/storage/test/';
-
 // const String companyLogoUrl = 'http://127.0.0.1:8000/storage/logos/';
 
-const String baseUrl = 'https://tizibane.com/api/';
-
-const String imageBaseUrl = 'https://tizibane.com/storage/profiles/';
-
-// const String baseUrl = 'https://tizibane.com/api/';
-
-// const String imageBaseUrl = 'https://tizibane.com/storage/profile-pictures/';
-
-const String companyLogoUrl = 'https://tizibane.com/storage/logos/';
+// const String baseUrl = 'http://192.168.0.1:8000/api/';
+// const String imageBaseUrl = 'http://192.168.0.1:8000/storage/profiles/';
+// const String companyLogoUrl = 'http://192.168.0.1:8000/storage/logos/';
 
 const String payment = 'make-payment';
 

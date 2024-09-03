@@ -29,10 +29,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ),
         body: TabBarView(
-          children: [
-            EditBasicDetails(),
-            EditJobProfile()
-          ],
+          children: [EditBasicDetails(), EditJobProfile()],
         ),
       ),
     );
