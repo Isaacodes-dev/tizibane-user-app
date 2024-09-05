@@ -18,7 +18,7 @@ class PaymentService {
 
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl$uploadProfilePic/$makePayment"),
+        Uri.parse("$baseUrl/$initiatePayment"),
         headers: headers,
         body: body,
       );

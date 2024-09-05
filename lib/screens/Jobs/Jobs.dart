@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tizibane/screens/Jobs/JobsFeed.dart';
-import 'package:tizibane/screens/Jobs/WebScrappedJobs.dart';
+import 'package:tizibane/screens/Jobs/PreviousJobApplications.dart';
 
 class Jobs extends StatefulWidget {
   const Jobs({super.key});
@@ -32,15 +32,22 @@ class _JobsState extends State<Jobs> {
                 labelColor: Colors.orange,
                 unselectedLabelColor: Colors.white,
                 tabs: [
-                  Tab(text: 'In App Jobs', icon: Icon(Icons.work)),
-                  Tab(text: 'Web Jobs', icon: Icon(CupertinoIcons.globe)),
+                  Tab(text: 'Jobs Feed', icon: Icon(Icons.work)),
+                  Tab(
+                      text: 'Applied Jobs',
+                      icon: Icon(CupertinoIcons.folder_solid)),
                 ],
               ),
             ),
           ),
         ),
         body: TabBarView(
-          children: [JobsFeed(), WebScrappedJobs()],
+          children: [
+            JobsFeed(),
+            ApplicationsPage(
+              individualProfileId: '10',
+            )
+          ],
         ),
       ),
     );

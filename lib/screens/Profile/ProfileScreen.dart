@@ -215,6 +215,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             imagePath: profileData.profilePicture!,
                             phoneNumber: profileData.phoneNumber!,
                             address: profileData.address!,
+                            // country: profileData.country!,
+                            // province: profileData.province!,
+                            // town: profileData.town!,
                           ));
                         },
                         child:

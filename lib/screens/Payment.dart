@@ -147,6 +147,7 @@ class Payment extends StatelessWidget {
   }
 
   void _createPayment(BuildContext context) {
+    // Show a snack bar while the payment is being processed
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Please wait, payment processing in progress'),
@@ -161,8 +162,10 @@ class Payment extends StatelessWidget {
     )
         .then((success) {
       if (success) {
-        Navigator.pushNamed(context, '/login'); // Navigate to login on success
+        // Navigate to login on success
+        Navigator.pushNamed(context, '/login');
       } else {
+        // Show a failure message in case of an error
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Payment processing failed.'),

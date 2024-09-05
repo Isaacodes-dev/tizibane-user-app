@@ -11,6 +11,7 @@ import 'package:tizibane/screens/Login.dart';
 import 'package:tizibane/screens/Notifications.dart';
 import 'package:tizibane/screens/Payment.dart';
 import 'package:tizibane/screens/Settings.dart';
+import 'package:tizibane/screens/Subscriptions.dart';
 import 'package:get/get.dart';
 import 'package:tizibane/components/share/ShareUrlLink.dart';
 import 'package:tizibane/screens/UpdateUserCredentials.dart';
@@ -94,6 +95,11 @@ class _MoreState extends State<More> {
           ),
           title: Text('Notifications', style: GoogleFonts.lexendDeca()),
           onTap: () => {Get.to(const Notifications())},
+        ),
+        ListTile(
+          leading: const Icon(Icons.monetization_on, color: Colors.black),
+          title: Text('Subscriptions', style: GoogleFonts.lexendDeca()),
+          onTap: () => {Get.to(const Subscriptions())},
         ),
         ListTile(
           leading: Icon(Icons.upload_file_rounded, color: Colors.black),
