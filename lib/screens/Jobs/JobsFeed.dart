@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,7 +37,6 @@ class _JobsFeedState extends State<JobsFeed> {
       if (_connectivityService.isConnected.value) {
         await _userService.getUser();
         await _jobsService.getJobsFeed();
-        // await _jobsService.getJobsFromLocalStorage();
         _jobsService.foundJobs.value = _jobsService.jobsFeedList;
       } else {
         await _jobsService.getJobsFromLocalStorage();
@@ -85,27 +82,14 @@ class _JobsFeedState extends State<JobsFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.black,
-      //   leading: Padding(
-      //     padding: const EdgeInsets.only(left: 16.0),
-      //     child: Image.asset(
-      //       'assets/images/tizibaneicon.png',
-      //       width: 50,
-      //       height: 50,
-      //     ),
-      //   ),
-      // ),
       backgroundColor: Colors.black,
-      body: Stack(
+      body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
               children: [
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 Row(
                   children: [
                     CircleAvatar(
@@ -122,9 +106,7 @@ class _JobsFeedState extends State<JobsFeed> {
                             ),
                           )),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,11 +140,8 @@ class _JobsFeedState extends State<JobsFeed> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 15,
-                ),
+                SizedBox(height: 15),
                 TextField(
-                  // onChanged: (value) => _jobsService.filterJobs(value),
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Search',
@@ -180,161 +159,343 @@ class _JobsFeedState extends State<JobsFeed> {
                     prefixIcon: Icon(Icons.search),
                     prefixIconColor: Colors.white,
                   ),
-                )
+                ),
+                SizedBox(height: 20),
               ],
             ),
           ),
-          Positioned(
-            top: 160,
-            right: 0,
-            left: 0,
-            bottom: 0,
-            child: Container(
-              padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-              height: 220,
-              decoration: const BoxDecoration(
-                color: Color(0xFFEFFFFC),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
-                ),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Available Jobs",
-                      style: GoogleFonts.lexendDeca(
-                        textStyle: TextStyle(fontSize: 16),
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.only(top: 15, left: 15, right: 15),
+                    height: 220,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFEFFFFC),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(40),
+                        bottomRight: Radius.circular(40),
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Obx(
-                      () {
-                        if (_jobsService.isLoading.value) {
-                          return Center(child: CircularProgressIndicator());
-                        } else {
-                          return _jobsService.foundJobs.value.isEmpty
-                              ? Text("No Jobs To Display")
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount:
-                                      _jobsService.foundJobs.value.length,
-                                  itemBuilder: (context, index) {
-                                    DateTime jobClosingDate = convertToDate(
-                                        _jobsService.foundJobs.value[index]
-                                            .applicationDeadline
-                                            .toLocal()
-                                            .toString()
-                                            .substring(0, 10));
-                                    DateTime currentDate = DateTime.now();
-                                    bool isJobStillOpen =
-                                        jobClosingDate.isAfter(currentDate) ||
-                                            jobClosingDate
-                                                .isAtSameMomentAs(currentDate);
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Available Jobs",
+                            style: GoogleFonts.lexendDeca(
+                              textStyle: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Obx(
+                            () {
+                              if (_jobsService.isLoading.value) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else {
+                                return _jobsService.foundJobs.value.isEmpty
+                                    ? Text("No Jobs To Display")
+                                    : ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount:
+                                            _jobsService.foundJobs.value.length,
+                                        itemBuilder: (context, index) {
+                                          DateTime jobClosingDate =
+                                              convertToDate(_jobsService
+                                                  .foundJobs
+                                                  .value[index]
+                                                  .applicationDeadline
+                                                  .toLocal()
+                                                  .toString()
+                                                  .substring(0, 10));
+                                          DateTime currentDate = DateTime.now();
+                                          bool isJobStillOpen = jobClosingDate
+                                                  .isAfter(currentDate) ||
+                                              jobClosingDate.isAtSameMomentAs(
+                                                  currentDate);
 
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (isJobStillOpen ||
-                                            _connectivityService
-                                                .isConnected.value) {
-                                          Get.to(JobDetails(
-                                            id: _jobsService
-                                                .foundJobs.value[index].id
-                                                .toString(),
-                                                experience: _jobsService
-                                                .foundJobs.value[index].experience,
-                                                employementType: _jobsService
-                                                .foundJobs.value[index].employmentType,
-                                            title: _jobsService
-                                                .foundJobs.value[index].title,
-                                            companyName: _jobsService
-                                                .foundJobs
-                                                .value[index]
-                                                .company
-                                                .companyName,
-                                            responsobilities: _jobsService
-                                                .foundJobs
-                                                .value[index]
-                                                .responsibilities,
-                                            companyAddress: _jobsService
-                                                .foundJobs
-                                                .value[index]
-                                                .company
-                                                .companyAddress,
-                                            description: _jobsService.foundJobs
-                                                .value[index].description,
-                                            companyLogo: _jobsService
-                                                .foundJobs
-                                                .value[index]
-                                                .company
-                                                .companyLogoUrl,
-                                            statusValue:
-                                                _statusService.jobStatuses[
-                                                        _jobsService.foundJobs
-                                                            .value[index].id
-                                                            .toString()] ??
-                                                    'Not Applied',
-                                          ));
-                                        } else {
-                                          showAlertDialog(
-                                            context,
-                                            _jobsService
-                                                .foundJobs.value[index].title,
-                                            _jobsService.foundJobs.value[index]
-                                                .company.companyName,
-                                            _jobsService.foundJobs.value[index]
-                                                .applicationDeadline
-                                                .toLocal()
-                                                .toString()
-                                                .substring(0, 10),
+                                          return GestureDetector(
+                                            onTap: () {
+                                              if (isJobStillOpen ||
+                                                  _connectivityService
+                                                      .isConnected.value) {
+                                                Get.to(JobDetails(
+                                                  id: _jobsService
+                                                      .foundJobs.value[index].id
+                                                      .toString(),
+                                                  experience: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .experience,
+                                                  employementType: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .employmentType,
+                                                  title: _jobsService.foundJobs
+                                                      .value[index].title,
+                                                  companyName: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .company
+                                                      .companyName,
+                                                  responsobilities: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .responsibilities,
+                                                  companyAddress: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .company
+                                                      .companyAddress,
+                                                  description: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .description,
+                                                  companyLogo: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .company
+                                                      .companyLogoUrl,
+                                                  statusValue: _statusService
+                                                              .jobStatuses[
+                                                          _jobsService.foundJobs
+                                                              .value[index].id
+                                                              .toString()] ??
+                                                      'Not Applied',
+                                                ));
+                                              } else {
+                                                showAlertDialog(
+                                                  context,
+                                                  _jobsService.foundJobs
+                                                      .value[index].title,
+                                                  _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .company
+                                                      .companyName,
+                                                  _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .applicationDeadline
+                                                      .toLocal()
+                                                      .toString()
+                                                      .substring(0, 10),
+                                                );
+                                              }
+                                            },
+                                            child: JobCard(
+                                              jobListingId: _jobsService
+                                                  .foundJobs.value[index].id
+                                                  .toString(),
+                                              position: _jobsService
+                                                  .foundJobs.value[index].title,
+                                              company: _jobsService
+                                                  .foundJobs
+                                                  .value[index]
+                                                  .company
+                                                  .companyName,
+                                              address: _jobsService
+                                                  .foundJobs
+                                                  .value[index]
+                                                  .company
+                                                  .companyAddress,
+                                              closing: 'Deadline: ' +
+                                                  _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .applicationDeadline
+                                                      .toLocal()
+                                                      .toString()
+                                                      .substring(0, 10),
+                                              companyLogo: _jobsService
+                                                  .foundJobs
+                                                  .value[index]
+                                                  .company
+                                                  .companyLogoUrl,
+                                            ),
                                           );
-                                        }
-                                      },
-                                      child: JobCard(
-                                        jobListingId: _jobsService
-                                            .foundJobs.value[index].id
-                                            .toString(),
-                                        position: _jobsService
-                                            .foundJobs.value[index].title,
-                                        company: _jobsService.foundJobs
-                                            .value[index].company.companyName,
-                                        address: _jobsService
-                                            .foundJobs
-                                            .value[index]
-                                            .company
-                                            .companyAddress,
-                                        closing: 'Dealine: ' +
-                                            _jobsService.foundJobs.value[index]
-                                                .applicationDeadline
-                                                .toLocal()
-                                                .toString()
-                                                .substring(0, 10),
-                                        companyLogo: _jobsService
-                                            .foundJobs
-                                            .value[index]
-                                            .company
-                                            .companyLogoUrl,
-                                      ),
-                                    );
-                                  },
-                                );
-                        }
-                      },
+                                        },
+                                      );
+                              }
+                            },
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      ),
                     ),
-                    SizedBox(
-                      height: 5,
-                    )
-                  ],
+                  ),
                 ),
-              ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.only(top: 15, left: 15, right: 15),
+                    height: 220,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFEFFFFC),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Other Jobs",
+                            style: GoogleFonts.lexendDeca(
+                              textStyle: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Obx(
+                            () {
+                              if (_jobsService.isLoading.value) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else {
+                                return _jobsService.foundJobs.value.isEmpty
+                                    ? Text("No Jobs To Display")
+                                    : ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount:
+                                            _jobsService.foundJobs.value.length,
+                                        itemBuilder: (context, index) {
+                                          DateTime jobClosingDate =
+                                              convertToDate(_jobsService
+                                                  .foundJobs
+                                                  .value[index]
+                                                  .applicationDeadline
+                                                  .toLocal()
+                                                  .toString()
+                                                  .substring(0, 10));
+                                          DateTime currentDate = DateTime.now();
+                                          bool isJobStillOpen = jobClosingDate
+                                                  .isAfter(currentDate) ||
+                                              jobClosingDate.isAtSameMomentAs(
+                                                  currentDate);
+
+                                          return GestureDetector(
+                                            onTap: () {
+                                              if (isJobStillOpen ||
+                                                  _connectivityService
+                                                      .isConnected.value) {
+                                                Get.to(JobDetails(
+                                                  id: _jobsService
+                                                      .foundJobs.value[index].id
+                                                      .toString(),
+                                                  experience: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .experience,
+                                                  employementType: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .employmentType,
+                                                  title: _jobsService.foundJobs
+                                                      .value[index].title,
+                                                  companyName: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .company
+                                                      .companyName,
+                                                  responsobilities: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .responsibilities,
+                                                  companyAddress: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .company
+                                                      .companyAddress,
+                                                  description: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .description,
+                                                  companyLogo: _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .company
+                                                      .companyLogoUrl,
+                                                  statusValue: _statusService
+                                                              .jobStatuses[
+                                                          _jobsService.foundJobs
+                                                              .value[index].id
+                                                              .toString()] ??
+                                                      'Not Applied',
+                                                ));
+                                              } else {
+                                                showAlertDialog(
+                                                  context,
+                                                  _jobsService.foundJobs
+                                                      .value[index].title,
+                                                  _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .company
+                                                      .companyName,
+                                                  _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .applicationDeadline
+                                                      .toLocal()
+                                                      .toString()
+                                                      .substring(0, 10),
+                                                );
+                                              }
+                                            },
+                                            child: JobCard(
+                                              jobListingId: _jobsService
+                                                  .foundJobs.value[index].id
+                                                  .toString(),
+                                              position: _jobsService
+                                                  .foundJobs.value[index].title,
+                                              company: _jobsService
+                                                  .foundJobs
+                                                  .value[index]
+                                                  .company
+                                                  .companyName,
+                                              address: _jobsService
+                                                  .foundJobs
+                                                  .value[index]
+                                                  .company
+                                                  .companyAddress,
+                                              closing: 'Deadline: ' +
+                                                  _jobsService
+                                                      .foundJobs
+                                                      .value[index]
+                                                      .applicationDeadline
+                                                      .toLocal()
+                                                      .toString()
+                                                      .substring(0, 10),
+                                              companyLogo: _jobsService
+                                                  .foundJobs
+                                                  .value[index]
+                                                  .company
+                                                  .companyLogoUrl,
+                                            ),
+                                          );
+                                        },
+                                      );
+                              }
+                            },
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

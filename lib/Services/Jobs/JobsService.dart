@@ -50,7 +50,7 @@ class JobsService extends GetxController {
       },
     );
     if (response.statusCode == 200) {
-      data = jsonDecode(response.body)['data'];
+      data = jsonDecode(response.body)['job_listings'];
       jobsFeedList.value = data.map((e) => JobListing.fromJson(e)).toList();
       // Insert fetched data into SQLite database
       // final dbHelper = DatabaseHelper();
